@@ -1,0 +1,26 @@
+<div class="container mt-5">
+    <div id="qrcode-container" style="display: none;">
+        <div id="qrcode"></div>
+    </div>
+    <script type="text/javascript">
+        // QR-Code generate new QRCode
+        new QRCode(
+            document.getElementById("qrcode"),
+            "{{ item._links.self.href }}"
+        );
+
+        // QR-Code toggle
+        const toggleButton = document.getElementById("toggle-qrcode");
+        const qrcodeContainer = document.getElementById("qrcode-container");
+
+        toggleButton.addEventListener("click", () => {
+            if (qrcodeContainer.style.display === "none") {
+                qrcodeContainer.style.display = "block";
+                // toggleButton.textContent = "Show QRCode";
+            } else {
+                qrcodeContainer.style.display = "none";
+                // toggleButton.textContent = "";
+            }
+        });
+    </script>
+</div>

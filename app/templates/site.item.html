@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("Item") }} #{{ item.id }}{% endblock %}
+
+
+{% block main %}
+<h1>{{ _("Item", context="Highlight") }} #{{ item.id }}</h1>
+
+<div id="carouselExample" class="carousel slide" style="width:600px; height:400px;">
+    <div class="carousel-inner">
+    {% for image in item.images %}
+        {% if loop.first %}
+        <div class="carousel-item active">
+        {% else %}
+        <div class="carousel-item">
+        {% endif %}
+            <img src="{{ image }}" class="d-block" alt="...">
+        </div>
+    {% endfor %}
+
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<pre>
+{{ item|tojson(indent=2) }}
+</pre>
+
+
+{% include 'component/qrcode.html' %}
+
+{% endblock %}
