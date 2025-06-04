@@ -1,3 +1,13 @@
+# Ignore all image files except default_user_image.png
+*.png
+!default_user_image.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.svg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
