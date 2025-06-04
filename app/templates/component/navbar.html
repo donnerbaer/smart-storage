@@ -11,11 +11,9 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('main.dashboard') }}" class="nav-link px-2 text-light"> {{ _("Dashboard") }}</a></li>
-                <li><a href="{{ url_for('main.catalog') }}" class="nav-link px-2 text-light"> {{ _("Catalog") }}</a></li>
-                <li><a href="{{ url_for('main.index') }}" class="nav-link px-2 text-light"> {{ _("Users") }} !DEVLink</a></li>
-                <li><a href="{{ url_for('main.index') }}" class="nav-link px-2 text-light"> {{ _("Admin") }} !DEVLink</a></li>
-                <li><a href="{{ url_for('main.index') }}" class="nav-link px-2 text-light"> {{ _("Admin") }} !DEVLink</a></li>
+                <li><a href="{{ url_for('main.dashboard') }}" class="nav-link px-2 text-light">{{ _("Dashboard") }}</a></li>
+                <li><a href="{{ url_for('main.catalog') }}" class="nav-link px-2 text-light">{{ _("Catalog") }}</a></li>
+                <li><a href="{{ url_for('main.users') }}" class="nav-link px-2 text-light">{{ _("Users") }}</a></li>
                 {% endif %}
             </ul>
 		</div>
@@ -37,12 +35,12 @@
             
                 <div class="flex-shrink-0 dropdown">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src=""
+                        <img src="{{url_for('main.serve_current_user_image')}}"
                             alt="Profile picture of"
                             width="40" height="40"
                             class="rounded-circle bg-light"> </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="">{{ _('My Profile')}}</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('main.my_profile')}}">{{ _('My Profile')}}</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"> {{ _("Logout")}}</a></li>
                     </ul>

@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64), nullable=True)
     last_name = db.Column(db.String(64), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    image_filename = db.Column(db.String(256), nullable=True)  # For user profile image
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
