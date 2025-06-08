@@ -33,9 +33,10 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            return redirect(url_for('main.index'))
+            if request.args.get('next'):
+                return redirect(request.args.get('next', '%2F'))
         flash(_l('Invalid username or password'))
-    return render_template('site.login.html', nav_login_form=form)
+    return render_template('site.login.html', nav_login_form=form, next=request.args.get('next', '%2F'))
 
 
 @auth_bp.route('/sign-up', methods=['GET', 'POST'])

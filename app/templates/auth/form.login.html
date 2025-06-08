@@ -1,5 +1,5 @@
 <div class="container">
-    <form method="POST" action="{{ url_for('auth.login') }}">
+    <form method="POST" action="{{ url_for('auth.login') }}?next={{next}}">
         {% if nav_login_form.errors %}
             <ul>
                 {% for field, errors in nav_login_form.errors.items() %}
