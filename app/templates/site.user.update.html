@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("Update User") }}: {{user.last_name}}, {{user.first_name}}{% endblock %}
+
+
+{% block main %}
+<h1>{{ user.last_name }}, {{ user.first_name}}</h1>
+<img src="{{ url_for('main.serve_user_image', filename=user.image_filename) }}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
+<a href="{{ url_for('main.user', user_id=user.id) }}" class="btn btn-danger">{{ _("Cancel") }}</a>
+
+
+<form action="" method="POST" class="form-horizontal">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        <label for="username">{{ form.username.label.text }}</label>
+        {{ form.username(class="form-control", id="username") }}
+    </div>
+
+
+    <div class="form-group">
+        <label for="first_name">{{ form.first_name.label.text }}</label>
+        {{ form.first_name(class="form-control", id="first_name") }}
+    </div>
+    <div class="form-group">
+        <label for="last_name">{{ form.last_name.label.text }}</label>
+        {{ form.last_name(class="form-control", id="last_name") }}
+    </div>
+
+    <div class="form-group">
+        <label for="image">{{ form.image.label.text }}</label>
+        {{ form.image(class="form-control", id="image") }}
+    </div>
+    <div class="form-group">
+        {{ form.delete_image(class="form-check-input") }}
+        {{ form.delete_image.label(class="form-check-label") }}
+    </div>
+    <div class="form-group">
+        <label for="new_password">{{ form.new_password.label.text }}</label>
+        {{ form.new_password(class="form-control", id="new_password") }}
+    </div>
+    <div class="form-group">
+        <label for="confirm_password">{{ form.confirm_password.label.text }}</label>
+        {{ form.confirm_password(class="form-control", id="confirm_password") }}
+    </div>
+
+
+    <div class="form-group">
+        <label for="old_password">{{ form.old_password.label.text }} <span class="text-danger">{{ _('Required') }}</span></label>
+        {{ form.old_password(class="form-control", id="old_password") }}
+    </div>
+
+    <div class="form-group">
+        {{ form.submit(class="form-control btn btn-primary", id="submit") }}
+    </div>
+
+</form>
+
+{% endblock %}
