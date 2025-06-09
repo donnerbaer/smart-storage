@@ -11,6 +11,7 @@ from app.resource.storage_location.model import StorageLocation
 from app.resource.item.model import Item
 from app.user.model import User
 from app import db
+from app.forms import UserUpdateForm
 
 
 
@@ -99,6 +100,24 @@ def user(user_id):
     if not is_image_name_valid(user.image_filename):
         user.image_filename = get_default_user_image()
     return render_template('site.user.html', current_user=current_user, user=user)
+
+
+@main_bp.route('/users/<int:user_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_user(user_id):
+    """ Update user information """
+    user = db.session.query(User).filter_by(id=user_id).first_or_404()
+    form = UserUpdateForm(obj=user)
+    
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        db.session.commit()
+        return redirect(f'/users/{user.id}')
+
+    if not is_image_name_valid(user.image_filename):
+        user.image_filename = get_default_user_image()
+
+    return render_template('site.user.update.html', current_user=current_user, user=user, form=form)
 
 
 @main_bp.route('/my-profile', methods=['GET'])
