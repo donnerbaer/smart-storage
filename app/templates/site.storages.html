@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("List of all Storage Locations") }}{% endblock %}
+
+{% block main %}
+<h1>{{ _("List of all Storage Locations", context="Highlight") }}</h1>
+<p>{{ _('Number of Storages') }}: {{storages|length}}</p>
+<a href="" class="btn btn-success">{{ _('Create New Storage') }}</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ _('ID') }}</th>
+            <th>{{ _("Name") }}</th>
+            <th>{{ _('Description') }}</th>
+            <th>{{ _('Parent') }}</th>
+            <th>{{ _('Root Parent') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for storage in storages %}
+        <tr>
+            <td>{{ storage.id }}</td>
+            <td><a href="{{ url_for('main.show_storage', storage_id=storage.id) }}" class="btn btn-primary">{{ storage.name }}</a></td>
+            <td>{{ storage.description if storage.description }}</td>
+            <td>
+                {% if storage.parent.id %}
+                <a href="{{ url_for('main.show_storage', storage_id=storage.parent.id) }}" class="btn btn-primary">{{ storage.parent.name }}</a>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if storage.id != storage.get_root().id %}  
+                <a href="{{ url_for('main.show_storage', storage_id=storage.get_root().id) }}" class="btn btn-primary">{{ storage.get_root().name }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

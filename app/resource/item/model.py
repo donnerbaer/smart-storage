@@ -27,7 +27,7 @@ class ItemImage(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     filename = db.Column(db.String(512), nullable=False)
 
-    # item = db.relationship('Item', backref='images')
+    item = db.relationship('Item', backref='images')
 
     def __repr__(self):
         return f"<ItemImage #{self.id} for Item #{self.item_id}>"
