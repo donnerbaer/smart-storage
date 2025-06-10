@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("Storage") }}{% endblock %}
+
+
+{% block main %}
+    <h1>Storage: #{{storage.id}} {{storage.name}}</h1>
+
+    <img src="" alt="" class="" style="height: 200px; width: 200px;">
+    <p>{{ _('Description')}}: {{ storage.description if storage.description}}</p>
+<pre>
+{{ storage }}
+{{ storage.items }}
+</pre>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{ _('ID') }}</th>
+                <th>{{ _("Name") }}</th>
+                <th>{{ _('Description') }}</th>
+                <th>{{ _('Barcode') }}</th>
+                <th>{{ _('Owner') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in storage.items %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td><a href="{{ url_for('main.show_item', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</a></td>
+                    <td>{{ item.description if item.description else '' }}</td>
+                    <td>{{ item.barcode if item.barcode else '' }}</td>
+                    <td>
+                        {% if item.owner_id %}
+                            <a href="{{ url_for('main.user', user_id=item.owner.id)}}" class="btn btn-primary">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'component/qrcode.html' %}
+{% endblock %}
+
+
