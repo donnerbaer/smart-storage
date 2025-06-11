@@ -1,18 +1,27 @@
 """ This module handles the main views of the application, including the index, dashboard, and error pages."""
 
 import os
+<<<<<<< Updated upstream
 from flask import Blueprint, render_template
+=======
+from uuid import uuid4
+from flask import Blueprint, render_template, url_for, flash
+>>>>>>> Stashed changes
 from flask import request
 from flask import jsonify, send_from_directory, redirect
 from flask_login import login_required, current_user
-from flask_babel import get_locale, gettext as _
+from flask_babel import get_locale, gettext as _, lazy_gettext
 from flask_wtf.csrf import generate_csrf
 from app.resource.storage_location.model import StorageLocation
 from app.resource.item.model import Item
 from app.user.model import User
 from app import db
+<<<<<<< Updated upstream
 from app.forms import UserUpdateForm
 
+=======
+from app.forms import UserUpdateForm, ItemCreateForm, RegistrationForm
+>>>>>>> Stashed changes
 
 
 main_bp = Blueprint('main', __name__)
@@ -82,6 +91,81 @@ def users():
     return render_template('site.users.html', current_user=current_user, users=users)
 
 
+<<<<<<< Updated upstream
+=======
+@main_bp.route('/users/create', methods=['GET'])
+@login_required
+def create_user():
+    """ Render the create user page.
+    
+    Returns:
+        Rendered template for the create user page with a form.
+    """
+    form = RegistrationForm()
+    return render_template('site.user.create.html', current_user=current_user, form=form)
+
+
+@main_bp.route('/users/create', methods=['POST'])
+@login_required
+def create_user_post():
+    """ Handle the creation of a new user, for already logged-in users.
+    This function checks if the passwords match, if the username and email are unique,
+    and then creates a new user in the database.
+    If any validation fails, it flashes an error message and redirects to the users page.
+    
+    Returns:
+        Redirect to the users page after successful creation.
+    """
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        if form.password.data != form.confirm_password.data:
+            flash(lazy_gettext('Passwords do not match'))
+            return redirect(url_for('main.users'))
+        if db.session.query(User).filter_by(username=form.username.data).first():
+            flash(lazy_gettext('Username already exists'))
+            return redirect(url_for('main.users'))
+        if db.session.query(User).filter_by(email=form.email.data).first():
+            flash(lazy_gettext('Email already exists'))
+            return redirect(url_for('main.users'))
+        user = User(username=form.username.data,
+                    email=form.email.data,
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data
+                    )
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash(lazy_gettext('Registration successful! Please log in.'))
+    return redirect(url_for('main.users'))
+
+
+@main_bp.route('/users/<int:user_id>/delete', methods=['GET'])
+@login_required
+def delete_user(user_id):
+    """ Handle the deletion of a user.
+    
+    Args:
+        user_id (int): The ID of the user to delete.
+
+    Returns:
+        Redirect to the users page after deletion.
+    """
+    user = db.session.query(User).filter_by(id=user_id).first_or_404()
+    delete_current_user = False
+    if user.id == current_user.id:
+        delete_current_user = True
+    if user.image_filename and user.image_filename != get_default_user_image():
+        image_path = os.path.join('img', 'user', user.image_filename)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+    db.session.delete(user)
+    db.session.commit()
+    if delete_current_user:
+        redirect(url_for('auth.logout'))
+    return redirect('/users')
+
+
+>>>>>>> Stashed changes
 def is_image_name_valid(image_name):
     """ Check if the image name is not None """
     return image_name is not None and image_name != ""
