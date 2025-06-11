@@ -28,6 +28,11 @@
     </div>
 </div>
 
+{% if users|length == 0 %}
+    <p>{{ _('No users found.') }}</p>
+{% else %}
+    <p>{{ _('Number of users') }}: {{ users|length }}</p>
+{% endif %}
 
 <table class="table table-striped">
     <thead>
