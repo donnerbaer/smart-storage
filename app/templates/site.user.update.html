@@ -4,8 +4,8 @@
 
 {% block main %}
 <h1>{{ user.last_name }}, {{ user.first_name}}</h1>
-<img src="{{ url_for('main.serve_user_image', filename=user.image_filename) }}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
-<a href="{{ url_for('main.user', user_id=user.id) }}" class="btn btn-danger">{{ _("Cancel") }}</a>
+<img src="{{ url_for('image.serve_user_image', filename=user.image_filename) }}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
+<a href="{{ url_for('user.user_view', user_id=user.id) }}" class="btn btn-danger">{{ _("Cancel") }}</a>
 
 
 <form action="" method="POST" class="form-horizontal">

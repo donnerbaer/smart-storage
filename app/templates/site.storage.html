@@ -26,12 +26,12 @@
             {% for item in storage.items %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td><a href="{{ url_for('main.show_item', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</a></td>
+                    <td><a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</a></td>
                     <td>{{ item.description if item.description else '' }}</td>
                     <td>{{ item.barcode if item.barcode else '' }}</td>
                     <td>
                         {% if item.owner_id %}
-                            <a href="{{ url_for('main.user', user_id=item.owner.id)}}" class="btn btn-primary">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
+                            <a href="{{ url_for('user.user_view', user_id=item.owner.id)}}" class="btn btn-primary">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
                         {% endif %}
                     </td>
                 </tr>

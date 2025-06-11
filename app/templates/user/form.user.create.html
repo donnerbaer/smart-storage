@@ -1,5 +1,5 @@
 <div class="container">
-    <form method="POST" action="{{ url_for('main.create_user') }}">
+    <form method="POST" action="{{ url_for('user.create_user') }}">
         {% if nav_signup_form.errors %}
             <ul>
                 {% for field, errors in nav_signup_form.errors.items() %}

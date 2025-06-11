@@ -4,9 +4,9 @@
 
 {% block main %}
 <h1 class="h1">{{user.last_name}}, {{user.first_name}}</h1>
-<img src="{{url_for('main.serve_user_image', filename=user.image_filename)}}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
+<img src="{{url_for('image.serve_user_image', filename=user.image_filename)}}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
 
-<a href="{{ url_for('main.update_user', user_id=user.id) }}" class="btn btn-secondary">{{ _("Update User Informations") }}</a>
+<a href="{{ url_for('user.update_user', user_id=user.id) }}" class="btn btn-secondary">{{ _("Update User Informations") }}</a>
 
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
     {{ _("Delete User") }}
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="{{ url_for('main.delete_user', user_id=user.id) }}" class="btn btn-danger">{{ _("Yes, delete User") }}</a>
+                <a href="{{ url_for('user.delete_user', user_id=user.id) }}" class="btn btn-danger">{{ _("Yes, delete User") }}</a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
             </div>
         </div>
@@ -50,8 +50,8 @@
         <li class="list-group-item"><strong>{{ _("Created At") }}:</strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
         <li class="list-group-item"><strong>{{ _("Image Filename") }}:</strong> {{ user.image_filename if user.image_filename else _("No image uploaded") }}</li>
         <li class="list-group-item"><strong>{{ _("Image URL") }}:</strong>
-            <a href="{{ url_for('main.serve_user_image', filename=user.image_filename) }}" target="_blank">
-                {{ url_for('main.serve_user_image', filename=user.image_filename) if user.image_filename else _("No image uploaded") }}
+            <a href="{{ url_for('image.serve_user_image', filename=user.image_filename) }}" target="_blank">
+                {{ url_for('image.serve_user_image', filename=user.image_filename) if user.image_filename else _("No image uploaded") }}
             </a>
         </li>
     </ul>

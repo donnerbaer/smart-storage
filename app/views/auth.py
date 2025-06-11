@@ -1,11 +1,11 @@
 """ This module handles user authentication, including login, registration, and logout."""
 
 from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_babel import lazy_gettext as _l
 from flask_login import login_user, logout_user, login_required
-from app.user.model import User
-from app.forms import LoginForm, RegistrationForm
 from app import db
-from flask_babel import get_locale, lazy_gettext as _l
+from app.forms import LoginForm, RegistrationForm
+from app.user.model import User
 from app.utils.decorators import anonymous_required
 
 
