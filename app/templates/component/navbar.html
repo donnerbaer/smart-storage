@@ -41,7 +41,7 @@
                             width="40" height="40"
                             class="rounded-circle bg-light"> </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{{ url_for('user.my_profile')}}">{{ _('My Profile')}}</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('user.user_view', user_id=current_user.id)}}">{{ _('My Profile')}}</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"> {{ _("Logout")}}</a></li>
                     </ul>

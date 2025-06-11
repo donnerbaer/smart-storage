@@ -150,15 +150,16 @@ def update_user(user_id):
     return render_template('site.user.update.html', current_user=current_user, user=user, form=form)
 
 
-@user_bp.route('/my-profile', methods=['GET'])
-@login_required
-def my_profile():
-    """ Render the users page.
+# @user_bp.route('/my-profile', methods=['GET'])
+# @login_required
+# def my_profile():
+#     """ Render the users page.
     
-    Returns:
-        Rendered template for the current user's profile page.
-    """
-    user = db.session.query(User).filter_by(id=current_user.id).first_or_404()
-    if not is_image_name_valid(user.image_filename):
-        user.image_filename = get_default_user_image()
-    return render_template('site.user.html', current_user=current_user, user=user)
+#     Returns:
+#         Rendered template for the current user's profile page.
+#     """
+#     user = db.session.query(User).filter_by(id=current_user.id).first_or_404()
+#     if not is_image_name_valid(user.image_filename):
+#         user.image_filename = get_default_user_image()
+#     # return redirect( url_for('user.user_view', user_id=user.id) )
+#     return render_template('site.user.html', current_user=current_user, user=user)
