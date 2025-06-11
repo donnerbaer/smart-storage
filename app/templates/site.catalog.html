@@ -13,12 +13,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="createItemModal">{{ _("Create Item") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="container">
                     {% include 'item/form.item.create.html' %}
                 </div>
-                <button type="button" class="btn btn-danger my-4" data-bs-dismiss="modal" aria-label="Close">{{ _('Cancel') }}</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
             </div>
         </div>
     </div>
