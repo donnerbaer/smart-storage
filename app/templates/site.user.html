@@ -8,4 +8,52 @@
 
 <a href="{{ url_for('main.update_user', user_id=user.id) }}" class="btn btn-secondary">{{ _("Update User Informations") }}</a>
 
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+    {{ _("Delete User") }}
+</button>
+<div class="modal fade" id="deleteUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteUserModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteUserModal">{{ _("Delete User") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    {{ _("Are you sure you want to delete this user? This action cannot be undone.") }}
+                    <p class="text-danger">{{ _("This will also delete all associated data.") }}</p>
+                    <p>{{ _('Your will delete following user:') }}</p>
+                    <p>{{ _("User ID:") }} {{ user.id }}</p>
+                    <p>{{ _("Username:") }} {{ user.username }}</p>
+                    <p>{{ _("First Name:") }} {{ user.first_name }}</p>
+                    <p>{{ _("Last Name:") }} {{ user.last_name }}</p>
+                    <p>{{ _("Email:") }} {{ user.email }}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('main.delete_user', user_id=user.id) }}" class="btn btn-danger">{{ _("Yes, delete User") }}</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <h2>{{ _("User Details") }}</h2>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>{{ _("Username") }}:</strong> {{ user.username }}</li>
+        <li class="list-group-item"><strong>{{ _("First Name") }}:</strong> {{ user.first_name }}</li>
+        <li class="list-group-item"><strong>{{ _("Last Name") }}:</strong> {{ user.last_name }}</li>
+        <li class="list-group-item"><strong>{{ _("Email") }}:</strong> {{ user.email }}</li>
+        <li class="list-group-item"><strong>{{ _("Created At") }}:</strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+        <li class="list-group-item"><strong>{{ _("Image Filename") }}:</strong> {{ user.image_filename if user.image_filename else _("No image uploaded") }}</li>
+        <li class="list-group-item"><strong>{{ _("Image URL") }}:</strong>
+            <a href="{{ url_for('main.serve_user_image', filename=user.image_filename) }}" target="_blank">
+                {{ url_for('main.serve_user_image', filename=user.image_filename) if user.image_filename else _("No image uploaded") }}
+            </a>
+        </li>
+    </ul>
+</div>
 {% endblock %}

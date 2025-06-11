@@ -5,6 +5,7 @@ from app.user.model import User
 from app.resource.storage_location.model import StorageLocation
 
 
+
 class Item(db.Model):
     __tablename__ = 'item'
     id = db.Column(db.Integer, primary_key=True)

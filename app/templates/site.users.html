@@ -3,29 +3,53 @@
 
 
 {% block main %}
-    <h1>{{ _("List of all Users", context="") }}</h1>
+<h1>{{ _("List of all Users", context="") }}</h1>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>{{ _("ID") }}</th>
-                <th>{{ _("Firstname") }}</th>
-                <th>{{ _("Lastname") }}</th>
-                <th>{{ _("Borrows") }}</th>
-                <th>{{ _("Actions") }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users: %}
-            <tr>
-                <td>{{user.id}}</td>
-                <td>{{user.first_name}}</td>
-                <td>{{user.last_name}}</td>
-                <td></td>
-                <td><a href="{{ url_for('main.user', user_id=user.id) }}" class="btn btn-primary">{{ _('Display') }}</a></td>
-            </tr>
-            {% endfor %}
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">
+    {{ _("Create User") }}
+</button>
 
-        </tbody>
-    </table>
+<div class="modal fade" id="createUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createUserModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createUserModal">{{ _("Create User") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    {% include 'user/form.user.create.html' %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ _("ID") }}</th>
+            <th>{{ _("Firstname") }}</th>
+            <th>{{ _("Lastname") }}</th>
+            <th>{{ _("Borrows") }}</th>
+            <th>{{ _("Actions") }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users: %}
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td></td>
+            <td><a href="{{ url_for('main.user', user_id=user.id) }}" class="btn btn-primary">{{ _('Display') }}</a></td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
 {% endblock %}
