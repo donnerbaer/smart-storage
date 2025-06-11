@@ -5,6 +5,29 @@
 {% block main %}
     <h1>{{ _("List of all Users", context="") }}</h1>
 
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">
+    {{ _("Create User") }}
+</button>
+
+<div class="modal fade" id="createUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createUserModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createUserModal">{{ _("Create User") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    {% include 'user/form.user.create.html' %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <table class="table table-striped">
         <thead>
             <tr>
