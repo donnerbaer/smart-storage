@@ -3,5 +3,67 @@
 
 
 {% block main %}
-    <h1>{{ _("Catalog", context="Highlight") }}</h1>
+<h1>{{ _("Catalog", context="Highlight") }}</h1>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createItemModal">
+    {{ _("Create new item") }}
+</button>
+
+<div class="modal fade" id="createItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createItemModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createItemModal">{{ _("Create Item") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    {% include 'item/form.item.create.html' %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% if items|length == 0 %}
+    <p>{{ _('No items found in the catalog.') }}</p>
+{% else %}
+    <p>{{ _('Number of Items') }}: {{ items|length }}</p>
+{% endif %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{{ _('ID') }}</th>
+            <th>{{ _("Name") }}</th>
+            <th>{{ _('Description') }}</th>
+            <th>{{ _('Barcode') }}</th>
+            <th>{{ _('Owner') }}</th>
+            <th>{{ _('Storage Location') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td><a href="{{ url_for('main.show_item', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</a></td>
+                <td>{{ item.description if item.description }}</td>
+                <td>{{ item.barcode if item.barcode }}</td>
+                <td>
+                    {% if item.owner_id %}
+                    <a href="{{ url_for('main.user', user_id=item.owner.id)}}" class="btn btn-primary">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
+                    {% endif %}
+                <td>
+                    {% if item.storage_location %}
+                    <a href="{{ url_for('main.show_storage', storage_id=item.storage_location.id)}}" class="btn btn-primary">{{ item.storage_location.name }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
