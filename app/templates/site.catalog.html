@@ -39,6 +39,7 @@
     <thead>
         <tr>
             <th>{{ _('ID') }}</th>
+            <th>{{ _('Image') }}</th>
             <th>{{ _("Name") }}</th>
             <th>{{ _('Description') }}</th>
             <th>{{ _('Barcode') }}</th>
@@ -50,6 +51,11 @@
         {% for item in items %}
             <tr>
                 <td>{{ item.id }}</td>
+                <td>
+                    {% if item.images|length > 0: %}
+                    <img src="{{ url_for('image.serve_item_image', filename=item.images[0].filename) }}" alt="{{ item.name }}" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">    
+                    {% endif %} 
+                </td>
                 <td><a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</a></td>
                 <td>{{ item.description if item.description }}</td>
                 <td>{{ item.barcode if item.barcode }}</td>
