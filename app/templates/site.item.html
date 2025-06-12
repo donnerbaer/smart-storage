@@ -18,7 +18,7 @@
                 {% if item.images|length>0 %}
                     <div>
                     <div class="border border-secondary bg-dark-subtle">
-                    <div id="carouselExample" class="carousel slide" style="max-height:300px;">
+                    <div id="mainItemCarousel" class="carousel slide" style="max-height:300px;">
                         <div class="carousel-inner">
                         {% for image in item.images %}
                             {% if loop.first %}
@@ -31,11 +31,11 @@
                         {% endfor %}
 
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#mainItemCarousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#mainItemCarousel" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                         </button>
