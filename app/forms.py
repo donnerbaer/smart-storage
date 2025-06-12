@@ -22,7 +22,7 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField(_l('Confirm Password'), validators=[DataRequired(), EqualTo('password')])
     first_name = StringField(_l('First Name'), validators=[Optional(), Length(max=64)])
     last_name = StringField(_l('Last Name'), validators=[Optional(), Length(max=64)])
-    submit = SubmitField(_l('Submit'))
+    submit = SubmitField(_l('Registrate'))
 
 
 class UserUpdateForm(FlaskForm):
@@ -36,7 +36,7 @@ class UserUpdateForm(FlaskForm):
     old_password = PasswordField(_l('Old Password'), validators=[DataRequired(), Length(min=8)])
     new_password = PasswordField(_l('New Password'), validators=[Optional(), Length(min=8)])
     confirm_password = PasswordField(_l('Confirm Password'), validators=[Optional(), EqualTo('password')])
-    submit = SubmitField(_l('Update Profile Information'))
+    submit = SubmitField(_l('Save Changes'))
 
 
 class ItemCreateForm(FlaskForm):
@@ -57,7 +57,7 @@ class ItemUpdateForm(FlaskForm):
     images = MultipleFileField('Add Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     barcode = StringField(_l('Barcode'), validators=[Optional(), Length(max=64)])
     storage_location = SelectField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
-    submit = SubmitField(_l('Update Item'))
+    submit = SubmitField(_l('Save Changes'))
 
 
 class ItemImageUpdateForm(FlaskForm):
