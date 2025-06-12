@@ -32,3 +32,17 @@ class ItemImage(db.Model):
 
     def __repr__(self):
         return f"<ItemImage #{self.id} for Item #{self.item_id}>"
+
+class ItemStorageStock(db.Model):
+    __tablename__ = 'item_storage_stock'
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
+    storage_location_id = db.Column(db.Integer, db.ForeignKey('storage_location.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=0)
+    timestamp = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+
+    item = db.relationship('Item', backref='stock')
+    storage_location = db.relationship('StorageLocation', backref='stock')
+
+    def __repr__(self):
+        return f"<ItemStock #{self.id} for Item #{self.item_id} in {self.storage_location_id} with quantity {self.quantity}>"

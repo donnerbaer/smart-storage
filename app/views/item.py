@@ -9,16 +9,16 @@ from flask import request, redirect
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from app import db
-from app.forms import ItemCreateForm
+from app.forms import ItemCreateForm, ItemUpdateForm
 from app.resource.item.model import Item, ItemImage
+from app.resource.storage_location.storage import get_storage_hierarchy
 from app.user.model import User
-
 
 
 item_bp = Blueprint('item', __name__)
 
 
-@item_bp.route('/items/<int:item_id>', methods=['GET', 'POST'])
+@item_bp.route('/items/<int:item_id>', methods=['GET'])
 @login_required
 def item_view(item_id):
     """ Render the item page.
@@ -31,7 +31,25 @@ def item_view(item_id):
     """
     item = Item.query.filter_by(id=item_id).first_or_404()
     qrcode_url = request.url
-    return render_template('site.item.html', current_user=current_user, item=item, qrcode_url=qrcode_url)
+
+    storage_hierarchy = []
+    if item.storage_location_id:
+        storage_hierarchy = get_storage_hierarchy(item.storage_location_id)
+
+    form = ItemUpdateForm(id=item_id,
+                            name=item.name,
+                            description=item.description,
+                            images=item.images,
+                            barcode=item.barcode,
+                            storage_location=item.storage_location_id
+                          )
+    return render_template('site.item.html',
+                           current_user=current_user,
+                           item=item,
+                           qrcode_url=qrcode_url,
+                           form=form,
+                           storage_hierarchy=storage_hierarchy
+                           )
 
 
 @item_bp.route('/items/<int:item_id>/delete', methods=['GET'])
@@ -55,6 +73,31 @@ def delete_item(item_id):
     db.session.delete(item)
     db.session.commit()
     return redirect( url_for('main.catalog') )
+
+
+@item_bp.route('/items/<int:item_id>/update', methods=['POST'])
+@login_required
+def update_item_post(item_id):
+    """ 
+    """
+    item = db.session.query(Item).filter_by(id=item_id).first_or_404()
+    form = ItemUpdateForm(request.form)
+
+    item.name = form.name.data
+    item.description = form.description.data
+    item.barcode = form.barcode.data
+    item.storage_location_id = form.storage_location.data
+    if form.images.data:
+        for image in form.images.data:
+            if image and image.filename:
+                ext = image.filename[image.filename.rfind('.'):]
+                unique_name = f"{uuid4()}{ext}"
+                image.save(os.path.join('img', 'item', unique_name))
+                db.session.add(ItemImage(item_id=item.id, filename=unique_name))
+    db.session.add(item)
+    db.session.commit()
+    # db.session.refresh(item)
+    return redirect( url_for('item.item_view', item_id=item_id) )
 
 
 @item_bp.route('/items/create', methods=['POST'])

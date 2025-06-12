@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from flask_babel import lazy_gettext as _l
 
@@ -47,3 +47,22 @@ class ItemCreateForm(FlaskForm):
     barcode = StringField(_l('Barcode'), validators=[Optional(), Length(max=64)])
     storage_location = StringField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     submit = SubmitField(_l('Create Item'))
+
+
+class ItemUpdateForm(FlaskForm):
+    """Form for updating an existing item."""
+    id = StringField(_l('Item ID'), render_kw={'readonly': True}, validators=[DataRequired()])
+    name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
+    description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
+    images = MultipleFileField('Add Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    barcode = StringField(_l('Barcode'), validators=[Optional(), Length(max=64)])
+    storage_location = SelectField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
+    submit = SubmitField(_l('Update Item'))
+
+
+class ItemImageUpdateForm(FlaskForm):
+    """Form for updating item images."""
+    images = MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    image_descriptions = StringField(_l('Image Descriptions (comma separated)'), validators=[Optional(), Length(max=1000)])
+    delete_images = BooleanField(_l('Delete Selected Images'), default=False, validators=[Optional()])
+    submit = SubmitField(_l('Update Images'))
