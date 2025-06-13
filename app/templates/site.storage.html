@@ -3,15 +3,76 @@
 
 
 {% block main %}
-    <h1>Storage: #{{storage.id}} {{storage.name}}</h1>
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+    {% for storage_hierarchy in storage_hierarchy %}
+        {% if loop.last %}
+            <li class="breadcrumb-item" aria-current="page">{{ storage_hierarchy.name}}</li>
+        {% else %}
+        <li class="breadcrumb-item">
+            <a class="" href="{{ url_for('storage.storage_view', storage_id=storage_hierarchy.id) }}">{{ storage_hierarchy.name }}</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    </ol>
+</nav>
 
-    <img src="" alt="" class="" style="height: 200px; width: 200px;">
-    <p>{{ _('Description')}}: {{ storage.description if storage.description}}</p>
-<pre>
-{{ storage }}
-{{ storage.items }}
-</pre>
 
+<h1>{{ _("Storage", context="Highlight") }} #{{ storage.id }} {{ storage.name }}</h1>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateItemModal">
+    {{ _("Edit Storage") }}
+</button>
+{% include 'component/qrcode.html' %}
+<div class="modal fade" id="updateItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateItemModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="updateItemModal">{{ _("Update Storage") }} #{{ storage.id }} {{ storage.name}}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if storage.images|length>0 %}
+                    <div>
+                    <div class="border border-secondary bg-dark-subtle">
+                    <div id="mainStorageCarousel" class="carousel slide" style="max-height:300px;">
+                        <div class="carousel-inner">
+                        {% for image in storage.images %}
+                            {% if loop.first %}
+                            <div class="carousel-item active">
+                            {% else %}
+                            <div class="carousel-item">
+                            {% endif %}
+                                <img src="{{ url_for('image.serve_storage_image', filename=image.filename) }}" class="d-block" alt="Image of {{ storage.name }}" style="max-height:300px">
+                            </div>
+                        {% endfor %}
+
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#mainStorageCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#mainStorageCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    </div>
+                    <p>{{ _('Number of images') }}: {{ storage.images|length}}</p>
+                    </div>
+                {% endif %}
+                
+                <!-- include storage/form.storage.update.html-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="">
+    <h2 class="h2">{{ _('Items') }}</h2>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -38,8 +99,15 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 
-    {% include 'component/qrcode.html' %}
+<div class="">
+    <h2 class="h2">{{ _('Storages contain in') }} {{storage.name}}</h2>
+</div>
+
+
+
+    
 {% endblock %}
 
 

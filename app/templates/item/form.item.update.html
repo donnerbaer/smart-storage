@@ -35,7 +35,7 @@
 <script>
     const container = document.getElementById('storage-container');
     const hiddenInput = document.getElementById('storage_location');
-    const preselectedHierarchy = {{ storage_hierarchy|tojson|safe }};
+    const preselectedHierarchy = {{ storage_hierarchy_ids|tojson|safe }};
 
     // init call (starts with 0 or root-level)
     loadChildren(0, 0, preselectedHierarchy);

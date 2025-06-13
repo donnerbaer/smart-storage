@@ -8,6 +8,7 @@ from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from app import db
 from app.resource.storage_location.model import StorageLocation
+from app.resource.storage_location.storage import get_storage_hierarchy
 
 
 storage_bp = Blueprint('storage', __name__)
@@ -38,7 +39,12 @@ def storage_view(storage_id):
     """
     storage = db.session.query(StorageLocation).filter_by(id=storage_id).first_or_404()
     qrcode_url = request.url
-    return render_template('site.storage.html', current_user=current_user, storage=storage, qrcode_url=qrcode_url)
+    return render_template('site.storage.html',
+                           current_user=current_user,
+                           storage=storage,
+                           qrcode_url=qrcode_url,
+                           storage_hierarchy=get_storage_hierarchy(storage_id)
+                           )
 
 
 @storage_bp.route('/api/storages/list/childs/<int:storage_id>', methods=['GET'])
