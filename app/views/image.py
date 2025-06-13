@@ -56,3 +56,18 @@ def serve_user_image(filename):
     """
     image_dir = os.path.join(os.getcwd(), 'img', 'user')
     return send_from_directory(image_dir, filename)
+
+
+@image_bp.route('/img/storage/<path:filename>')
+@login_required
+def serve_storage_image(filename):
+    """Serve an image from the filesystem.
+
+    Args:
+        filename (str): The name of the image file to serve.
+
+    Returns:
+        Response: The image file served from the specified directory.
+    """
+    image_dir = os.path.join(os.getcwd(), 'img', 'storage')
+    return send_from_directory(image_dir, filename)
