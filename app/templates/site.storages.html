@@ -3,7 +3,31 @@
 
 {% block main %}
 <h1>{{ _("Storage Locations") }}</h1>
-<a href="" class="btn btn-success"><i class="bi bi-plus-circle"></i> {{ _('Create New Storage') }}</a>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createStorageModal">
+    <i class="bi bi-plus-circle"> </i>{{ _("Create new Storage") }}
+</button>
+<div class="modal fade" id="createStorageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createStorageModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createStorageModal">{{ _("Create new Storage") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% include 'storage/form.storage.create.html' %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <p>{{ _('Number of Storages') }}: {{storages|length}}</p>
 
 <table class="table table-striped">
