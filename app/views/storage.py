@@ -3,14 +3,18 @@ This module provides routes to display storage locations and individual storage 
 """
 
 import os
+from uuid import uuid4
 from flask import Blueprint, render_template
 from flask import request, redirect, url_for
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from app import db
-from app.resource.storage_location.model import StorageLocation, StorageLocationImage
+from app.forms import StorageCreateForm, StorageUpdateForm
+from app.resource.storage_location.model import StorageLocation, StorageLocationImage, \
+                                                StorageLocationImage
 from app.resource.item.model import ItemStorageStock
-from app.resource.storage_location.storage import get_storage_hierarchy
+from app.resource.storage_location.storage import get_storage_hierarchy, \
+                                                get_storage_hierarchy_ids
 
 
 storage_bp = Blueprint('storage', __name__)
@@ -25,7 +29,37 @@ def storages_view():
         Rendered template for the storages page with a list of storage locations.
     """
     storages = db.session.query(StorageLocation).all()
-    return render_template('site.storages.html', current_user=current_user, storages=storages)
+    form = StorageCreateForm()
+    return render_template('site.storages.html',
+                           current_user=current_user,
+                           storages=storages,
+                           form=form
+                           )
+
+
+@storage_bp.route('/storages/create', methods=['GET','POST'])
+@login_required
+def create_storage():
+    """ Create a new storage location.
+    
+    Returns:
+        Redirects to the storages page after creation.
+    """
+    form = StorageCreateForm(request.form)
+    if form.validate_on_submit():
+        storage = StorageLocation(
+            name=form.name.data,
+            description=form.description.data
+        )
+        db.session.add(storage)
+        db.session.commit()
+        return redirect(url_for('storage.storages_view'))
+    else:
+        return render_template('site.storages.html',
+                               current_user=current_user,
+                               form=form,
+                               error=form.errors
+                               )
 
 
 @storage_bp.route('/storages/<int:storage_id>', methods=['GET'])
@@ -41,12 +75,62 @@ def storage_view(storage_id):
     """
     storage = db.session.query(StorageLocation).filter_by(id=storage_id).first_or_404()
     qrcode_url = request.url
+    form = StorageUpdateForm(
+        id=storage_id,
+        name=storage.name,
+        description=storage.description,
+        images=storage.images,
+        storage_location=storage.parent_id
+    )
+    print("\n"*3)
+    print(storage.parent_id)
+    # storage_hierarchy requiered for for the breadcrumbs in the storage view
+    # storage_hierarchy_ids requiered for the select field in the storage update form
     return render_template('site.storage.html',
                            current_user=current_user,
                            storage=storage,
                            qrcode_url=qrcode_url,
-                           storage_hierarchy=get_storage_hierarchy(storage_id)
+                           form=form,
+                           storage_hierarchy=get_storage_hierarchy(storage.id),
+                           storage_hierarchy_ids=get_storage_hierarchy_ids(storage.id)
                            )
+
+
+@storage_bp.route('/storages/<int:storage_id>/update', methods=['POST'])
+@login_required
+def update_storage(storage_id):
+    """ Update an existing storage location.
+    
+    Args:
+        storage_id (int): The ID of the storage location to update.
+
+    Returns:
+        Redirects to the storages page after update.
+    """
+    storage = db.session.query(StorageLocation).filter_by(id=storage_id).first_or_404()
+    form = StorageUpdateForm(request.form)
+    print(form.storage_location.data)
+    if form.validate_on_submit():
+
+        storage.name = form.name.data
+        storage.description = form.description.data
+        # ! attention: different naming between form and model
+        storage.parent_id = form.storage_location.data
+        # if form.images.data:
+        #     for image in form.images.data:
+        #         if image and image.filename:
+        #             ext = image.filename[image.filename.rfind('.'):]
+        #             unique_name = f"{uuid4()}{ext}"
+        #             image.save(os.path.join('img', 'item', unique_name))
+        #             db.session.add(StorageLocationImage(storage_location_id=storage.id, filename=unique_name))
+
+        db.session.add(storage)
+        db.session.commit()
+    return redirect( url_for('storage.storage_view', storage_id=storage_id) )
+
+
+
+
 
 @storage_bp.route('/storages/<int:storage_id>/delete', methods=['GET'])
 @login_required
