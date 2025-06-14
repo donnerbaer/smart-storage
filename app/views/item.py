@@ -84,7 +84,7 @@ def update_item_post(item_id):
 
     item.name = form.name.data
     item.description = form.description.data
-    item.barcode = form.barcode.data
+    item.barcode = form.barcode.data if form.barcode.data != '' else None
     item.storage_location_id = form.storage_location.data
     if form.images.data:
         for image in form.images.data:
