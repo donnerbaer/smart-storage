@@ -19,55 +19,42 @@
 
 
 <h1>{{ _("Storage", context="Highlight") }} #{{ storage.id }} {{ storage.name }}</h1>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateItemModal">
-    {{ _("Edit Storage") }}
-</button>
+{% include 'storage/modal.update.html' %}
+{% include 'storage/modal.delete.html' %}
 {% include 'component/qrcode.html' %}
-<div class="modal fade" id="updateItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateItemModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="updateItemModal">{{ _("Update Storage") }} #{{ storage.id }} {{ storage.name}}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% if storage.images|length>0 %}
-                    <div>
-                    <div class="border border-secondary bg-dark-subtle">
-                    <div id="mainStorageCarousel" class="carousel slide" style="max-height:300px;">
-                        <div class="carousel-inner">
-                        {% for image in storage.images %}
-                            {% if loop.first %}
-                            <div class="carousel-item active">
-                            {% else %}
-                            <div class="carousel-item">
-                            {% endif %}
-                                <img src="{{ url_for('image.serve_storage_image', filename=image.filename) }}" class="d-block" alt="Image of {{ storage.name }}" style="max-height:300px">
-                            </div>
-                        {% endfor %}
 
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#mainStorageCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#mainStorageCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                    </div>
-                    <p>{{ _('Number of images') }}: {{ storage.images|length}}</p>
-                    </div>
+
+<div>
+    <div class="border border-secondary bg-dark-subtle">
+    <div id="mainStorageCarousel" class="carousel slide" style="max-height:300px;">
+        <div class="carousel-inner">
+        {% if storage.images|length == 0 %}
+            <div class="carousel-item active">
+                <img src="{{ url_for('image.serve_storage_image', filename='default_storage_image.png') }}" class="d-block" alt="Placeholder Image" style="max-height:300px">
+            </div>
+        {% else %}
+            {% for image in storage.images %}
+                {% if loop.first %}
+                <div class="carousel-item active">
+                {% else %}
+                <div class="carousel-item">
                 {% endif %}
-                
-                <!-- include storage/form.storage.update.html-->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
-            </div>
+                    <img src="{{ url_for('image.serve_storage_image', filename=image.filename) }}" class="d-block" alt="Image of {{ storage.name }}" style="max-height:300px">
+                </div>
+            {% endfor %}
+        {% endif %}
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainStorageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainStorageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
+    </div>
+    <p>{{ _('Number of images') }}: {{ storage.images|length}}</p>
 </div>
 
 
@@ -87,12 +74,12 @@
             {% for item in storage.items %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td><a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</a></td>
+                    <td>{% include 'component/link.item.html' %}</td>
                     <td>{{ item.description if item.description else '' }}</td>
                     <td>{{ item.barcode if item.barcode else '' }}</td>
                     <td>
                         {% if item.owner_id %}
-                            <a href="{{ url_for('user.user_view', user_id=item.owner.id)}}" class="btn btn-primary">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
+                            {% include 'component/link.item.owner.html' %}
                         {% endif %}
                     </td>
                 </tr>
@@ -107,7 +94,24 @@
 
 
 
-    
+
+{% macro render_node(node) %}
+        <li class="m-2">
+             <a href="{{ url_for('storage.storage_view', storage_id=node.id) }}" class="btn btn-{{'primary' if node.id==storage.id else 'secondary'}}"><i class="bi bi-box"></i> {{ node.name }}</a>
+            {% if node.children %}
+                <ul>
+                    {% for child in node.children %}
+                       {{ render_node(child) }}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endmacro %}
+
+    <ul>
+        {{ render_node(storage.get_root()) }}
+    </ul>
+
 {% endblock %}
 
 
