@@ -1,0 +1,22 @@
+<form action="{{ url_for('storage.create_storage') }}" method="POST" class="form-horizontal">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        <label for="name">{{ form.name.label.text }} <span class="text-danger">required</span></label>
+        {{ form.name(class="form-control", id="name") }}
+    </div>
+
+    <div class="form-group">
+        <label for="description">{{ form.description.label.text }}</label>
+        {{ form.description(class="form-control", id="description") }}
+    </div>
+
+    <div class="form-group">
+        <label for="images">{{ form.images.label.text }} <span class="text-danger">allowed types jpg, png, jpeg, gif</span></label>
+        {{ form.images(class="form-control", id="images") }}
+    </div>
+
+    <div class="form-group my-3">
+        {{ form.submit(class="form-control btn btn-success") }}
+    </div>
+</form>
