@@ -2,9 +2,9 @@
 {% block title %} {{ _("List of all Storage Locations") }}{% endblock %}
 
 {% block main %}
-<h1>{{ _("List of all Storage Locations", context="Highlight") }}</h1>
+<h1>{{ _("Storage Locations") }}</h1>
+<a href="" class="btn btn-success"><i class="bi bi-plus-circle"></i> {{ _('Create New Storage') }}</a>
 <p>{{ _('Number of Storages') }}: {{storages|length}}</p>
-<a href="" class="btn btn-success">{{ _('Create New Storage') }}</a>
 
 <table class="table table-striped">
     <thead>
@@ -20,17 +20,17 @@
         {% for storage in storages %}
         <tr>
             <td>{{ storage.id }}</td>
-            <td><a href="{{ url_for('storage.storage_view', storage_id=storage.id) }}" class="btn btn-primary">{{ storage.name }}</a></td>
+            <td>{% include 'component/link.storage.html' %}</td>
             <td>{{ storage.description if storage.description }}</td>
             <td>
                 {% if storage.parent.id %}
-                <a href="{{ url_for('storage.storage_view', storage_id=storage.parent.id) }}" class="btn btn-primary">{{ storage.parent.name }}</a>
+                <a href="{{ url_for('storage.storage_view', storage_id=storage.parent.id) }}" class="btn btn-primary"><i class="bi bi-box"></i> {{ storage.parent.name }}</a>
                 {% endif %}
             </td>
 
             <td>
                 {% if storage.id != storage.get_root().id %}  
-                <a href="{{ url_for('storage.storage_view', storage_id=storage.get_root().id) }}" class="btn btn-primary">{{ storage.get_root().name }}</a>
+                <a href="{{ url_for('storage.storage_view', storage_id=storage.get_root().id) }}" class="btn btn-primary"><i class="bi bi-box"></i> {{ storage.get_root().name }}</a>
                 {% endif %}
             </td>
         </tr>
