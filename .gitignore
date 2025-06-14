@@ -1,5 +1,7 @@
 # Ignore all image files except default_user_image.png
 *.png
+!default_item_image.png
+!default_storage_image.png
 !default_user_image.png
 *.jpg
 *.jpeg

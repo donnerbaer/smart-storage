@@ -1,20 +1,14 @@
-<form action="{{ url_for('item.update_item_post', item_id=item.id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ url_for('storage.update_storage', storage_id=storage.id) }}" method="POST">
     {{ form.hidden_tag() }}
-    <div class="form-group my-2">
-        <label for="id">{{ form.id.label }}</label>
-        {{ form.id(class="form-control bg-secondary-subtle", id="id") }}
-    </div>
-    <div class="form-group my-2">
-        <label for="name">{{ form.name.label }} <span class="text-danger">required</span></label>
+
+    <div class="form-group">
+        <label for="name">{{ form.name.label.text }} <span class="text-danger">required</span></label>
         {{ form.name(class="form-control", id="name") }}
     </div>
-    <div class="form-group my-2">
-        <label for="description">{{ form.description.label }}</label>
+
+    <div class="form-group">
+        {{ form.description.label }}
         {{ form.description(class="form-control", id="description") }}
-    </div>
-    <div class="form-group my-2">
-        <label for="barcode">{{ form.barcode.label }}</label>
-        {{ form.barcode(class="form-control", id="barcode") }}
     </div>
 
     <div class="form-group my-2">
@@ -22,12 +16,13 @@
         <div id="storage-container"></div>
         <input type="hidden" name="storage_location" id="storage_location">
     </div>
- 
-    <div class="form-group my-2">
-        <label for="images">{{ form.images.label }} <span class="text-danger">allowed types jpg, png, jpeg, gif</span></label>
+
+    <div class="form-group">
+        {{ form.images.label }} <span class="text-danger">allowed types jpg, png, jpeg, gif</span>
         {{ form.images(class="form-control", id="images") }}
     </div>
-    <div class="form-group my-3"> 
+
+    <div class="form-group my-3">
         {{ form.submit(class="form-control btn btn-success") }}
     </div>
 </form>
@@ -35,7 +30,8 @@
 <script>
     const container = document.getElementById('storage-container');
     const hiddenInput = document.getElementById('storage_location');
-    const preselectedHierarchy = {{ storage_hierarchy_ids|tojson|safe }};
+    let preselectedHierarchy = {{ storage_hierarchy_ids|tojson|safe }};
+    preselectedHierarchy = preselectedHierarchy.slice(0, -1);
 
     // init call (starts with 0 or root-level)
     loadChildren(0, 0, preselectedHierarchy);

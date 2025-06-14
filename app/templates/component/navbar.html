@@ -11,10 +11,10 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('main.dashboard') }}" class="nav-link px-2 text-light">{{ _("Dashboard") }}</a></li>
-                <li><a href="{{ url_for('main.catalog') }}" class="nav-link px-2 text-light">{{ _("Catalog") }}</a></li>
-                <li><a href="{{ url_for('user.users_view') }}" class="nav-link px-2 text-light">{{ _("Users") }}</a></li>
-                <li><a href="{{ url_for('storage.storages_view') }}" class="nav-link px-2 text-light">{{ _("Storage Locations") }}</a></li>
+                <li><a href="{{ url_for('main.dashboard') }}" class="nav-link px-2 text-light"><i class="bi bi-speedometer"></i> {{ _("Dashboard") }}</a></li>
+                <li><a href="{{ url_for('main.catalog') }}" class="nav-link px-2 text-light"><i class="bi bi-suitcase-lg-fill"></i> {{ _("Catalog") }}</a></li>
+                <li><a href="{{ url_for('user.users_view') }}" class="nav-link px-2 text-light"><i class="bi bi-people"></i> {{ _("Users") }}</a></li>
+                <li><a href="{{ url_for('storage.storages_view') }}" class="nav-link px-2 text-light"><i class="bi bi-box"></i> {{ _("Storage Locations") }}</a></li>
                 {% endif %}
             </ul>
 		</div>
