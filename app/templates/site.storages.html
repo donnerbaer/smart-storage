@@ -2,15 +2,26 @@
 {% block title %} {{ _("List of all Storage Locations") }}{% endblock %}
 
 {% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a class="" href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ _('Storages') }}
+        </li>
+    </ol>
+</nav>
+
 <h1>{{ _("Storage Locations") }}</h1>
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createStorageModal">
-    <i class="bi bi-plus-circle"> </i>{{ _("Create new Storage") }}
+    <i class="bi bi-plus-circle"></i> {{ _("Create new Storage") }}
 </button>
 <div class="modal fade" id="createStorageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createStorageModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createStorageModal">{{ _("Create new Storage") }}</h1>
+                <h1 class="modal-title fs-5" id="createStorageModal"><i class="bi bi-plus-circle"> </i>{{ _("Create new Storage") }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
