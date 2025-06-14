@@ -6,14 +6,14 @@
 <h1>{{ _("List of all Users", context="") }}</h1>
 
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">
-    {{ _("Create User") }}
+    <i class="bi bi-person-plus-fill"></i> {{ _("Create User") }}
 </button>
 
 <div class="modal fade" id="createUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createUserModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createUserModal">{{ _("Create User") }}</h1>
+                <h1 class="modal-title fs-5" id="createUserModal"><i class="bi bi-person-plus-fill"></i> {{ _("Create User") }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
