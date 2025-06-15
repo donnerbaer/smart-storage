@@ -46,12 +46,22 @@ def create_storage():
         Redirects to the storages page after creation.
     """
     form = StorageCreateForm(request.form)
+    form.images.data = request.files.getlist('images')
     if form.validate_on_submit():
         storage = StorageLocation(
             name=form.name.data,
-            description=form.description.data
+            description=form.description.data if form.description.data else None
         )
         db.session.add(storage)
+        db.session.merge(storage)
+
+        if form.images.data:
+            for image in form.images.data:
+                if image and image.filename:
+                    ext = image.filename[image.filename.rfind('.'):]
+                    unique_name = f"{uuid4()}{ext}"
+                    image.save(os.path.join('img', 'storage', unique_name))
+                    db.session.add(StorageLocationImage(storage_location_id=storage.id, filename=unique_name))
         db.session.commit()
         return redirect(url_for('storage.storages_view'))
     else:
@@ -82,8 +92,6 @@ def storage_view(storage_id):
         images=storage.images,
         storage_location=storage.parent_id
     )
-    print("\n"*3)
-    print(storage.parent_id)
     # storage_hierarchy requiered for for the breadcrumbs in the storage view
     # storage_hierarchy_ids requiered for the select field in the storage update form
     return render_template('site.storage.html',
@@ -109,20 +117,20 @@ def update_storage(storage_id):
     """
     storage = db.session.query(StorageLocation).filter_by(id=storage_id).first_or_404()
     form = StorageUpdateForm(request.form)
-    print(form.storage_location.data)
+    form.images.data = request.files.getlist('images')
     if form.validate_on_submit():
 
         storage.name = form.name.data
         storage.description = form.description.data
         # ! attention: different naming between form and model
-        storage.parent_id = form.storage_location.data
-        # if form.images.data:
-        #     for image in form.images.data:
-        #         if image and image.filename:
-        #             ext = image.filename[image.filename.rfind('.'):]
-        #             unique_name = f"{uuid4()}{ext}"
-        #             image.save(os.path.join('img', 'item', unique_name))
-        #             db.session.add(StorageLocationImage(storage_location_id=storage.id, filename=unique_name))
+        storage.parent_id = form.storage_location.data if form.storage_location.data != '' else None
+        if form.images.data:
+            for image in form.images.data:
+                if image and image.filename:
+                    ext = image.filename[image.filename.rfind('.'):]
+                    unique_name = f"{uuid4()}{ext}"
+                    image.save(os.path.join('img', 'storage', unique_name))
+                    db.session.add(StorageLocationImage(storage_location_id=storage.id, filename=unique_name))
 
         db.session.add(storage)
         db.session.commit()
@@ -173,7 +181,7 @@ def api_get_all_child_storages(storage_id):
     Returns:
         List of all storage locations.
     """
-    if storage_id is "0" or storage_id is 0:
+    if storage_id == 0:
         storage_id = None
     storages = db.session.query(StorageLocation).filter_by(parent_id=storage_id).all()
     storage_data = []
