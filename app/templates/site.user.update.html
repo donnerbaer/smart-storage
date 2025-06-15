@@ -3,6 +3,7 @@
 
 
 {% block main %}
+
 <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
     <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
         <li class="breadcrumb-item">
@@ -16,6 +17,7 @@
 </nav>
 
 <h1>{{ user.first_name}} {{ user.last_name }}</h1>
+
 <img src="{{ url_for('image.serve_user_image', filename=user.image_filename) }}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
 <div>
     <a href="{{ url_for('user.user_view', user_id=user.id) }}" class="btn btn-danger">{{ _("Cancel") }}</a>
