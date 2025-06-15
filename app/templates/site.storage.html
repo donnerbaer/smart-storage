@@ -5,12 +5,18 @@
 {% block main %}
 <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
     <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('storage.storages_view') }}">Storages</a>
+        </li>
     {% for storage_hierarchy in storage_hierarchy %}
         {% if loop.last %}
-            <li class="breadcrumb-item" aria-current="page">{{ storage_hierarchy.name}}</li>
+        <li class="breadcrumb-item" aria-current="page">{{ storage_hierarchy.name}}</li>
         {% else %}
-        <li class="breadcrumb-item">
-            <a class="" href="{{ url_for('storage.storage_view', storage_id=storage_hierarchy.id) }}">{{ storage_hierarchy.name }}</a>
+        <li class="breadcrumb-item active" aria-current="page">
+            <a href="{{ url_for('storage.storage_view', storage_id=storage_hierarchy.id) }}">{{ storage_hierarchy.name }}</a>
         </li>
         {% endif %}
     {% endfor %}

@@ -23,7 +23,7 @@
         <!-- user infos, login, registration-->
         {% if current_user.is_authenticated %}
             <div class="d-flex align-items-center">
-                <div class="">
+                <div class="me-2">
                     <button id="toggle-qrcode" class="btn btn-primary"><i class="bi bi-qr-code"></i></button>
                 </div>
                 
@@ -39,7 +39,8 @@
                         <img src="{{ url_for('image.serve_current_user_image') }}"
                             alt="Profile picture of"
                             width="40" height="40"
-                            class="rounded-circle bg-light"> </a>
+                            class="rounded-circle bg-light">
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="{{ url_for('user.user_view', user_id=current_user.id)}}">{{ _('My Profile')}}</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -47,56 +48,25 @@
                     </ul>
                 </div>
             </div>
-            
             {% else %}
             <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal">
-                    {{ _("Sign-in") }}
-                </button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrateModal">
-                    {{ _("Sign-up") }}
-                </button>
+                <div class="me-2">
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        {{ _("Sign-in") }}
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrateModal">
+                        {{ _("Sign-up") }}
+                    </button>
+                </div>
             </div>
             {% endif %}
-            
         </div>
     </div>
 </nav>
 
-
-
-<!-- Modal Sign-in -->
-<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="loginModalLabel">{{ _("Sign-in") }}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    {% include './auth/form.login.html' %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Modal Sign-up -->
-<div class="modal fade" id="registrateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registrateModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="registrateModalLabel">{{ _("Sign-up") }}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    {% include './auth/form.sign-up.html' %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% if not current_user.is_authenticated %}
+{% include 'auth/modal.login.html' %}
+{% include 'auth/modal.registrate.html' %}
+{% endif %}

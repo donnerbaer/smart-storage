@@ -3,16 +3,27 @@
 
 
 {% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a class="" href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ _('Catalog') }}
+        </li>
+    </ol>
+</nav>
+
 <h1>{{ _("Catalog", context="Highlight") }}</h1>
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createItemModal">
-    {{ _("Create new item") }}
+    <i class="bi bi-plus-circle"></i> {{ _("Create new item") }}
 </button>
 
 <div class="modal fade" id="createItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createItemModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createItemModal">{{ _("Create Item") }}</h1>
+                <h1 class="modal-title fs-5" id="createItemModal"><i class="bi bi-plus-circle"> </i>{{ _("Create Item") }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

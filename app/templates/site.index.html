@@ -3,6 +3,14 @@
 
 
 {% block main %}
-    <h1>Welcome on the side</h1>
-    <p>Here is some content for the index page.</p>
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item active" aria-current="page">
+            <i class="bi bi-house-door-fill"></i> {{ _("Home") }}
+        </li>
+    </ol>
+</nav>
+
+<h1>{{ _('Welcome on the side') }}</h1>
+<p>{{ _('Here is some content for the index page.') }}</p>
 {% endblock %}
