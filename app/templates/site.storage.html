@@ -64,22 +64,27 @@
 </div>
 
 
-<div class="">
+<section>
     <h2 class="h2">{{ _('Items') }}</h2>
+    {% if storage.items|length < 1 %}
+        <div class="alert alert-info" role="alert">
+            {{ _("No items found in this storage.") }}
+        </div>
+    {% else %}
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>{{ _('ID') }}</th>
-                <th>{{ _("Name") }}</th>
-                <th>{{ _('Description') }}</th>
-                <th>{{ _('Barcode') }}</th>
-                <th>{{ _('Owner') }}</th>
+                <th scope="col">{{ _('ID') }}</th>
+                <th scope="col">{{ _("Name") }}</th>
+                <th scope="col">{{ _('Description') }}</th>
+                <th scope="col">{{ _('Barcode') }}</th>
+                <th scope="col">{{ _('Owner') }}</th>
             </tr>
         </thead>
         <tbody>
             {% for item in storage.items %}
                 <tr>
-                    <td>{{ item.id }}</td>
+                    <td scope="row">{{ item.id }}</td>
                     <td>{% include 'component/link.item.html' %}</td>
                     <td>{{ item.description if item.description else '' }}</td>
                     <td>{{ item.barcode if item.barcode else '' }}</td>
@@ -92,7 +97,8 @@
             {% endfor %}
         </tbody>
     </table>
-</div>
+    {% endif %}
+</section>
 
 <div class="">
     <h2 class="h2">{{ _('Storages contain in') }} {{storage.name}}</h2>
