@@ -37,7 +37,7 @@
                 <div class="col-sm">
                     <h3>{{ _("Storage Location") }}</h3>
                     {% if item.storage_location %}
-                    <a href="{{ url_for('storage.storage_view', storage_id=item.storage_location.id) }}" class="btn btn-primary">{{ item.storage_location.name }}</a>
+                    <a href="{{ url_for('storage.storage_view', storage_id=item.storage_location.id) }}" class="btn btn-primary d-block">{{ item.storage_location.name }}</a>
                     {% else %}
                     <div class="alert alert-info" role="alert">
                         {{ _("No location assigned to this item.") }}
@@ -47,7 +47,7 @@
                 <div class="col-sm">
                     <h3>{{ _("Owner") }}</h3>
                     {% if item.owner %}
-                    <a href="{{ url_for('user.user_view', user_id=item.owner.id) }}" class="btn btn-primary">{{ item.owner.first_name }} {{ item.owner.last_name }}</a>
+                    <a href="{{ url_for('user.user_view', user_id=item.owner.id) }}" class="btn btn-primary d-block">{{ item.owner.first_name }} {{ item.owner.last_name }}</a>
                     {% else %}
                     <div class="alert alert-info" role="alert">
                     {{ _("No owner found for this item.") }}
