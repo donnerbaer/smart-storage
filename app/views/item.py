@@ -83,9 +83,10 @@ def update_item_post(item_id):
     """
     item = db.session.query(Item).filter_by(id=item_id).first_or_404()
     form = ItemUpdateForm(request.form)
-
+    form.images.data = request.files.getlist('images')
+    
     item.name = form.name.data
-    item.description = form.description.data
+    item.description = form.description.data if form.description.data != '' else None
     item.barcode = form.barcode.data if form.barcode.data != '' else None
     item.storage_location_id = form.storage_location.data
     item.owner_id = form.owner.data if form.owner.data > 0 else None
@@ -95,14 +96,14 @@ def update_item_post(item_id):
                 ext = image.filename[image.filename.rfind('.'):]
                 unique_name = f"{uuid4()}{ext}"
                 image.save(os.path.join('img', 'item', unique_name))
-                db.session.add(ItemImage(item_id=item.id, filename=unique_name))
+                db.session.add(ItemImage(item_id=item_id, filename=unique_name))
     db.session.add(item)
     db.session.commit()
     # db.session.refresh(item)
     return redirect( url_for('item.item_view', item_id=item_id) )
 
 
-@item_bp.route('/items/create', methods=['POST'])
+@item_bp.route('/items', methods=['POST'])
 @login_required
 def create_item():
     """ Handle the creation of a new item.
