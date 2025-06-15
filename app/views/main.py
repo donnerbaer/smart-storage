@@ -6,6 +6,8 @@ from flask_babel import gettext as _
 from app import db
 from app.forms import ItemCreateForm
 from app.resource.item.model import Item
+from app.resource.storage_location.model import StorageLocation
+from app.user.model import User
 
 
 main_bp = Blueprint('main', __name__)
@@ -29,7 +31,46 @@ def dashboard():
     Returns:
         Rendered template for the dashboard page.
     """
-    return render_template('site.dashboard.html', current_user=current_user)
+    users_count = db.session.query(User).count()
+    locations_count = db.session.query(StorageLocation).count()
+    items_count = db.session.query(Item).count()
+    """ Prepare data for the dashboard.
+
+        The data is structured as follows:
+        1. The key is the HTML id of the chart.
+        2. The value is a dictionary containing:
+        - 'title': The title of the chart.
+        - 'description': A description of the chart.
+        - 'labels': A list of labels for the chart.
+        - 'data': A list of data points for the chart.
+        - 'name': The name of the chart.
+
+        If required, you can add more charts by following the same structure.
+        The data can be used to render charts using a JavaScript charting library like Chart.js.
+
+        Example:
+            {'overall_sum': {
+                'title': 'Title of the chart',
+                'description': 'Description of the chart',
+                'labels': ['Label1', 'Label2', 'Label3'],
+                'data': [12, 19, 3],
+                'name': 'name of the chart'
+            }
+    """
+
+    data = {
+        "overall_sum": {
+            "title": _("Overall Summary"),
+            "description": _("This is the overall summary of your storage system."),
+            "labels": [_("Users"), _("Locations"), _("Items")],
+            "data": [users_count, locations_count, items_count],
+            "name": 'overall_sum'
+        }
+    }
+    return render_template('site.dashboard.html',
+                           current_user=current_user,
+                           data=data
+                           )
 
 
 @main_bp.app_errorhandler(404)
