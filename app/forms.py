@@ -2,7 +2,8 @@
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, BooleanField, HiddenField
+from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, \
+                    BooleanField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from flask_babel import lazy_gettext as _l
 
@@ -57,6 +58,7 @@ class ItemUpdateForm(FlaskForm):
     images = MultipleFileField('Add Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     barcode = StringField(_l('Barcode'), validators=[Optional(), Length(max=64)])
     storage_location = HiddenField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
+    owner = SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()])
     submit = SubmitField(_l('Save Changes'))
 
 
