@@ -18,6 +18,11 @@
     </div>
 
     <div class="form-group my-2">
+        {{ form.owner.label }}
+        {{ form.owner(class="form-control", id="owner") }}
+    </div>
+
+    <div class="form-group my-2">
         <label for="storage_location">{{ form.storage_location.label }}</label>
         <div id="storage-container"></div>
         <input type="hidden" name="storage_location" id="storage_location">

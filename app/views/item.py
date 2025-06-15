@@ -37,8 +37,10 @@ def item_view(item_id):
                             description=item.description,
                             images=item.images,
                             barcode=item.barcode,
-                            storage_location=item.storage_location_id
+                            storage_location=item.storage_location_id,
+                            owner=item.owner_id
                           )
+    form.owner.choices = [(0, '')] + [(u.id, u.username) for u in User.query.all()]
     # storage_hierarchy requiered for for the breadcrumbs in the item view
     # storage_hierarchy_ids requiered for the select field in the item update form
     return render_template('site.item.html',
@@ -86,6 +88,7 @@ def update_item_post(item_id):
     item.description = form.description.data
     item.barcode = form.barcode.data if form.barcode.data != '' else None
     item.storage_location_id = form.storage_location.data
+    item.owner_id = form.owner.data if form.owner.data > 0 else None
     if form.images.data:
         for image in form.images.data:
             if image and image.filename:
