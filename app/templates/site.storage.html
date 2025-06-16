@@ -24,13 +24,29 @@
 </nav>
 
 
-<h1>{{ _("Storage", context="Highlight") }} #{{ storage.id }} {{ storage.name }}</h1>
-{% include 'storage/modal.update.html' %}
-{% include 'storage/modal.delete.html' %}
-{% include 'component/qrcode.html' %}
-
-
-{% include 'storage/carousel.storage.html' %}
+<h1>#{{ storage.id }} {{ storage.name }}</h1>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col">
+            {% include 'storage/carousel.storage.html' %}
+            {% include 'storage/modal.update.html' %}
+            {% include 'storage/modal.delete.html' %}
+        </div>
+        <div class="col-6">
+            {% include 'component/qrcode.html' %}
+            <div class="mt-3">
+                <h3>{{ _("Description") }}</h3>
+                {% if storage.description %}
+                <p>{{ storage.description }}</p>
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    {{ _("No description found for this storage.") }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <section>
