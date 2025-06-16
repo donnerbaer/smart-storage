@@ -42,35 +42,50 @@
 
 <p>{{ _('Number of Storages') }}: {{storages|length}}</p>
 
-<table class="table table-striped">
+{% if storages|length > 0%}
+<table class="table table-striped table-hover align-middle">
     <thead>
         <tr>
-            <th>{{ _('ID') }}</th>
-            <th>{{ _("Name") }}</th>
-            <th>{{ _('Description') }}</th>
-            <th>{{ _('Parent') }}</th>
-            <th>{{ _('Root Parent') }}</th>
+            <th scope="col">{{ _('ID') }}</th>
+            <th scope="col">{{ _("Name") }}</th>
+            <th scope="col">{{ _('Description') }}</th>
+            <th scope="col">{{ _('Parent') }}</th>
+            <th scope="col">{{ _('Root Parent') }}</th>
         </tr>
     </thead>
     <tbody>
         {% for storage in storages %}
         <tr>
-            <td>{{ storage.id }}</td>
-            <td>{% include 'component/link.storage.html' %}</td>
-            <td>{{ storage.description if storage.description }}</td>
+            <td scope="row">
+                <span class="fw-bold">{{ storage.id }}</span>
+            </td>
             <td>
+                <a href="{{ url_for('storage.storage_view', storage_id=storage.id) }}" class="btn btn-primary"><i class="bi bi-search"></i></a>
+                <span class="fw-bold">{{ storage.name }}</span>
+            </td>
+            <td>
+                {{ storage.description if storage.description }}
+            </td>
+            <td class="text-nowrap">
                 {% if storage.parent.id %}
-                <a href="{{ url_for('storage.storage_view', storage_id=storage.parent.id) }}" class="btn btn-primary"><i class="bi bi-box"></i> {{ storage.parent.name }}</a>
+                <a href="{{ url_for('storage.storage_view', storage_id=storage.parent.id) }}" class="btn btn-primary"><i class="bi bi-search"></i></i></a>
+                {{ storage.parent.name }}
                 {% endif %}
             </td>
-
-            <td>
+            <td class="text-nowrap">
                 {% if storage.id != storage.get_root().id %}  
-                <a href="{{ url_for('storage.storage_view', storage_id=storage.get_root().id) }}" class="btn btn-primary"><i class="bi bi-box"></i> {{ storage.get_root().name }}</a>
+                <a href="{{ url_for('storage.storage_view', storage_id=storage.get_root().id) }}" class="btn btn-primary"><i class="bi bi-search"></i></a>
+                {{ storage.get_root().name }}
                 {% endif %}
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+<div class="alert alert-info" role="alert">
+{{ _("No storages found.") }}
+</div>
+{% endif %}
+
 {% endblock %}

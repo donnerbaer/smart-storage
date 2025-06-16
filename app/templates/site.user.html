@@ -16,28 +16,99 @@
 </nav>
 
 <h1 class="h1">{{ user.first_name }} {{ user.last_name }}</h1>
-<img src="{{url_for('image.serve_user_image', filename=user.image_filename)}}" alt="User Image" class="img-thumbnail mb-3" style="height:250px">
-<div>
-    {% include 'component/link.user.delete.html' %}
-    {% include 'user/modal.delete.html' %}
-</div>
-
 
 
 <div class="container">
-    <h2>{{ _("User Details") }}</h2>
-    <ul class="list-group">
-        <li class="list-group-item"><strong>{{ _("Username") }}:</strong> {{ user.username }}</li>
-        <li class="list-group-item"><strong>{{ _("First Name") }}:</strong> {{ user.first_name }}</li>
-        <li class="list-group-item"><strong>{{ _("Last Name") }}:</strong> {{ user.last_name }}</li>
-        <li class="list-group-item"><strong>{{ _("Email") }}:</strong> {{ user.email }}</li>
-        <li class="list-group-item"><strong>{{ _("Created At") }}:</strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
-        <li class="list-group-item"><strong>{{ _("Image Filename") }}:</strong> {{ user.image_filename if user.image_filename else _("No image uploaded") }}</li>
-        <li class="list-group-item"><strong>{{ _("Image URL") }}:</strong>
-            <a href="{{ url_for('image.serve_user_image', filename=user.image_filename) }}" target="_blank">
-                {{ url_for('image.serve_user_image', filename=user.image_filename) if user.image_filename else _("No image uploaded") }}
-            </a>
-        </li>
-    </ul>
+    <div class="row">
+        <div class="col-auto col-sm">
+            <img src="{{url_for('image.serve_user_image', filename=user.image_filename)}}" alt="User Image" class="img-thumbnail mb-3" style="max-width:250px">
+        </div>
+        <div class="col-9">
+            <ul class="list-group">
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("Username") }}</strong></div>
+                    <div class="col-8">{{ user.username }}</div>
+                </li>
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("First Name") }}</strong></div>
+                    <div class="col-8">{{ user.first_name }}</div>
+                </li>
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("Last Name") }}</strong></div>
+                    <div class="col-8">{{ user.last_name }}</div>
+                </li>
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("Email") }}</strong></div>
+                    <div class="col-8">{{ user.email }}</div>
+                </li>
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("Created At") }}</strong></div>
+                    <div class="col-8">{{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</div>
+                </li>
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("Image Filename") }}</strong></div>
+                    <div class="col-8">
+                        {{ user.image_filename if user.image_filename else _("No image uploaded") }}
+                    </div>
+                </li>
+                <li class="list-group-item row">
+                    <div class="col-4"><strong>{{ _("Image URL") }}</strong></div>
+                    <div class="col-8">
+                        {% if user.image_filename %}
+                            <a href="{{ url_for('image.serve_user_image', filename=user.image_filename) }}" target="_blank">
+                                {{ url_for('image.serve_user_image', filename=user.image_filename) }}
+                            </a>
+                        {% else %}
+                            {{ _("No image uploaded") }}
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                {% include 'component/link.user.delete.html' %}
+                {% include 'user/modal.delete.html' %}
+            </div>
+        </div>
+     </div>
 </div>
+
+
+<section class="mt-4">
+    <h2>{{ _("User owned items") }}</h2>
+    {% if user.items|length > 0 %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>{{ _('ID') }}</th>
+                <th>{{ _('Item') }}</th>
+                <th>{{ _('Location') }}</th>
+                <th>{{ _('Description') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in user.items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td><a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">{{ item.name }}</td>
+                <td>
+                    {% if item.storage_location %}
+                    <a href="{{ url_for('storage.storage_view', storage_id=item.storage_location.id) }}" class="btn btn-primary">{{ item.storage_location.name }}</a>
+                    {% else %}
+                    {{ _("No location assigned") }}
+                    {% endif %}
+                </td>
+                <td>{{ item.description if item.description else '' }}</td>
+            </tr>
+            {% endfor %}
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        {{ _("No items found for this user.") }}
+    </div>
+    {% endif %}
+</section>
+
+
 {% endblock %}

@@ -34,12 +34,12 @@
                     </div>
                 </form>
             
-                <div class="flex-shrink-0 dropdown">
+                <div class="flex-shrink-0 dropdown mx-2">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ url_for('image.serve_current_user_image') }}"
                             alt="Profile picture of"
                             width="40" height="40"
-                            class="rounded-circle bg-light">
+                            class="rounded-circle bg-light"> {{ current_user.first_name }} {{ current_user.last_name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="{{ url_for('user.user_view', user_id=current_user.id)}}">{{ _('My Profile')}}</a></li>

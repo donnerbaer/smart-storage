@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block title %} {{ _("Dashboard") }}{% endblock %}
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
 
 
 {% block main %}
@@ -15,5 +19,39 @@
 </nav>
 
 <h1>Dashboard</h1>
+
+<section>
+    <div class="border border-1 border-dark-emphasis p-3 rounded-4 bg-light" style="max-width: 500px;">
+        <h2 class="h4">{{ data.overall_sum.title}}</h2>
+        <p class="text-muted">{{ data.overall_sum.description }}</p>
+    <canvas id="{{ data.overall_sum.name }}"></canvas>
+    </div>
+
+    <script>
+    const {{ data.overall_sum.name }} = document.getElementById('{{ data.overall_sum.name }}');
+
+    new Chart({{ data.overall_sum.name }}, {
+        type: 'bar',
+        data: {
+        labels: {{ data.overall_sum.labels|tojson|safe }},
+        datasets: [{
+            label: '{{ data.overall_sum.title|tojson|safe }}',
+            data: {{ data.overall_sum.data|tojson|safe }},
+            borderWidth: 1
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+                ticks: {
+                    stepSize: 1
+            },
+            beginAtZero: true
+            }
+        }
+        }
+    });
+    </script>
+</section>
 
 {% endblock %}
