@@ -62,6 +62,8 @@
                 select.appendChild(defaultOption);
 
                 data.storages.forEach(storage => {
+                    // skip the current storage to avoid circular references
+                    if (storage.id === {{storage.id}}) return;
                     const opt = document.createElement('option');
                     opt.value = storage.id;
                     opt.textContent = storage.name;
@@ -105,6 +107,6 @@
                     }
                 }
             })
-            .catch(err => console.error("Fehler beim Laden:", err));
+            .catch(err => console.error("Error at loading:", err));
     }
 </script>
