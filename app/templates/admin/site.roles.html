@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %} {{ _('Roles') }} - {{ _("Admin") }}{% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('admin.admin_view') }}">{{ _("Admin") }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ _("Roles") }}
+        </li>
+    </ol>
+</nav>
+
+<h1 class="h1">{{ _('Roles') }}</h1>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createRoleModal">
+    <i class="bi bi-plus-circle"></i> {{ _("Create role") }}
+</button>
+<div class="modal fade" id="createRoleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createRoleModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createRoleModal"><i class="bi bi-plus-circle"> </i>{{ _("Create role") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% if roles|length == 0 %}
+    <p>{{ _('No roles found.') }}</p>
+{% else %}
+    <p>{{ _('Number of roles') }}: {{ roles|length }}</p>
+{% endif %}
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">{{ _('ID') }}</th>
+            <th scope="col">{{ _('Name') }}</th>
+            <th scope="col">{{ _('Description') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for role in roles %}
+            <tr>
+                <td scope="row">{{ role.id }}</td>
+                <td><a href="{{ url_for('admin.role_view', role_id=role.id) }}">{{ role.name }}</a></td>
+                <td>{{ role.description }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">{{ _('No roles found.') }}</td>
+            </tr>
+        {% endfor %}
+    <thead>
+        
+    </thead>
+</table>
+
+
+{% endblock %}
