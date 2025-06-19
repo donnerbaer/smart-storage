@@ -118,7 +118,7 @@ def groups_view():
                 'admin.backend.access',
                 'admin.group.create'
             ])
-def group_post():
+def create_group():
     """Create a new group."""
     form = GroupCreateForm(request.form)
     if not form.validate_on_submit():
@@ -142,7 +142,12 @@ def group_post():
             ])
 def group_view(group_id):
     group = Group.query.get_or_404(group_id)
-    return render_template('admin/site.group.html', current_user=current_user, group=group)
+    form_update_group = GroupUpdateForm(obj=group)
+    return render_template('admin/site.group.html',
+                           current_user=current_user,
+                           group=group,
+                           form_update_group=form_update_group)
+
 
 
 @admin_bp.route('/groups/<int:group_id>', methods=['POST'])
@@ -151,23 +156,19 @@ def group_view(group_id):
                 'admin.backend.access',
                 'admin.group.update'
             ])
-def create_group(group_id):
-    group = Group.query.get_or_404(group_id)
-    # Logic to update the group
-    return redirect(url_for('admin.groups_view'))
-
-
-@admin_bp.route('/groups/<int:group_id>/update', methods=['POST'])
-@login_required
-@check_permissions([
-                'admin.backend.access',
-                'admin.group.update'
-            ])
 def update_group(group_id: int):
     """Render the group update page."""
     group = Group.query.get_or_404(group_id)
-    form = GroupUpdateForm(obj=group)
-    return render_template('admin/site.group.update.html', current_user=current_user, group=group)
+    form = GroupUpdateForm(request.form)
+    if not form.validate_on_submit():
+        return redirect(url_for('admin.group_view', group_id=group_id))
+    if not Group.query.filter_by(name=form.name.data).first():
+        group.name = form.name.data
+        group.description = form.description.data if form.description.data and form.description != '' else None
+        db.session.add(group)
+        db.session.commit()
+
+    return redirect(url_for('admin.group_view', group_id=group.id))
 
 
 @admin_bp.route('/groups/<int:group_id>/delete', methods=['GET'])
