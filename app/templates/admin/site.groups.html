@@ -20,13 +20,13 @@
 
 <h1 class="h1">{{ _('Groups') }}</h1>
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGroupModal">
-    <i class="bi bi-plus-circle"></i> {{ _("Create group") }}
+    <i class="bi bi-plus-circle"></i> {{ _("Create Group") }}
 </button>
 <div class="modal fade" id="createGroupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createGroupModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createGroupModal"><i class="bi bi-plus-circle"> </i>{{ _("Create group") }}</h1>
+                <h1 class="modal-title fs-5" id="createGroupModal"><i class="bi bi-plus-circle"> </i>{{ _("Create Group") }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -61,7 +61,7 @@
         <tr>
             <td scope="row">{{ group.id }}</td>
             <td>
-                <a href="{{ url_for('admin.group_view', group_id=group.id) }}">{{ group.name }}</a>
+                <a class="btn btn-primary" href="{{ url_for('admin.group_view', group_id=group.id) }}">{{ group.name }}</a>
             </td>
         </tr>
         {% else %}
