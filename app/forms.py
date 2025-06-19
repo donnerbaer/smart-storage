@@ -91,7 +91,6 @@ class RoleCreateForm(FlaskForm):
     """Form for creating a new role."""
     name = StringField(_l('Role Name'), validators=[DataRequired(), Length(max=50)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
-    permissions = SelectField(_l('Permissions'), choices=[], coerce=int, multiple=True, validators=[Optional()])
     submit = SubmitField(_l('Create Role'))
 
 # TODO: add possible permissions choices dynamically based on the application context
@@ -107,7 +106,6 @@ class GroupCreateForm(FlaskForm):
     """Form for creating a new group."""
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
-    roles = SelectField(_l('Roles'), choices=[], coerce=int, multiple=True, validators=[Optional()])
     submit = SubmitField(_l('Create Group'))
 
 # TODO: add possible roles choices dynamically based on the application context
@@ -115,5 +113,4 @@ class GroupUpdateForm(FlaskForm):
     """Form for updating an existing group."""
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
-    roles = SelectField(_l('Roles'), choices=[], coerce=int, multiple=True, validators=[Optional()])
     submit = SubmitField(_l('Update Group'))

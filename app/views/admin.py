@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template
-from flask import redirect, url_for
+from flask import redirect, url_for, request
 from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from app import db
 from app.user.model import User
-from app.resource.auth.model import Role, Group, Permission, role_permission, group_role, group_user
+from app.forms import GroupCreateForm, GroupUpdateForm
+from app.resource.auth.model import Role, Group, Permission
 from app.utils.decorators import check_permissions
 
 
@@ -107,7 +108,8 @@ def delete_role(role_id: int):
             ])
 def groups_view():
     groups = db.session.query(Group).all()
-    return render_template('admin/site.groups.html', current_user=current_user, groups=groups)
+    form_create_group = GroupCreateForm(request.form)
+    return render_template('admin/site.groups.html', current_user=current_user, groups=groups, form_create_group=form_create_group)
 
 
 @admin_bp.route('/groups', methods=['POST'])
@@ -117,8 +119,19 @@ def groups_view():
                 'admin.group.create'
             ])
 def group_post():
-    # Logic to create a new group
-    redirect(url_for('admin.groups_view'))
+    """Create a new group."""
+    form = GroupCreateForm(request.form)
+    if not form.validate_on_submit():
+        return redirect(url_for('admin.groups_view'))
+    
+    if not Group.query.filter_by(name=form.name.data).first():
+        new_group = Group(
+                    name=form.name.data,
+                    description=form.description.data if form.description.data and form.description != '' else None
+                    )
+        db.session.add(new_group)
+        db.session.commit()
+    return redirect(url_for('admin.groups_view'))
 
 
 @admin_bp.route('/groups/<int:group_id>', methods=['GET'])
@@ -142,6 +155,19 @@ def create_group(group_id):
     group = Group.query.get_or_404(group_id)
     # Logic to update the group
     return redirect(url_for('admin.groups_view'))
+
+
+@admin_bp.route('/groups/<int:group_id>/update', methods=['POST'])
+@login_required
+@check_permissions([
+                'admin.backend.access',
+                'admin.group.update'
+            ])
+def update_group(group_id: int):
+    """Render the group update page."""
+    group = Group.query.get_or_404(group_id)
+    form = GroupUpdateForm(obj=group)
+    return render_template('admin/site.group.update.html', current_user=current_user, group=group)
 
 
 @admin_bp.route('/groups/<int:group_id>/delete', methods=['GET'])
@@ -206,7 +232,7 @@ def add_user_to_group(group_id: int, user_id: int):
 @login_required
 @check_permissions([
                 'admin.backend.access',
-                'admin.group.update'
+                'admin.membership.remove'
             ])
 def remove_user_from_group(group_id: int, user_id: int):
     """Remove a user from a group."""
