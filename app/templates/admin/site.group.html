@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} {{ _('Group') }} - {{ _("Admin") }}{% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('admin.admin_view') }}">{{ _("Admin") }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('admin.groups_view') }}">{{ _("Groups") }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ group.name }}
+        </li>
+    </ol>
+</nav>
+
+
+<h1 class="h1">{{ _('Group') }}: {{ group.name }}</h1>
+<p><strong>{{ _('Description') }}:</strong> {{ group.description if group.description }}</p>
+
+
+{% endblock %}
