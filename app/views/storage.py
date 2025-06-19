@@ -37,7 +37,7 @@ def storages_view():
                            )
 
 
-@storage_bp.route('/storages/create', methods=['GET','POST'])
+@storage_bp.route('/storages', methods=['POST'])
 @login_required
 def create_storage():
     """ Create a new storage location.
