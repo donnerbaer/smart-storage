@@ -46,7 +46,7 @@
     <p>{{ _('Number of Items') }}: {{ items|length }}</p>
 {% endif %}
 
-{% if item|length <= 0%}
+{% if items|length <= 0 %}
 <div class="alert alert-info" role="alert">
 {{ _("No items found.") }}
 </div>
