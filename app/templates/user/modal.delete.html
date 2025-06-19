@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
-    <i class="bi bi-trash3-fill"></i> {{ _("Delete User") }}
+    <i class="bi bi-trash3-fill"></i> {{ _("Delete") }}
 </button>
 <div class="modal fade" id="deleteUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteUserModal" aria-hidden="true">
     <div class="modal-dialog">
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="{{ url_for('user.delete_user', user_id=user.id) }}" class="btn btn-danger">{{ _("Yes, delete User") }}</a>
+                <a href="{{ url_for('user.delete_user', user_id=user.id) }}" class="btn btn-danger">{{ _("Delete User") }}</a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
             </div>
         </div>
