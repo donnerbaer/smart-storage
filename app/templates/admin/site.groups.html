@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %} {{ _('Groups') }} - {{ _("Admin") }}{% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a href="{{ url_for('admin.admin_view') }}">{{ _("Admin") }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ _("Groups") }}
+        </li>
+    </ol>
+</nav>
+
+
+<h1 class="h1">{{ _('Groups') }}</h1>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGroupModal">
+    <i class="bi bi-plus-circle"></i> {{ _("Create group") }}
+</button>
+<div class="modal fade" id="createGroupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createGroupModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createGroupModal"><i class="bi bi-plus-circle"> </i>{{ _("Create group") }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% if groups|length == 0 %}
+    <p>{{ _('No groups found.') }}</p>
+{% else %}
+    <p>{{ _('Number of Groups') }}: {{ groups|length }}</p>
+{% endif %}
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="span">ID</th>
+            <th scope="span">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in groups %}
+        <tr>
+            <td scope="row">{{ group.id }}</td>
+            <td>
+                <a href="{{ url_for('admin.group_view', group_id=group.id) }}">{{ group.name }}</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">{{ _('No groups found.') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
