@@ -20,6 +20,8 @@ PERMISSIONS = [
     {"name": "admin.group.create", "description": "Create group"},
     {"name": "admin.group.update", "description": "Update group"},
     {"name": "admin.group.delete", "description": "Delete group"},
+    {"name": "admin.group.assign_role", "description": "Assign role to group"},
+    {"name": "admin.group.remove_role", "description": "Remove role from group"},
 
     {"name": "admin.users.read", "description": "Read users"},
     {"name": "admin.user.read", "description": "Read user"},
@@ -27,6 +29,8 @@ PERMISSIONS = [
     {"name": "admin.user.update", "description": "Update user"},
     {"name": "admin.user.delete", "description": "Delete user"},
     {"name": "admin.user.password.change", "description": "Change user password"},
+    {"name": "admin.membership.assign", "description": "Assign user to group"},
+    {"name": "admin.membership.remove", "description": "Remove user from group"},
 
     {"name": "admin.permissions.grant", "description": "Grant permissions to user"},
     {"name": "admin.permissions.revoke", "description": "Revoke permissions from user"},
@@ -85,6 +89,8 @@ ROLES = [
                 "admin.group.create",
                 "admin.group.update",
                 "admin.group.delete",
+                "admin.group.assign_role",
+                "admin.group.remove_role",
 
                 "admin.users.read",
                 "admin.user.read",
@@ -92,6 +98,8 @@ ROLES = [
                 "admin.user.update",
                 "admin.user.delete",
                 "admin.user.password.change",
+                "admin.membership.assign",
+                "admin.membership.remove",
 
                 "admin.permissions.grant",
                 "admin.permissions.revoke",
