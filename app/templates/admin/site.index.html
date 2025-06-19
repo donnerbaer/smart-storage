@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("Admin") }}{% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+                <li class="breadcrumb-item">
+            <a class="" href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ _("Admin") }}
+        </li>
+    </ol>
+</nav>
+
+
+<h1>{{ _('Admin Panel') }}</h1>
+<p>{{ _('Here is some content for the admin dashboard.') }}</p>
+
+
+<div>
+<a href="{{ url_for('admin.groups_view') }}" class="btn btn-primary">Groups</a>
+<a href="{{ url_for('admin.roles_view') }}" class="btn btn-primary">Roles</a>
+</div>
+
+
+{% endblock %}
