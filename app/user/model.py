@@ -18,8 +18,16 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     image_filename = db.Column(db.String(256), nullable=True)  # For user profile image
 
-    def set_password(self, password):
+    def set_password(self, password) -> None:
         self.password_hash = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password: str) -> str:
         return check_password_hash(self.password_hash, password)
+
+    def has_permission(self, permission_name: str) -> bool:
+        """ Check if the user has a specific permission. """
+        for group in self.groups:
+            for role in group.roles:
+                if any(permission.name == permission_name for permission in role.permissions):
+                    return True
+        return False
