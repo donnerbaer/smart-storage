@@ -56,7 +56,8 @@ def role_post():
             ])
 def role_view(role_id):
     role = Role.query.get_or_404(role_id)
-    return render_template('admin/site.role.html', current_user=current_user, role=role)
+    permissions = db.session.query(Permission).all()
+    return render_template('admin/site.role.html', current_user=current_user, role=role, permissions=permissions)
 
 
 @admin_bp.route('/roles/<int:role_id>/update', methods=['GET'])
@@ -134,7 +135,7 @@ def create_group():
     return redirect(url_for('admin.groups_view'))
 
 
-@admin_bp.route('/groups/<int:group_id>', methods=['GET'])
+@admin_bp.route('/groups/<int:group_id>', methods=['GET', 'POST'])
 @login_required
 @check_permissions([
                 'admin.backend.access',
@@ -143,32 +144,26 @@ def create_group():
 def group_view(group_id):
     group = Group.query.get_or_404(group_id)
     form_update_group = GroupUpdateForm(obj=group)
+    # TODO: Check if the user has permission to update the group
+    # if current_user.has_permission('admin.group.update'):
+    # ...
+    # else:
+    # raise PermissionDenied(_('You do not have permission to update this group.'))
+    # return render_template('admin/site.group.update.html', current_user=current_user, group=group, form_update_group=form_update_group)
+    # if methods=['POST']
+    # if request.method == 'POST':
+    if form_update_group.validate_on_submit():
+        if Group.query.filter(Group.id != group.id, Group.name == form_update_group.name.data).first():
+            form_update_group.name.errors.append(_('Group name already exists.'))
+        else:
+            form_update_group.populate_obj(group)
+            db.session.add(group)
+            db.session.commit()
+
     return render_template('admin/site.group.html',
                            current_user=current_user,
                            group=group,
                            form_update_group=form_update_group)
-
-
-
-@admin_bp.route('/groups/<int:group_id>', methods=['POST'])
-@login_required
-@check_permissions([
-                'admin.backend.access',
-                'admin.group.update'
-            ])
-def update_group(group_id: int):
-    """Render the group update page."""
-    group = Group.query.get_or_404(group_id)
-    form = GroupUpdateForm(request.form)
-    if not form.validate_on_submit():
-        return redirect(url_for('admin.group_view', group_id=group_id))
-    if not Group.query.filter_by(name=form.name.data).first():
-        group.name = form.name.data
-        group.description = form.description.data if form.description.data and form.description != '' else None
-        db.session.add(group)
-        db.session.commit()
-
-    return redirect(url_for('admin.group_view', group_id=group.id))
 
 
 @admin_bp.route('/groups/<int:group_id>/delete', methods=['GET'])
