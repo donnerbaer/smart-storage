@@ -2,7 +2,7 @@
 # app/utils/decorators.py
 
 from typing import List
-from flask import redirect, url_for
+from flask import redirect, url_for, abort
 from flask_login import current_user
 from functools import wraps
 from app.resource.auth.model import Group, Role, Permission
@@ -24,13 +24,13 @@ def check_permissions(required_permissions: List[str]):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if not current_user.is_authenticated:
-                print("Failed")
+                print("User is not authenticated.")
                 return redirect(url_for('auth.login'))
 
             for required_permission in required_permissions:
                 if not current_user.has_permission(required_permission):
                     print(f"User {current_user.username} does not have permission: {required_permission}")
-                    return redirect(url_for('main.index'))
+                    abort(403)
 
             return f(*args, **kwargs)
         return decorated_function

@@ -73,6 +73,19 @@ def dashboard():
                            )
 
 
+@main_bp.app_errorhandler(403)
+def page_not_found(e):
+    """ Render the 403 error page.
+
+    Args:
+        e: The error that occurred.
+
+    Returns:
+        Rendered template for the 403 error page.
+    """
+    return render_template('error/403.html', current_user=current_user), 403
+
+
 @main_bp.app_errorhandler(404)
 def page_not_found(e):
     """ Render the 404 error page.
