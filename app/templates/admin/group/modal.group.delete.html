@@ -1,3 +1,4 @@
+{% if current_user.has_permission('admin.group.delete') %}
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteGroupModal">
     <i class="bi bi-trash"></i> {{ _('Delete Group') }}
@@ -24,3 +25,4 @@
         </div>
     </div>
 </div>
+{% endif %}
