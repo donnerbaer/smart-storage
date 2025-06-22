@@ -13,7 +13,12 @@
                         <div class="col">
                             <a href="{{ url_for('storage.delete_storage', storage_id=storage.id) }}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i> {{ _('Yes, delete now') }}</a>
                         </div>
-                        <div class="col"></div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill"></i> {{ _('Warning!') }}
+                                {{ _('Are you sure you want to delete the Storage? This action cannot be undone.') }}
+                            </div>
+                        </div>
                         <div class="col">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">{{ _('Cancel') }}</button>
                         </div>
