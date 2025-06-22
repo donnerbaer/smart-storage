@@ -4,13 +4,24 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from app import db
-from app.forms import ItemCreateForm
+from app.forms import ItemCreateForm, SearchForm
 from app.resource.item.model import Item
 from app.resource.storage_location.model import StorageLocation
 from app.user.model import User
 
 
 main_bp = Blueprint('main', __name__)
+
+
+@main_bp.app_context_processor
+def inject_search_form():
+    """Injects the search form into the template context.
+    
+    This allows the search form to be accessible in all templates rendered within this blueprint.
+    """
+    return {
+        'navbar_search_form': SearchForm()
+    }
 
 
 @main_bp.route('/')
@@ -71,6 +82,30 @@ def dashboard():
                            current_user=current_user,
                            data=data
                            )
+
+
+@main_bp.route('/search', methods=['GET', 'POST'])
+@login_required
+def search_view():
+    """ Render the search page.
+    
+    Returns:
+        Rendered template for the search page.
+    """
+    form = SearchForm()
+    if form.validate_on_submit():
+        items = Item.query.filter(Item.name.ilike(f"%{form.query.data}%")).all()
+        users = User.query.filter(User.username.ilike(f"%{form.query.data}%")).all()
+        storages = StorageLocation.query.filter(StorageLocation.name.ilike(f"%{form.query.data}%")).all()
+        return render_template('site.search.result.html',
+                               current_user=current_user,
+                               items=items,
+                               users=users,
+                               storages=storages,
+                               form=form
+                               )
+
+    return render_template('site.search.result.html', current_user=current_user)
 
 
 @main_bp.app_errorhandler(403)
