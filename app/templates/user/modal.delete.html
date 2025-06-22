@@ -1,3 +1,4 @@
+{% if current_user.has_permission('admin.user.delete') or current_user.id == user.id %}
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
     <i class="bi bi-trash3-fill"></i> {{ _("Delete") }}
 </button>
@@ -21,3 +22,4 @@
         </div>
     </div>
 </div>
+{% endif %}
