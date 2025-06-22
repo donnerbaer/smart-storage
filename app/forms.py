@@ -40,6 +40,12 @@ class UserUpdateForm(FlaskForm):
     submit = SubmitField(_l('Save Changes'))
 
 
+class SearchForm(FlaskForm):
+    """Form for searching items."""
+    query = StringField(_l('Search'), validators=[DataRequired(), Length(max=4095)])
+    submit = SubmitField(_l('Search'))
+
+
 class ItemCreateForm(FlaskForm):
     """Form for creating a new item."""
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
