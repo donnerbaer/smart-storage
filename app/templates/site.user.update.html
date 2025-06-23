@@ -23,7 +23,35 @@
     <a href="{{ url_for('user.user_view', user_id=user.id) }}" class="btn btn-danger">{{ _("Cancel") }}</a>
 </div>
 
-<form action="" method="POST" class="form-horizontal">
+<form action="" method="POST"  enctype="multipart/form-data">
+    {% if form.errors %}
+        <div class="alert alert-warning">
+            <ul>
+                {% for field, errors in form.errors.items() %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger">
+                {{ _('Errors:') }}
+            {% if messages|length > 1 %}
+                <ul>
+            {% endif %}
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            {% if messages|length > 1 %}
+                </ul>
+            {% endif %}
+            </div>
+        {% endif %}
+    {% endwith %}
     {{ form.hidden_tag() }}
 
     <div class="form-group">
