@@ -127,11 +127,8 @@
                     </a>
                     {% endif %}
                     {% if current_user.has_permission('admin.group.remove_role') %}
-                    <a class="btn btn-secondary btn-sm" href="{{ url_for('admin.remove_role_from_group', group_id=group.id, role_id=role.id) }}">
-                        <i class="bi bi-person-dash"></i> {{ _('Remove') }}
-                    </a>
+                    {% include 'admin/group/modal.group.remove_role.html' %}
                     {% endif %}
-
                 </td>
             </tr>
             {% endfor %}

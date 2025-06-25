@@ -239,7 +239,7 @@ def delete_group(group_id: int):
 @login_required
 @check_permissions([
                 'admin.backend.access',
-                'admin.group.update'
+                'admin.group.assign_role'
             ])
 def add_role_to_group(group_id: int, role_id: int):
     """Add a role to a group.
@@ -261,7 +261,7 @@ def add_role_to_group(group_id: int, role_id: int):
 @login_required
 @check_permissions([
                 'admin.backend.access',
-                'admin.group.update'
+                'admin.group.remove_role'
             ])
 def remove_role_from_group(group_id: int, role_id: int):
     """Remove a role from a group.

@@ -112,6 +112,17 @@ class Group(db.Model):
             return new_group
         return None
     
+    def has_role(self, role_name: str) -> bool:
+        """ Check if the group has a specific role by name.
+
+        Args:
+            role_name (str): The name of the role to check.
+
+        Returns:
+            bool: True if the group has the role, False otherwise.
+        """
+        return any(role.name == role_name for role in self.roles)
+    
     def is_group_exists(self, name: str) -> bool:
         """ Check if a group with the given name already exists. """
         return db.session.query(Group).filter_by(name=name).first() is not None
