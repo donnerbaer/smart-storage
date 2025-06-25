@@ -115,7 +115,7 @@ class GroupCreateForm(FlaskForm):
     description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Create Group'))
 
-# TODO: add possible roles choices dynamically based on the application context
+
 class GroupUpdateForm(FlaskForm):
     """Form for updating an existing group."""
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
