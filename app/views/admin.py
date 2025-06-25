@@ -18,7 +18,14 @@ admin_bp = Blueprint('admin', __name__, url_prefix='/admin', template_folder='te
                 'admin.backend.access'
             ])
 def admin_view():
-    """Render the admin dashboard."""
+    """Render the admin site.
+
+    Args:
+        None
+
+    Returns:
+        Rendered template for the admin site.
+    """
     return render_template('admin/site.index.html', current_user=current_user)
 
 
@@ -32,7 +39,14 @@ def admin_view():
                 'admin.roles.read'
             ])
 def roles_view():
-    """Render the roles management page."""
+    """Render the roles management page.
+    
+    Args:
+        None
+
+    Returns:
+        Rendered template for roles management.
+    """
     roles = db.session.query(Role).all()
     return render_template('admin/site.roles.html', current_user=current_user, roles=roles)
 
@@ -55,6 +69,14 @@ def role_post():
                 'admin.role.read'
             ])
 def role_view(role_id):
+    """ Render the role view page.
+
+    Args:
+        role_id (int): The ID of the role to be viewed.
+
+    Returns:
+        Rendered template for the role view.
+    """
     role = Role.query.get_or_404(role_id)
     permissions = db.session.query(Permission).all()
     return render_template('admin/site.role.html', current_user=current_user, role=role, permissions=permissions)
@@ -91,7 +113,14 @@ def update_role_post(role_id):
                 'admin.role.delete'
             ])
 def delete_role(role_id: int):
-    """Delete a role by its ID."""
+    """Delete a role by its ID.
+
+    Args:
+        role_id (int): The ID of the role to be deleted.
+
+    Returns:
+        Redirect to the roles management page.
+    """
     role = Role.query.get_or_404(role_id)
     db.session.delete(role)
     db.session.commit()
@@ -108,6 +137,14 @@ def delete_role(role_id: int):
                 'admin.groups.read'
             ])
 def groups_view():
+    """ Render the groups management page.
+
+    Args:
+        None
+
+    Returns:
+        Rendered template for groups management.
+    """
     groups = db.session.query(Group).all()
     form_create_group = GroupCreateForm(request.form)
     return render_template('admin/site.groups.html', current_user=current_user, groups=groups, form_create_group=form_create_group)
@@ -120,7 +157,14 @@ def groups_view():
                 'admin.group.create'
             ])
 def create_group():
-    """Create a new group."""
+    """Create a new group.
+
+    Args:
+        None
+
+    Returns:
+        Redirect to the groups management page.
+    """
     form = GroupCreateForm(request.form)
     if not form.validate_on_submit():
         return redirect(url_for('admin.groups_view'))
@@ -142,24 +186,26 @@ def create_group():
                 'admin.group.read'
             ])
 def group_view(group_id):
+    """ Render the group view page.
+
+    Args:
+        group_id (int): The ID of the group to be viewed.
+
+    Returns:
+        Rendered template for the group view.
+    """
     group = Group.query.get_or_404(group_id)
     form_update_group = GroupUpdateForm(obj=group)
     form_membership = GroupMembershipForm(group_id=group.id)
-    # TODO: Check if the user has permission to update the group
-    # if current_user.has_permission('admin.group.update'):
-    # ...
-    # else:
-    # raise PermissionDenied(_('You do not have permission to update this group.'))
-    # return render_template('admin/site.group.update.html', current_user=current_user, group=group, form_update_group=form_update_group)
-    # if methods=['POST']
-    # if request.method == 'POST':
-    if form_update_group.validate_on_submit():
-        if Group.query.filter(Group.id != group.id, Group.name == form_update_group.name.data).first():
-            form_update_group.name.errors.append(_('Group name already exists.'))
-        else:
-            form_update_group.populate_obj(group)
-            db.session.add(group)
-            db.session.commit()
+
+    if current_user.has_permission('admin.group.update'):
+        if form_update_group.validate_on_submit():
+            if Group.query.filter(Group.id != group.id, Group.name == form_update_group.name.data).first():
+                form_update_group.name.errors.append(_('Group name already exists.'))
+            else:
+                form_update_group.populate_obj(group)
+                db.session.add(group)
+                db.session.commit()
 
     return render_template('admin/site.group.html',
                            current_user=current_user,
@@ -175,7 +221,14 @@ def group_view(group_id):
                 'admin.group.delete'
             ])
 def delete_group(group_id: int):
-    """Delete a group by its ID."""
+    """Delete a group by its ID.
+
+    Args:
+        group_id (int): The ID of the group to be deleted.
+
+    Returns:
+        Redirect to the groups management page.
+    """
     group = Group.query.get_or_404(group_id)
     db.session.delete(group)
     db.session.commit()
@@ -189,7 +242,15 @@ def delete_group(group_id: int):
                 'admin.group.update'
             ])
 def add_role_to_group(group_id: int, role_id: int):
-    """Add a role to a group."""
+    """Add a role to a group.
+
+    Args:
+        group_id (int): The ID of the group to which the role will be added.
+        role_id (int): The ID of the role to be added to the group.
+
+    Returns:
+        Redirect to the group view page.
+    """
     group = Group.query.get_or_404(group_id)
     role = Role.query.get_or_404(role_id)
     group.add_role(role)
@@ -203,7 +264,15 @@ def add_role_to_group(group_id: int, role_id: int):
                 'admin.group.update'
             ])
 def remove_role_from_group(group_id: int, role_id: int):
-    """Remove a role from a group."""
+    """Remove a role from a group.
+
+    Args:
+        group_id (int): The ID of the group from which the role will be removed.
+        role_id (int): The ID of the role to be removed from the group. 
+
+    Returns:
+        Redirect to the group view page.
+    """
     group = Group.query.get_or_404(group_id)
     role = Role.query.get_or_404(role_id)
     group.remove_role(role)
@@ -218,7 +287,7 @@ def remove_role_from_group(group_id: int, role_id: int):
             ])
 def add_user_to_group(group_id: int):
     """Add a user to a group.
-    
+
     Args:
         group_id (int): The ID of the group to which the user will be added.
 
@@ -226,9 +295,7 @@ def add_user_to_group(group_id: int):
         Redirect to the group view page.
     """
     form = GroupMembershipForm()
-    if not form.validate_on_submit():
-        return redirect(url_for('admin.group_view', group_id=group_id))
-    else:
+    if form.validate_on_submit():
         user_id = (int)(form.user.data)
         if user_id == 0 or user_id == '0':
             form.user.errors.append(_('Please select a user to add to the group.'))
@@ -248,11 +315,18 @@ def add_user_to_group(group_id: int):
                 'admin.membership.remove'
             ])
 def remove_user_from_group(group_id: int, user_id: int):
-    """Remove a user from a group."""
+    """Remove a user from a group.
+
+    Args:
+        group_id (int): The ID of the group from which the user will be removed.
+        user_id (int): The ID of the user to be removed from the group.
+
+    Returns:
+        Redirect to the group view page.
+    """
     group = Group.query.get_or_404(group_id)
     user = User.query.get_or_404(user_id)
     if user in group.users:
         group.users.remove(user)
         db.session.commit()
     return redirect(url_for('admin.group_view', group_id=group.id))
-
