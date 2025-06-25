@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from app import db
 from app.user.model import User
-from app.forms import GroupCreateForm, GroupUpdateForm
+from app.forms import GroupCreateForm, GroupUpdateForm, GroupMembershipForm
 from app.resource.auth.model import Role, Group, Permission
 from app.utils.decorators import check_permissions
 
@@ -144,6 +144,7 @@ def create_group():
 def group_view(group_id):
     group = Group.query.get_or_404(group_id)
     form_update_group = GroupUpdateForm(obj=group)
+    form_membership = GroupMembershipForm(group_id=group.id)
     # TODO: Check if the user has permission to update the group
     # if current_user.has_permission('admin.group.update'):
     # ...
@@ -163,7 +164,8 @@ def group_view(group_id):
     return render_template('admin/site.group.html',
                            current_user=current_user,
                            group=group,
-                           form_update_group=form_update_group)
+                           form_update_group=form_update_group,
+                           form_membership=form_membership)
 
 
 @admin_bp.route('/groups/<int:group_id>/delete', methods=['GET'])
@@ -208,20 +210,35 @@ def remove_role_from_group(group_id: int, role_id: int):
     return redirect(url_for('admin.group_view', group_id=group.id))
 
 
-@admin_bp.route('/groups/<int:group_id>/add_user/<int:user_id>', methods=['GET'])
+@admin_bp.route('/groups/<int:group_id>/add_user', methods=['POST'])
 @login_required
 @check_permissions([
                 'admin.backend.access',
-                'admin.group.update'
+                'admin.membership.assign'
             ])
-def add_user_to_group(group_id: int, user_id: int):
-    """Add a user to a group."""
-    group = Group.query.get_or_404(group_id)
-    user = User.query.get_or_404(user_id)
-    if user not in group.users:
+def add_user_to_group(group_id: int):
+    """Add a user to a group.
+    
+    Args:
+        group_id (int): The ID of the group to which the user will be added.
+
+    Returns:
+        Redirect to the group view page.
+    """
+    form = GroupMembershipForm()
+    if not form.validate_on_submit():
+        return redirect(url_for('admin.group_view', group_id=group_id))
+    else:
+        user_id = (int)(form.user.data)
+        if user_id == 0 or user_id == '0':
+            form.user.errors.append(_('Please select a user to add to the group.'))
+            return redirect(url_for('admin.group_view', group_id=group_id))
+        user = User.query.get_or_404(user_id)
+        group = Group.query.get_or_404(group_id)
         group.users.append(user)
+        db.session.add(group)
         db.session.commit()
-    return redirect(url_for('admin.group_view', group_id=group.id))
+    return redirect(url_for('admin.group_view', group_id=group_id))
 
 
 @admin_bp.route('/groups/<int:group_id>/remove_user/<int:user_id>', methods=['GET'])

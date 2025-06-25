@@ -6,6 +6,7 @@ from wtforms import StringField, PasswordField, SubmitField, FileField, Multiple
                     BooleanField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from flask_babel import lazy_gettext as _l
+from app.user.model import User
 
 
 class LoginForm(FlaskForm):
@@ -120,3 +121,23 @@ class GroupUpdateForm(FlaskForm):
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Update Group'))
+
+
+class GroupMembershipForm(FlaskForm):
+    """Form for managing group membership."""
+    user = SelectField(_l('Choose an user'), choices=[], coerce=int, validators=[DataRequired()])
+    submit = SubmitField(_l('Add to Group'))
+
+    def __init__(self, group_id=None, *args, **kwargs):
+        """Initialize the form with dynamic user choices.
+        Args:
+            group_id (int): The ID of the group to filter users.
+        """
+        super().__init__(*args, **kwargs)
+        choices = [(0, _l('-- Please Choose --'))]
+        if group_id:
+            users = User.query.filter(~User.groups.any(id=group_id)).all()
+        else:
+            users = User.query.all()
+        choices += [(user.id, user.username) for user in users]
+        self.user.choices = choices
