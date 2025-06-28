@@ -1,6 +1,6 @@
 {% if current_user.has_permission('storage.delete') %}
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteStorageModal">
-    <i class="bi bi-trash3-fill"></i> {{ _("Delete Storage") }}
+    <i class="bi bi-trash3-fill"></i> {{ _("Delete") }}
 </button>
 <div class="modal fade" id="deleteStorageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteStorageModal" aria-hidden="true">
     <div class="modal-dialog">
