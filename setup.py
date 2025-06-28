@@ -140,15 +140,49 @@ ROLES = [
     {
         "name": "user",
         "description": "Standard user role",
-        "permissions": []
+        "permissions": [
+                "storages.read",
+                "storage.read",
+                "storage.create",
+                "storage.update",
+                "storage.delete",
+                "storage.assign",
+                "storage.reassign",
+                "storage.unassign",
+
+                "items.read",
+                "item.read",
+                "item.create",
+                "item.update",
+                "item.delete",
+
+                "item.assign.storage",
+                "item.reassign.storage",
+                "item.unassign.storage",
+
+                "item.assign.user",
+                "item.reassign.user",
+                "item.unassign.user",
+
+                "item.description.update",
+                "item.name.update",
+                "item.image.create",
+                "item.image.update",
+                "item.image.delete"    
+        ]
     }
 ]
 
 GROUPS = [
     {
         "name": "Admin",
-        "description": "Administrative group",
+        "description": "Administrative group [DO NOT DELETE]",
         "roles": ["admin"]
+    },
+    {
+        "name": "User",
+        "description": "Standard user group [DO NOT DELETE]",
+        "roles": ["user"]
     }
 ]
 
