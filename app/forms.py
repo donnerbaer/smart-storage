@@ -7,6 +7,7 @@ from wtforms import StringField, PasswordField, SubmitField, FileField, Multiple
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from flask_babel import lazy_gettext as _l
 from app.user.model import User
+from app.resource.auth.model import Role
 
 
 class LoginForm(FlaskForm):
@@ -141,3 +142,23 @@ class GroupMembershipForm(FlaskForm):
             users = User.query.all()
         choices += [(user.id, user.username) for user in users]
         self.user.choices = choices
+
+
+class GroupAssignRoleForm(FlaskForm):
+    """Form for assigning roles to a group."""
+    role = SelectField(_l('Choose a role'), choices=[], coerce=int, validators=[DataRequired()])
+    submit = SubmitField(_l('Assign Role'))
+
+    def __init__(self, group_id=None, *args, **kwargs):
+        """Initialize the form with dynamic role choices.
+        Args:
+            group_id (int): The ID of the group to filter roles.
+        """
+        super().__init__(*args, **kwargs)
+        choices = [(0, _l('-- Please Choose --'))]
+        if group_id:
+            roles = Role.query.filter(~Role.groups.any(id=group_id)).all()
+        else:
+            roles = Role.query.all()
+        choices += [(role.id, role.name) for role in roles]
+        self.role.choices = choices

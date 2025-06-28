@@ -4,7 +4,8 @@ from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from app import db
 from app.user.model import User
-from app.forms import GroupCreateForm, GroupUpdateForm, GroupMembershipForm
+from app.forms import GroupCreateForm, GroupUpdateForm, GroupMembershipForm, \
+                    GroupAssignRoleForm
 from app.resource.auth.model import Role, Group, Permission
 from app.utils.decorators import check_permissions
 
@@ -197,6 +198,7 @@ def group_view(group_id):
     group = Group.query.get_or_404(group_id)
     form_update_group = GroupUpdateForm(obj=group)
     form_membership = GroupMembershipForm(group_id=group.id)
+    form_assign_role = GroupAssignRoleForm(group_id=group.id)
 
     if current_user.has_permission('admin.group.update'):
         if form_update_group.validate_on_submit():
@@ -211,7 +213,9 @@ def group_view(group_id):
                            current_user=current_user,
                            group=group,
                            form_update_group=form_update_group,
-                           form_membership=form_membership)
+                           form_membership=form_membership,
+                           form_assign_role=form_assign_role
+                        )
 
 
 @admin_bp.route('/groups/<int:group_id>/delete', methods=['GET'])
@@ -235,24 +239,23 @@ def delete_group(group_id: int):
     return redirect(url_for('admin.groups_view'))
 
 
-@admin_bp.route('/groups/<int:group_id>/add_role/<int:role_id>', methods=['GET'])
+@admin_bp.route('/groups/<int:group_id>/assign_role', methods=['POST'])
 @login_required
 @check_permissions([
                 'admin.backend.access',
                 'admin.group.assign_role'
             ])
-def add_role_to_group(group_id: int, role_id: int):
+def assign_role_to_group(group_id: int):
     """Add a role to a group.
 
     Args:
         group_id (int): The ID of the group to which the role will be added.
-        role_id (int): The ID of the role to be added to the group.
 
     Returns:
         Redirect to the group view page.
     """
     group = Group.query.get_or_404(group_id)
-    role = Role.query.get_or_404(role_id)
+    role = Role.query.get_or_404(request.form.get('role'))
     group.add_role(role)
     return redirect(url_for('admin.group_view', group_id=group.id))
 
