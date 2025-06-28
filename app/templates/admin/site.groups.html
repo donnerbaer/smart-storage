@@ -32,8 +32,9 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th scope="span">ID</th>
-            <th scope="span">Name</th>
+            <th scope="span">{{ _('ID') }}</th>
+            <th scope="span">{{ _('Name') }}</th>
+            <th scope="span">{{ _('Description') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -43,6 +44,7 @@
             <td>
                 <a class="btn btn-primary" href="{{ url_for('admin.group_view', group_id=group.id) }}">{{ group.name }}</a>
             </td>
+            <td>{{ group.description if group.description }}</td>
         </tr>
         {% else %}
         <tr>
