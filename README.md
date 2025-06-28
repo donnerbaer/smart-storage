@@ -42,6 +42,11 @@ A website for storing and managing household items
     2. Provide your secret key.
     3. Set your database path.
 
+7. Set up the database with standard groups, roles, and permissions by running:
+
+```sh
+py setup.py
+```
 
 
 # Start the application
@@ -52,3 +57,11 @@ A website for storing and managing household items
     ```sh
     py main.py
     ```
+
+2. Open your web browser and visit the URL you have configured for the website.
+
+3. Log in with the default credentials:
+
++ username: `admin`
++ password' `admin` 
+
