@@ -14,6 +14,7 @@ PERMISSIONS = [
     {"name": "admin.role.create", "description": "Create role"},
     {"name": "admin.role.update", "description": "Update role"},
     {"name": "admin.role.delete", "description": "Delete role"},
+    {"name": "admin.role.update_permission", "description": "Grant and revoke permissions to role"},
 
     {"name": "admin.groups.read", "description": "Read groups"},
     {"name": "admin.group.read", "description": "Read group"},
@@ -83,6 +84,7 @@ ROLES = [
                 "admin.role.create",
                 "admin.role.update",
                 "admin.role.delete",
+                "admin.role.update_permission",
 
                 "admin.groups.read",
                 "admin.group.read",
