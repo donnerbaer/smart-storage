@@ -1,6 +1,6 @@
 {% if current_user.has_permission('item.delete') %}
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteItemModal">
-    <i class="bi bi-trash3-fill"></i> {{ _("Delete Item") }}
+    <i class="bi bi-trash3-fill"></i> {{ _("Delete") }}
 </button>
 <div class="modal fade" id="deleteItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteItemModal" aria-hidden="true">
     <div class="modal-dialog">
