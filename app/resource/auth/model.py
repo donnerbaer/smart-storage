@@ -1,5 +1,6 @@
 """ This module defines the Auth model for the database. """
 
+from typing import Optional
 from app import db
 
 
@@ -48,34 +49,67 @@ class Role(db.Model):
         return f"<Role #{self.id} {self.name}>"
 
 
-    def add_permission(self, permission):
-        """ Add a permission to the role. """
+    def add_permission(self, permission: Permission) -> None:
+        """ Add a permission to the role.
+
+        Args:
+            permission (Permission): The permission to be added to the role.
+
+        Returns:
+            None
+        """
         self.permissions.append(permission)
         db.session.commit()
 
-    def remove_permission(self, permission):
-        """ Remove a permission from the role. """
+    def remove_permission(self, permission: Permission) -> None:
+        """ Remove a permission from the role.
+
+        Args:
+            permission (Permission): The permission to be removed from the role.
+
+        Returns:
+            None
+        """
         self.permissions.remove(permission)
         db.session.commit()
 
-    def has_permission(self, permission_name):
-        """ Check if the role has a specific permission by name. """
+    def has_permission(self, permission_name: str) -> bool:
+        """ Check if the role has a specific permission by name.
+        This method checks if the role has a permission with the given name.
+
+        Args:
+            permission_name (str): The name of the permission to check.
+
+        Returns:
+            bool: True if the role has the permission, False otherwise.
+        """
         return any(permission.name == permission_name for permission in self.permissions)
 
-    def add_role(self, role):
-        """ Add a role to the group. """
+    def add_role(self, role: 'Role') -> None:
+        """ Add a role to the group.
+        This method checks if the role is already associated with the group before adding it.
+
+        Args:
+            role (Role): The role to be added to the group.
+
+        Returns:
+            None
+        """
         if not self.has_role(role.name):
             self.roles.append(role)
             db.session.commit()
 
-    def remove_role(self, role):
-        """ Remove a role from the group. """
-        if self.has_role(role.name):
-            self.roles.remove(role)
-            db.session.commit()
 
-    def has_role(self, role_name):
-        """ Check if the group has a specific role by name. """
+    def has_role(self, role_name: str) -> bool:
+        """ Check if the group has a specific role by name.
+        This method checks if the group has a role with the given name.
+
+        Args:
+            role_name (str): The name of the role to check.
+
+        Returns:
+            bool: True if the group has the role, False otherwise.
+        """
         return any(role.name == role_name for role in self.roles)
 
 
@@ -92,19 +126,44 @@ class Group(db.Model):
         return f"<Group #{self.id} {self.name}>"
     
     def add_role(self, role: Role) -> None:
-        """ Add a role to the group. """
+        """ Add a role to the group.
+        This method checks if the role is already associated with the group before adding it.
+
+        Args:
+            role (Role): The role to be added to the group.
+
+        Returns:
+            None    
+        """
         if not self.has_role(role.name):
             self.roles.append(role)
             db.session.commit()
 
     def remove_role(self, role: Role) -> None:
-        """ Remove a role from the group. """
+        """ Remove a role from the group. 
+        This method checks if the role is associated with the group before removing it.
+
+        Args:
+            role (Role): The role to be removed from the group.
+
+        Returns:
+            None
+        """
         if self.has_role(role.name):
             self.roles.remove(role)
             db.session.commit()
+    
 
-    def create(self, name: str) -> 'Group':
-        """ Create a new group with the given name. """
+    def create(self, name: str) -> Optional['Group']:
+        """ Create a new group with the given name.
+        This method checks if a group with the same name already exists before creating a new one.
+
+        Args:
+            name (str): The name of the group to be created.
+
+        Returns:
+            Optional[Group]: The newly created group if it does not already exist, None otherwise.
+        """
         if not self.is_group_exists(name):
             new_group = Group(name=name)
             db.session.add(new_group)
@@ -124,10 +183,20 @@ class Group(db.Model):
         return any(role.name == role_name for role in self.roles)
     
     def is_group_exists(self, name: str) -> bool:
-        """ Check if a group with the given name already exists. """
+        """ Check if a group with the given name already exists.
+
+        Args:
+            name (str): The name of the group to check.
+
+        Returns:
+            bool: True if a group with the name exists, False otherwise.
+        """
         return db.session.query(Group).filter_by(name=name).first() is not None
 
     def delete(self) -> None:
-        """ Delete the group from the database. """
+        """ Delete the group from the database.
+        This method removes the group from the database and commits the changes.
+        It does not check for any dependencies or associations before deletion, so use with caution.
+        """
         db.session.delete(self)
         db.session.commit()
