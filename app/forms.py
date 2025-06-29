@@ -39,7 +39,7 @@ class UserUpdateForm(FlaskForm):
     delete_image = BooleanField(_l('Delete Profile Image'), default=False, validators=[Optional()])
     old_password = PasswordField(_l('Old Password'), validators=[DataRequired(), Length(min=8)])
     new_password = PasswordField(_l('New Password'), validators=[Optional(), Length(min=8)])
-    confirm_password = PasswordField(_l('Confirm Password'), validators=[Optional(), EqualTo('password')])
+    confirm_password = PasswordField(_l('Confirm Password'), validators=[Optional(), EqualTo('new_password')])
     submit = SubmitField(_l('Save Changes'))
 
 
