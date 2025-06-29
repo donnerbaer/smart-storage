@@ -7,8 +7,11 @@ from flask_login import current_user
 from functools import wraps
 from app.resource.auth.model import Group, Role, Permission
 
-def anonymous_required(f):
-    """ Decorator to restrict access to anonymous users only. """
+def anonymous_required(f) -> callable:
+    """ Decorator to restrict access to anonymous users only.
+        If the user is authenticated, they will be redirected to the main page.
+        This is useful for login or registration routes where authenticated users should not access them.
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         """ Check if the user is authenticated. If so, redirect to the main page. """
@@ -18,8 +21,17 @@ def anonymous_required(f):
     return decorated_function
 
 
-def check_permissions(required_permissions: List[str]):
-    """Decorator to check if the user has the required permissions."""
+def check_permissions(required_permissions: List[str]) -> callable:
+    """Decorator to check if the user has the required permissions.
+    This decorator can be applied to Flask route functions to ensure that the user has the necessary permissions
+    before allowing access to the route.
+
+    Args:
+        required_permissions (List[str]): A list of permission names that the user must have.
+
+    Returns:
+        callable: A decorator that checks user permissions before executing the route function.
+    """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
