@@ -5,7 +5,7 @@ from flask_babel import gettext as _
 from app import db
 from app.user.model import User
 from app.forms import GroupCreateForm, GroupUpdateForm, GroupMembershipForm, \
-                    GroupAssignRoleForm
+                    GroupAssignRoleForm, build_role_permission_form
 from app.resource.auth.model import Role, Group, Permission
 from app.utils.decorators import check_permissions
 
@@ -80,19 +80,49 @@ def role_view(role_id):
     """
     role = Role.query.get_or_404(role_id)
     permissions = db.session.query(Permission).all()
-    return render_template('admin/site.role.html', current_user=current_user, role=role, permissions=permissions)
+    form_role_permissions = build_role_permission_form(role, permissions)
 
 
-@admin_bp.route('/roles/<int:role_id>/update', methods=['GET'])
+    return render_template('admin/site.role.html',
+                           current_user=current_user,
+                           role=role,
+                           permissions=permissions,
+                           form_role_permissions=form_role_permissions,
+                           getattr=getattr
+                        )
+
+
+@admin_bp.route('/roles/<int:role_id>/add_permission', methods=['POST'])
 @login_required
 @check_permissions([
                 'admin.backend.access',
-                'admin.role.update'
+                'admin.role.update_permission'
             ])
-def update_role(role_id):
+def add_permission_to_role(role_id: int):
+    """Add a permission to a role.
+
+    Args:
+        role_id (int): The ID of the role to which the permission will be added.
+
+    Returns:
+        Redirect to the role view page.
+    """
     role = Role.query.get_or_404(role_id)
-    # Logic to update the role
-    return render_template('admin/site.role.update.html', current_user=current_user, role=role)
+    permissions = db.session.query(Permission).all()
+    form_role_permissions = build_role_permission_form(role, permissions)
+
+    if form_role_permissions.validate_on_submit():
+        for permission in permissions:
+            field_name = f'perm_{permission.id}'
+            field_value = getattr(form_role_permissions, field_name).data
+            if field_value == 'allow' and not permission.id in (perm.id for perm in role.permissions):
+                role.add_permission(permission)
+            elif field_value == 'deny' and permission.id in (perm.id for perm in role.permissions):
+                role.remove_permission(permission)
+
+        db.session.commit()
+
+    return redirect(url_for('admin.role_view', role_id=role.id))
 
 
 @admin_bp.route('/roles/<int:role_id>/update', methods=['POST'])

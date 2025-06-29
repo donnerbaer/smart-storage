@@ -24,6 +24,10 @@
 <h1 class="h1">{{ _('Role') }}: {{ role.name }}</h1>
 <p><strong>{{ _('Description') }}:</strong> {{ role.description if role.description }}</p>
 
+<div>
+    {% include 'admin/role/modal.role.add_permission.html' %}
+</div>
+
 <table class="table table-striped table-hover mt-3">
     <thead>
         <tr>

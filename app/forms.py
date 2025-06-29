@@ -1,13 +1,14 @@
 """ Flask-WTF forms. """
 
+from typing import List
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, \
-                    BooleanField, HiddenField, SelectField
+                    BooleanField, HiddenField, SelectField, RadioField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from flask_babel import lazy_gettext as _l
 from app.user.model import User
-from app.resource.auth.model import Role
+from app.resource.auth.model import Role, Permission
 
 
 class LoginForm(FlaskForm):
@@ -122,6 +123,47 @@ class GroupUpdateForm(FlaskForm):
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Update Group'))
+
+
+def build_role_permission_form(role: Role, permissions: List[Permission]) -> FlaskForm:
+    """ Builds a dynamic form for role permissions.
+    
+    This function creates a FlaskForm subclass with radio fields for each permission
+    associated with a role. Each permission can be set to 'Allow' or 'Deny'.
+
+    Args:
+        role (Role): The role for which permissions are being managed.
+        permissions (list): A list of Permission objects to create fields for.
+    """
+    class DynamicRolePermissionForm(FlaskForm):
+        """Dynamically generated form for role permissions.
+        
+        This form contains radio fields for each permission, allowing the user
+        to set permissions for the specified role.
+
+        Attributes:
+            submit (SubmitField): A submit button to update permissions.
+        """
+        submit = SubmitField(_l('Update Permissions'))
+
+    # Dynamically add fields for each permission
+    for perm in permissions:
+        field_name = f'perm_{perm.id}'
+        default_value = 'allow' if perm in role.permissions else 'deny'
+
+        field = RadioField(
+            label=perm.name,
+            choices=[
+                ('allow', _l('Allow')),
+                ('deny', _l('Deny'))
+            ],
+            default=default_value
+        )
+
+        # Set the name attribute for the field, which is used in the template.
+        setattr(DynamicRolePermissionForm, field_name, field)
+
+    return DynamicRolePermissionForm()
 
 
 class GroupMembershipForm(FlaskForm):
