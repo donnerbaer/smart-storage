@@ -138,37 +138,28 @@ def update_user(user_id):
 
     """
     user = db.session.query(User).filter_by(id=user_id).first_or_404()
-    form = UserUpdateForm(
-        username=user.username,
-        email=user.email,
-        first_name=user.first_name,
-        last_name=user.last_name,
-        image_filename=user.image_filename
-    )
+    form = UserUpdateForm(obj=user)
 
     if form.validate_on_submit():
-        print(form.new_password.data, form.confirm_password.data)
         if not user:
-            flash('User not found.')
+            flash(_('User not found.'))
             return redirect(url_for('user.users_view'))
         if not user.check_password(form.old_password.data):
-            flash('Old password is incorrect.')
+            flash(_('Old password is incorrect.'))
             return render_template('site.user.update.html', current_user=current_user, user=user, form=form)
-        if form.new_password.data and form.confirm_password.data:
-            if form.new_password.data != form.confirm_password.data:
-                flash('New passwords do not match.')
-                return render_template('site.user.update.html', current_user=current_user, user=user, form=form)
-            user.set_password(form.new_password.data)
 
         form.populate_obj(user)
-        # image handling
-        if form.image.data:
-            # remove old image if exists
+        # * image handling
+        # remove old image if exists
+        if form.delete_image.data or form.image.data:
             if user.image_filename and user.image_filename != get_default_user_image():
                 old_image_path = os.path.join('img', 'user', user.image_filename)
                 if os.path.exists(old_image_path):
                     os.remove(old_image_path)
-            # save new image
+            user.image_filename = None
+
+        # save new image
+        if form.image.data:
             image = form.image.data
             filename = image.filename
             ext = os.path.splitext(filename)[1]
@@ -180,7 +171,6 @@ def update_user(user_id):
         db.session.add(user)
         db.session.commit()
         return redirect(f'/users/{user.id}')
-
 
     if not is_image_name_valid(user.image_filename):
         user.image_filename = get_default_user_image()
