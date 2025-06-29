@@ -14,7 +14,13 @@ class StorageLocation(db.Model):
     def __repr__(self):
         return f"<StorageLocation #{self.id} {self.name}>"
 
-    def get_root(self):
+    def get_root(self) -> 'StorageLocation':
+        """ Get the root storage location of the current storage location.
+        This method traverses up the parent chain until it finds the root storage location.
+
+        Returns:
+            StorageLocation: The root storage location.
+        """
         current = self
         while current.parent is not None:
             current = current.parent
