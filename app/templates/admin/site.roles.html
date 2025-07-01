@@ -18,28 +18,9 @@
 </nav>
 
 <h1 class="h1">{{ _('Roles') }}</h1>
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createRoleModal">
-    <i class="bi bi-plus-circle"></i> {{ _("Create role") }}
-</button>
-<div class="modal fade" id="createRoleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createRoleModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createRoleModal"><i class="bi bi-plus-circle"> </i>{{ _("Create role") }}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Close') }}</button>
-            </div>
-        </div>
-    </div>
+<div>
+    {% include 'admin/role/modal.role.create.html' %}
 </div>
-
 
 {% if roles|length == 0 %}
     <p>{{ _('No roles found.') }}</p>
@@ -59,8 +40,8 @@
         {% for role in roles %}
             <tr>
                 <td scope="row">{{ role.id }}</td>
-                <td><a href="{{ url_for('admin.role_view', role_id=role.id) }}">{{ role.name }}</a></td>
-                <td>{{ role.description }}</td>
+                <td><a class="btn btn-primary" href="{{ url_for('admin.role_view', role_id=role.id) }}">{{ role.name }}</a></td>
+                <td>{{ role.description if role.description is not none }}</td>
             </tr>
         {% else %}
             <tr>

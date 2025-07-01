@@ -5,7 +5,7 @@ from flask_babel import gettext as _
 from app import db
 from app.user.model import User
 from app.forms import GroupCreateForm, GroupUpdateForm, GroupMembershipForm, \
-                    GroupAssignRoleForm, build_role_permission_form
+                    GroupAssignRoleForm, build_role_permission_form, RoleCreateForm
 from app.resource.auth.model import Role, Group, Permission
 from app.utils.decorators import check_permissions
 
@@ -49,18 +49,42 @@ def roles_view():
         Rendered template for roles management.
     """
     roles = db.session.query(Role).all()
-    return render_template('admin/site.roles.html', current_user=current_user, roles=roles)
+    form_create_role = RoleCreateForm()
+    
+    return render_template('admin/site.roles.html',
+                           current_user=current_user,
+                           roles=roles,
+                           form_create_role=form_create_role
+                           )
 
 
 @admin_bp.route('/roles', methods=['POST'])
 @login_required
 @check_permissions([
                 'admin.backend.access',
-                'admin.roles.create'
+                'admin.role.create'
             ])
 def role_post():
-    """Create a new role."""
-    redirect(url_for('admin.roles_view'))
+    """Create a new role.
+    
+    Args:
+        None
+
+    Returns:
+        Redirect to the roles management page.
+    """
+    form_create_role = RoleCreateForm(request.form)
+    if form_create_role.validate_on_submit():
+        if not Role.query.filter_by(name=form_create_role.name.data).first():
+            new_role = Role(
+                name=form_create_role.name.data,
+                description=form_create_role.description.data if form_create_role.description.data else None
+            )
+            db.session.add(new_role)
+            db.session.commit()
+        else:
+            form_create_role.name.errors.append(_('Role name already exists.'))
+    return redirect(url_for('admin.roles_view'))
 
 
 @admin_bp.route('/roles/<int:role_id>', methods=['GET'])
