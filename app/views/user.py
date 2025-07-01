@@ -10,6 +10,7 @@ from app import db
 from app.forms import RegistrationForm, UserUpdateForm
 from app.user.model import User
 from app.utils.image import is_image_name_valid, get_default_user_image
+from app.utils.decorators import check_permissions, check_own_or_has_permissions
 
 
 user_bp = Blueprint('user', __name__)
@@ -30,23 +31,11 @@ def users_view():
                            )
 
 
-@user_bp.route('/users/create', methods=['GET'])
+@user_bp.route('/users', methods=['POST'])
 @login_required
-def create_user_view():
-    """ Render the create user page.
-    
-    Returns:
-        Rendered template for the create user page with a form.
-    """
-    form = RegistrationForm()
-    return render_template('site.user.create.html',
-                           current_user=current_user,
-                           form=form
-                           )
-
-
-@user_bp.route('/users/create', methods=['POST'])
-@login_required
+@check_permissions([
+                'admin.user.create'
+            ])
 def create_user():
     """ Handle the creation of a new user, for already logged-in users.
     This function checks if the passwords match, if the username and email are unique,
@@ -83,6 +72,9 @@ def create_user():
 
 @user_bp.route('/users/<int:user_id>/delete', methods=['GET'])
 @login_required
+@check_own_or_has_permissions([
+                'admin.user.delete'
+            ])
 def delete_user(user_id):
     """ Handle the deletion of a user.
     
@@ -110,6 +102,9 @@ def delete_user(user_id):
 
 @user_bp.route('/users/<int:user_id>', methods=['GET'])
 @login_required
+@check_own_or_has_permissions([
+                'admin.user.read'
+                ])
 def user_view(user_id):
     """ Render the users page
     
@@ -127,6 +122,9 @@ def user_view(user_id):
 
 @user_bp.route('/users/<int:user_id>/update', methods=['GET', 'POST'])
 @login_required
+@check_own_or_has_permissions([
+                'admin.user.update'
+            ])
 def update_user(user_id):
     """ Update user information
 
