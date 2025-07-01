@@ -41,6 +41,8 @@
 
 {% if users|length == 0 %}
     <p>{{ _('No users found.') }}</p>
+{% elif not current_user.has_permission('admin.users.read') %}
+    <p>{{ _('Number of users') }}: 1
 {% else %}
     <p>{{ _('Number of users') }}: {{ users|length }}</p>
 {% endif %}
@@ -56,12 +58,14 @@
     </thead>
     <tbody>
         {% for user in users: %}
+        {% if user.id == current_user.id or current_user.has_permission('admin.users.read')%}
         <tr>
             <td scope="row">{{user.id}}</td>
             <td>{{user.first_name}}</td>
             <td>{{user.last_name}}</td>
             <td><a href="{{ url_for('user.user_view', user_id=user.id) }}" class="btn btn-primary">{{ _('Display') }}</a></td>
         </tr>
+        {% endif %}
         {% endfor %}
 
     </tbody>
