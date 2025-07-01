@@ -160,5 +160,7 @@ def catalog():
     return render_template('site.catalog.html',
                            current_user=current_user,
                            items=items,
-                           form=form
+                           form=form,
+                           storage_hierarchy=None,
+                           storage_hierarchy_ids=None
                            )

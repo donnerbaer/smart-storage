@@ -117,7 +117,7 @@ def create_item():
         item = Item(
             name=form.name.data,
             description=form.description.data,
-            storage_location_id=request.form.get('storage_location_id'),
+            storage_location_id=form.storage_location.data,
             barcode=(form.barcode.data if form.barcode.data != '' else None),
         )
         db.session.add(item)
