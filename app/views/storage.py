@@ -3,6 +3,7 @@ This module provides routes to display storage locations and individual storage 
 """
 
 import os
+from typing import Dict
 from uuid import uuid4
 from flask import Blueprint, render_template
 from flask import request, redirect, url_for
@@ -15,6 +16,7 @@ from app.resource.storage_location.model import StorageLocation, StorageLocation
 from app.resource.item.model import ItemStorageStock
 from app.resource.storage_location.storage import get_storage_hierarchy, \
                                                 get_storage_hierarchy_ids
+from app.utils.decorators import check_permissions
 
 
 storage_bp = Blueprint('storage', __name__)
@@ -22,6 +24,7 @@ storage_bp = Blueprint('storage', __name__)
 
 @storage_bp.route('/storages', methods=['GET'])
 @login_required
+@check_permissions(['storages.read'])
 def storages_view():
     """ Render the storages page.
     
@@ -39,6 +42,7 @@ def storages_view():
 
 @storage_bp.route('/storages', methods=['POST'])
 @login_required
+@check_permissions(['storage.create'])
 def create_storage():
     """ Create a new storage location.
     
@@ -74,6 +78,7 @@ def create_storage():
 
 @storage_bp.route('/storages/<int:storage_id>', methods=['GET'])
 @login_required
+@check_permissions(['storage.read'])
 def storage_view(storage_id):
     """ Render the storage page.
     
@@ -106,6 +111,7 @@ def storage_view(storage_id):
 
 @storage_bp.route('/storages/<int:storage_id>/update', methods=['POST'])
 @login_required
+@check_permissions(['storage.update'])
 def update_storage(storage_id):
     """ Update an existing storage location.
     
@@ -142,6 +148,7 @@ def update_storage(storage_id):
 
 @storage_bp.route('/storages/<int:storage_id>/delete', methods=['GET'])
 @login_required
+@check_permissions(['storage.delete'])
 def delete_storage(storage_id):
     """ Delete a storage location.
     
@@ -175,11 +182,12 @@ def delete_storage(storage_id):
 
 @storage_bp.route('/api/storages/list/childs/<int:storage_id>', methods=['GET'])
 @login_required
-def api_get_all_child_storages(storage_id):
-    """ Get all storage locations.
+@check_permissions(['storages.read'])
+def api_get_all_child_storages(storage_id) -> Dict:
+    """ Get all storage locations with a specific parent storage ID.
     
     Returns:
-        List of all storage locations.
+        Dict: A dictionary containing a list of storage locations with their IDs and names.
     """
     if storage_id == 0:
         storage_id = None
@@ -197,11 +205,12 @@ def api_get_all_child_storages(storage_id):
 
 @storage_bp.route('/api/storages/list', methods=['GET'])
 @login_required
-def api_get_all_storages():
+@check_permissions(['storages.read'])
+def api_get_all_storages() -> Dict:
     """ Get all storage locations.
     
     Returns:
-        List of all storage locations.
+        Dict: A dictionary containing a list of all storage locations with their IDs and names.
     """
     storages = db.session.query(StorageLocation).all()
     storage_data = []
