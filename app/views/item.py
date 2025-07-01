@@ -13,6 +13,7 @@ from app.forms import ItemCreateForm, ItemUpdateForm
 from app.resource.item.model import Item, ItemImage
 from app.resource.storage_location.storage import get_storage_hierarchy_ids, get_storage_hierarchy
 from app.user.model import User
+from app.utils.decorators import check_permissions
 
 
 item_bp = Blueprint('item', __name__)
@@ -20,6 +21,7 @@ item_bp = Blueprint('item', __name__)
 
 @item_bp.route('/items/<int:item_id>', methods=['GET'])
 @login_required
+@check_permissions(['items.read'])
 def item_view(item_id):
     """ Render the item page.
 
@@ -55,6 +57,7 @@ def item_view(item_id):
 
 @item_bp.route('/items/<int:item_id>/delete', methods=['GET'])
 @login_required
+@check_permissions(['item.delete'])
 def delete_item(item_id):
     """ Handle the deletion of an item, including its images.
 
@@ -78,6 +81,7 @@ def delete_item(item_id):
 
 @item_bp.route('/items/<int:item_id>/update', methods=['POST'])
 @login_required
+@check_permissions(['item.update'])
 def update_item_post(item_id):
     """ 
     """
@@ -105,6 +109,7 @@ def update_item_post(item_id):
 
 @item_bp.route('/items', methods=['POST'])
 @login_required
+@check_permissions(['item.create'])
 def create_item():
     """ Handle the creation of a new item.
 
