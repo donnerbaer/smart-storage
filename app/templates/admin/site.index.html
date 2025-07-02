@@ -20,9 +20,15 @@
 
 
 <div>
-    <a href="{{ url_for('user.users_view') }}" class="btn btn-primary">Users</a>
-    <a href="{{ url_for('admin.groups_view') }}" class="btn btn-primary">Groups</a>
-    <a href="{{ url_for('admin.roles_view') }}" class="btn btn-primary">Roles</a>
+    {% if current_user.has_permission('admin.users.read') %}
+        <a href="{{ url_for('user.users_view') }}" class="btn btn-primary">Users</a>	
+    {% endif %}
+    {% if current_user.has_permission('admin.groups.read') %}
+        <a href="{{ url_for('admin.groups_view') }}" class="btn btn-primary">Groups</a>	
+    {% endif %}
+    {% if current_user.has_permission('admin.roles.read') %}
+		<a href="{{ url_for('admin.roles_view') }}" class="btn btn-primary">Roles</a>		
+    {% endif %}
 </div>
 
 
