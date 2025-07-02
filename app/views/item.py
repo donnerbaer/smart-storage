@@ -38,7 +38,6 @@ def item_view(item_id):
                             name=item.name,
                             description=item.description,
                             images=item.images,
-                            barcode=item.barcode,
                             storage_location=item.storage_location_id,
                             owner=item.owner_id
                           )
@@ -91,7 +90,6 @@ def update_item_post(item_id):
     
     item.name = form.name.data
     item.description = form.description.data if form.description.data != '' else None
-    item.barcode = form.barcode.data if form.barcode.data != '' else None
     item.storage_location_id = form.storage_location.data
     item.owner_id = form.owner.data if form.owner.data > 0 else None
     if form.images.data:
@@ -122,8 +120,7 @@ def create_item():
         item = Item(
             name=form.name.data,
             description=form.description.data,
-            storage_location_id=form.storage_location.data,
-            barcode=(form.barcode.data if form.barcode.data != '' else None),
+            storage_location_id=form.storage_location.data
         )
         db.session.add(item)
         db.session.commit()

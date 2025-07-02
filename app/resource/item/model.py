@@ -12,11 +12,11 @@ class Item(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(512), nullable=True)
     owner_id = db.Column(db.String(100), db.ForeignKey('users.id'), nullable=True)
-    barcode = db.Column(db.String(100), nullable=True, unique=True)
     storage_location_id = db.Column(db.Integer, db.ForeignKey('storage_location.id'), nullable=True)
 
     owner = db.relationship('User', backref='items')
     storage_location = db.relationship('StorageLocation', backref='items')
+    categories = db.relationship('Category', secondary='item_category', back_populates='items')
 
     def __repr__(self):
         return f"<Item #{self.id} {self.name}>"

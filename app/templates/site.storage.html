@@ -62,7 +62,6 @@
                 <th scope="col">{{ _('ID') }}</th>
                 <th scope="col">{{ _("Name") }}</th>
                 <th scope="col">{{ _('Description') }}</th>
-                <th scope="col">{{ _('Barcode') }}</th>
                 <th scope="col">{{ _('Owner') }}</th>
             </tr>
         </thead>
@@ -72,7 +71,6 @@
                     <td scope="row">{{ item.id }}</td>
                     <td>{% include 'component/link.item.html' %}</td>
                     <td>{{ item.description if item.description else '' }}</td>
-                    <td>{{ item.barcode if item.barcode else '' }}</td>
                     <td>
                         {% if item.owner_id %}
                             {% include 'component/link.item.owner.html' %}

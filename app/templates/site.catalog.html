@@ -59,7 +59,6 @@
             <th>{{ _("Name") }}</th>
             <th>{{ _('Storage Location') }}</th>
             <th>{{ _('Description') }}</th>
-            <th>{{ _('Barcode') }}</th>
             <th>{{ _('Owner') }}</th>
         </tr>
     </thead>
@@ -79,7 +78,6 @@
                 {% endif %}
             </td>
             <td>{{ item.description if item.description }}</td>
-            <td>{{ item.barcode if item.barcode }}</td>
             <td>
                 {% if item.owner_id %}
                 <a href="{{ url_for('user.user_view', user_id=item.owner.id)}}" class="btn btn-primary d-block">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
