@@ -42,7 +42,15 @@ A website for storing and managing household items
     2. Provide your secret key.
     3. Set your database path.
 
-7. Set up the database with standard groups, roles, and permissions by running:
+7. Start the application
+
+```sh
+py main.py
+```
+
+8. Set up the database with standard groups, roles, and permissions by running:
+
+The application has run at least once. This is required for create the database tables.
 
 ```sh
 py setup.py
