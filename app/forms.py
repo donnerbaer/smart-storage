@@ -4,11 +4,12 @@ from typing import List
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, \
-                    BooleanField, HiddenField, SelectField, RadioField
+                    BooleanField, HiddenField, SelectField, RadioField, ColorField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from flask_babel import lazy_gettext as _l
 from app.user.model import User
 from app.resource.auth.model import Role, Permission
+from app.resource.category.model import Category, CategoryColor
 
 
 class LoginForm(FlaskForm):
@@ -54,7 +55,6 @@ class ItemCreateForm(FlaskForm):
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
     images = MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
-    barcode = StringField(_l('Barcode'), validators=[Optional(), Length(max=64)])
     storage_location = StringField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     submit = SubmitField(_l('Create Item'))
 
@@ -65,7 +65,6 @@ class ItemUpdateForm(FlaskForm):
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
     description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
     images = MultipleFileField('Add Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
-    barcode = StringField(_l('Barcode'), validators=[Optional(), Length(max=64)])
     storage_location = HiddenField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     owner = SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()])
     submit = SubmitField(_l('Save Changes'))
@@ -204,3 +203,33 @@ class GroupAssignRoleForm(FlaskForm):
             roles = Role.query.all()
         choices += [(role.id, role.name) for role in roles]
         self.role.choices = choices
+
+
+class CategoryCreateForm(FlaskForm):
+    """Form for creating a new category."""
+    name = StringField(_l('Category Name'), validators=[DataRequired(), Length(max=100)])
+    color = SelectField(_l('Choose Color'), choices=[], coerce=int, validators=[DataRequired()])
+    submit = SubmitField(_l('Create Category'))
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the form with dynamic user choices.
+        """
+        super().__init__(*args, **kwargs)
+        category_colors = CategoryColor.query.all()
+        choices = [(category_color.id, category_color.name, category_color.color) for category_color in category_colors]
+        self.color.choices = choices
+
+
+class CategoryUpdateForm(FlaskForm):
+    """Form for creating a new category."""
+    name = StringField(_l('Category Name'), validators=[DataRequired(), Length(max=100)])
+    color = SelectField(_l('Choose Color'), choices=[], coerce=int, validators=[DataRequired()])
+    submit = SubmitField(_l('Update Category'))
+
+    def __init__(self, *args, **kwargs):
+        """Initialize the form with dynamic user choices.
+        """
+        super().__init__(*args, **kwargs)
+        category_colors = CategoryColor.query.all()
+        choices = [(category_color.id, category_color.name, category_color.color) for category_color in category_colors]
+        self.color.choices = choices
