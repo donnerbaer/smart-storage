@@ -2,6 +2,7 @@
 
 from app import create_app, db
 from app.resource.auth.model import Permission, Role, Group
+from app.resource.category.model import Category, CategoryColor
 from app.user.model import User
 
 
@@ -69,6 +70,14 @@ PERMISSIONS = [
     {"name": "item.image.create", "description": "Add item image"},
     {"name": "item.image.update", "description": "Update item image"},
     {"name": "item.image.delete", "description": "Delete item image"},
+
+
+    # * Category Permissions
+    {"name": "categories.read", "description": "Read categories"},
+    {"name": "category.read", "description": "Read category"},
+    {"name": "category.create", "description": "Create category"},
+    {"name": "category.update", "description": "Update category"},
+    {"name": "category.delete", "description": "Delete category"},
 ]
 
 
@@ -134,7 +143,13 @@ ROLES = [
                 "item.name.update",
                 "item.image.create",
                 "item.image.update",
-                "item.image.delete"    
+                "item.image.delete",
+
+                "categories.read",
+                "category.read",
+                "category.create",
+                "category.update",
+                "category.delete"
             ]
     },
     {
@@ -168,7 +183,13 @@ ROLES = [
                 "item.name.update",
                 "item.image.create",
                 "item.image.update",
-                "item.image.delete"    
+                "item.image.delete",
+
+                "categories.read",
+                "category.read",
+                "category.create",
+                "category.update",
+                "category.delete"
         ]
     }
 ]
@@ -196,6 +217,40 @@ USERS = [
         }
 ]
 
+CATEGORY_COLORS = [
+    {"name": "White",       "color": "white"},
+    {"name": "Light Grey",  "color": "light"},
+    {"name": "Blue",        "color": "primary"},
+    {"name": "Gray",        "color": "secondary"},
+    {"name": "Green",       "color": "success"},
+    {"name": "Red",         "color": "danger"},
+    {"name": "Yellow",      "color": "warning"},
+    {"name": "Light Blue",  "color": "info"},
+    {"name": "Black",       "color": "dark"}
+]
+
+CATEGORIES = [
+    {
+        "name": "Uncategorized",
+        "color": "light"
+    },
+    {
+        "name": "Food",
+        "color": "success"
+    },
+    {
+        "name": "Electronics",
+        "color": "primary"
+    },
+    {
+        "name": "Clothing",
+        "color": "info"
+    },
+    {
+        "name": "Furniture",
+        "color": "warning"
+    }
+]
 
 def seed_permissions():
     for perm_data in PERMISSIONS:
@@ -240,7 +295,11 @@ def seed_users():
     for user_data in USERS:
         user = User.query.filter_by(username=user_data["username"]).first()
         if not user:
-            user = User(username=user_data["username"], email=user_data["email"], first_name=user_data['first_name'], last_name=user_data['last_name'])
+            user = User(username=user_data["username"],
+                        email=user_data["email"],
+                        first_name=user_data['first_name'],
+                        last_name=user_data['last_name']
+                    )
             user.set_password(user_data["password"])
             db.session.add(user)
             db.session.commit()
@@ -249,6 +308,32 @@ def seed_users():
         if admin_group and user not in admin_group.users:
             admin_group.users.append(user)
             db.session.commit()
+
+
+def seed_category_colors():
+    for color_data in CATEGORY_COLORS:
+        color = CategoryColor.query.filter_by(name=color_data["name"]).first()
+        if not color:
+            color = CategoryColor(
+                        name=color_data["name"],
+                        color=color_data["color"]
+                    )
+            db.session.add(color)
+    db.session.commit()
+
+
+def seed_categories():
+    for category_data in CATEGORIES:
+        category = Category.query.filter_by(name=category_data["name"]).first()
+        if not category:
+            category_color = CategoryColor.query.filter_by(color=category_data["color"]).first()
+            
+            category = Category(
+                            name=category_data["name"],
+                            color=category_color
+                        )
+            db.session.add(category)
+    db.session.commit()
 
 
 def run_seeding():
@@ -260,6 +345,10 @@ def run_seeding():
     seed_groups()
     print("Seeding users...")
     seed_users()
+    print("Seeding category colors...")
+    seed_category_colors()
+    print("Seeding categories...")
+    seed_categories()
     print("Done.")
 
 
