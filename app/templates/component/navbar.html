@@ -13,18 +13,26 @@
 		<li class="nav-item">
 			<a class="nav-link" href="{{ url_for('main.dashboard') }}"><i class="bi bi-speedometer"></i> {{ _("Dashboard") }}</a>
 		</li>
+		{% if current_user.has_permission('items.read') %}
 		<li class="nav-item">
 			<a class="nav-link" href="{{ url_for('main.catalog') }}"><i class="bi bi-suitcase-lg-fill"></i> {{ _("Catalog") }}</a>
 		</li>
+		{% endif %}
+		{% if current_user.has_permission('admin.users.read') %}
 		<li class="nav-item">
 			<a class="nav-link" href="{{ url_for('user.users_view') }}"><i class="bi bi-people"></i> {{ _("Users") }}</a>
 		</li>
+		{% endif %}
+		{% if current_user.has_permission('storages.read') %}
 		<li class="nav-item">
 			<a class="nav-link" href="{{ url_for('storage.storages_view') }}"><i class="bi bi-box"></i> {{ _("Storage Locations") }}</a>
 		</li>
 		{% endif %}
-
-		{% if current_user.is_authenticated %}
+		{% if current_user.has_permission('categories.read') %}
+		<li class="nav-item">
+			<a class="nav-link" href="{{ url_for('category.categories_view') }}"><i class="bi bi-tags"></i> {{ _("Categories") }}</a>
+		</li>
+		{% endif %}
 		{% if current_user.has_permission('admin.backend.access') %}
         <li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,8 +41,12 @@
 			<ul class="dropdown-menu">
 				<li><a class="dropdown-item" href="{{ url_for('admin.admin_view') }}">{{ _('Dashboard') }}</a></li>
 				<li><hr class="dropdown-divider"></li>
+				{% if current_user.has_permission('admin.groups.read') %}
 				<li><a class="dropdown-item" href="{{ url_for('admin.groups_view') }}">{{ _('Groups') }}</a></li>
+				{% endif %}
+				{% if current_user.has_permission('admin.roles.read') %}
 				<li><a class="dropdown-item" href="{{ url_for('admin.roles_view') }}">{{ _('Roles') }}</a></li>
+				{% endif %}
 			</ul>
         </li>
 		{% endif %}
