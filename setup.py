@@ -218,8 +218,6 @@ USERS = [
 ]
 
 CATEGORY_COLORS = [
-    {"name": "White",       "color": "white"},
-    {"name": "Light Grey",  "color": "light"},
     {"name": "Blue",        "color": "primary"},
     {"name": "Gray",        "color": "secondary"},
     {"name": "Green",       "color": "success"},
@@ -230,10 +228,6 @@ CATEGORY_COLORS = [
 ]
 
 CATEGORIES = [
-    {
-        "name": "Uncategorized",
-        "color": "light"
-    },
     {
         "name": "Food",
         "color": "success"
