@@ -45,7 +45,14 @@
             </div>
             <div class="card-body">
                 <h3 class="card-title">{{ item.name }}</h3>
-                <div><span class="badge text-bg-secondary">{{ _('Item') }}</span></div>
+                <div>
+                    <span class="badge text-bg-secondary">{{ _('Item') }}</span>
+                    {% if item.categories|length > 0 %}
+                        {% for category in item.categories %}
+                            {% include 'component/badge.category.html' %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 <p class="card-text">{{ item.description if item.description else '' }}</p>
                 <a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">{{ _('Show') }}</a>
             </div>
@@ -95,7 +102,14 @@
             </div>
             <div class="card-body">
                 <h3 class="card-title">{{ storage.name }}</h3>
-                <div><span class="badge text-bg-secondary">{{ _('Storage') }}</span></div>
+                <div>
+                    <span class="badge text-bg-secondary">{{ _('Storage') }}</span>
+                    {% if storage.categories|length > 0 %}
+                        {% for category in storage.categories %}
+                            {% include 'component/badge.category.html' %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 <p class="card-text">{{ storage.description if storage.description else '' }}</p>
                 <a href="{{ url_for('storage.storage_view', storage_id=storage.id) }}" class="btn btn-primary">{{ _('Show') }}</a>
             </div>
