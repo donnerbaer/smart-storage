@@ -25,9 +25,9 @@
 
 
 <h1>#{{ storage.id }} {{ storage.name }}</h1>
-{% if item.categories|length > 0 %}
+{% if storage.categories|length > 0 %}
 <div class="my-2">
-    {% for category in item.categories %}
+    {% for category in storage.categories %}
     {% include 'component/badge.category.html' %}
     {% endfor %}
 </div>
