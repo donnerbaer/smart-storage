@@ -87,7 +87,8 @@ def build_item_form(
         'name': StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)]),
         'description': TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)]),
         'images': MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])]),
-        'storage_location': StringField(_l('Storage Location'), valilidators=[Optional()]),
+        'owner': SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()]),
+        'storage_location': StringField(_l('Storage Location'), validators=[Optional()]),
         'submit': SubmitField(submit_text)
     }
     for category in categories:
