@@ -1,8 +1,8 @@
 <form action="{{ url_for('item.update_item_post', item_id=item.id) }}" method="POST" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <div class="form-group my-2">
-        <label for="id">{{ form.id.label }}</label>
-        {{ form.id(class="form-control bg-secondary-subtle", id="id") }}
+        <div>ID</div>
+        <div class="form-control bg-secondary-subtle">{{ form.id.data }}</div>
     </div>
     <div class="form-group my-2">
         <label for="name">{{ form.name.label }} <span class="text-danger">required</span></label>
@@ -11,6 +11,24 @@
     <div class="form-group my-2">
         <label for="description">{{ form.description.label }}</label>
         {{ form.description(class="form-control", id="description") }}
+    </div>
+
+    <div class="form-group my-2">
+        <label>{{ _('Categories') }}</label>
+        <div class="form-text">{{ _('Select the categories that apply to this item.') }}</div>
+        {% for category in categories %}
+            <!-- Dynamically generated fields for each category -->
+            {% set field = getattr(form, 'category_' ~ category.id) %}
+            <div class="row align-items-center p-2 border-2 border-bottom">
+                    {{ field(class="btn-check", id=field.id) }}
+                    <label
+                        class="btn btn-outline-{{ category.color.color }}"
+                        for="{{ field.id }}"
+                        >
+                        {{ field.label.text }}
+                    </label>
+            </div>
+        {% endfor %}
     </div>
 
     <div class="form-group my-2">

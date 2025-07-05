@@ -4,10 +4,12 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from app import db
-from app.forms import ItemCreateForm, SearchForm
+from app.forms import ItemCreateForm, SearchForm, build_item_form
+from app.resource.category.model import Category
 from app.resource.item.model import Item
 from app.resource.storage_location.model import StorageLocation
 from app.user.model import User
+
 
 
 main_bp = Blueprint('main', __name__)
@@ -156,11 +158,21 @@ def catalog():
         Rendered template for the catalog page with a list of items.
     """
     items = db.session.query(Item).all()
-    form = ItemCreateForm()
+    users = db.session.query(User).all()
+    categories = db.session.query(Category).all()
+    
+    form = build_item_form(
+                        item=None,
+                        users=users,
+                        categories=categories,
+                        submit_text=_('Create Item')
+                    )
     return render_template('site.catalog.html',
-                           current_user=current_user,
-                           items=items,
-                           form=form,
-                           storage_hierarchy=None,
-                           storage_hierarchy_ids=None
+                            current_user=current_user,
+                            items=items,
+                            form=form,
+                            categories=categories,
+                            getattr=getattr,
+                            storage_hierarchy=None,
+                            storage_hierarchy_ids=None
                            )

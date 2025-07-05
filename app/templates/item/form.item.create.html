@@ -10,15 +10,34 @@
     </div>
 
 
+    <div class="form-group my-2">
+        <label>{{ _('Categories') }}</label>
+        <div class="form-text">{{ _('Select the categories that apply to this item.') }}</div>
+        {% for category in categories %}
+            <!-- Dynamically generated fields for each category -->
+            {% set field = getattr(form, 'category_' ~ category.id) %}
+            <div class="row align-items-center p-2 border-2 border-bottom">
+                    {{ field(class="btn-check", id=field.id) }}
+                    <label
+                        class="btn btn-outline-{{ category.color.color }}"
+                        for="{{ field.id }}"
+                        >
+                        {{ field.label.text }}
+                    </label>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group my-2">
+        {{ form.owner.label }}
+        {{ form.owner(class="form-control", id="owner") }}
+    </div>
 
     <div class="form-group my-2">
         <label for="storage_location">{{ form.storage_location.label }}</label>
         <div id="storage-container"></div>
         <input type="hidden" name="storage_location" id="storage_location">
     </div>
-
-
-
 
     <div class="form-group">
         <label for="images">{{ form.images.label }} <span class="text-danger">allowed types jpg, png, jpeg, gif</span></label>

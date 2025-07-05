@@ -4,12 +4,13 @@ from typing import List
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, \
-                    BooleanField, HiddenField, SelectField, RadioField, ColorField
+                    BooleanField, HiddenField, SelectField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
-from flask_babel import lazy_gettext as _l
+from flask_babel import lazy_gettext as _l, gettext as _
 from app.user.model import User
 from app.resource.auth.model import Role, Permission
 from app.resource.category.model import Category, CategoryColor
+from app.resource.item.model import Item
 
 
 class LoginForm(FlaskForm):
@@ -53,17 +54,94 @@ class SearchForm(FlaskForm):
 class ItemCreateForm(FlaskForm):
     """Form for creating a new item."""
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
     images = MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     storage_location = StringField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     submit = SubmitField(_l('Create Item'))
+
+
+def build_item_form(
+        categories: List[Category],
+        users: List[User],
+        item: Item = None,
+        submit_text: str = _l('Submit')
+    ) -> FlaskForm:
+    """ Builds a dynamic form for item creation or update.
+
+    This function creates a FlaskForm subclass with fields for item attributes,
+    including categories and users. It can be used for both creating a new item
+    and updating an existing one.
+
+    Args:
+        categories (list): A list of Category objects to create category fields.
+        users (list): A list of User objects to populate the owner field.
+        item (Item): An optional Item object to pre-fill the form for updates.
+        submit_text (str): The text for the submit button.
+
+    Returns:
+        FlaskForm: A dynamically created form class with fields for item attributes.
+    """
+
+    fields: dict = {
+        'id': HiddenField(_l('Item ID'), validators=[Optional()]),
+        'name': StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)]),
+        'description': TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)]),
+        'images': MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])]),
+        'storage_location': StringField(_l('Storage Location'), valilidators=[Optional()]),
+        'submit': SubmitField(submit_text)
+    }
+    for category in categories:
+        fields[f'category_{category.id}'] = BooleanField(category.name, default=False)
+
+    DynamicItemUpdateForm = type('DynamicItemUpdateForm', (FlaskForm,), fields)
+
+    class _Form(DynamicItemUpdateForm):
+        """ Dynamically generated form for item creation or update.
+
+        This form contains fields for item attributes, including categories and users(owner selection).
+        It can be used for both creating a new item and updating an existing one.
+
+        Args:
+            categories (list): A list of Category objects to create category fields.
+            users (list): A list of User objects to populate the owner field.
+            item (Item): An optional Item object to pre-fill the form for updates.
+            submit_text (str): The text for the submit button.
+        """
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            owner_choices = [(0, _l('-- No Owner --'))] + [(user.id, user.username) for user in users]
+            self.owner.choices = owner_choices
+
+            if item:
+                self.id.data = item.id
+                self.name.data = item.name
+                self.description.data = item.description
+                self.storage_location.data = item.storage_location_id
+                self.owner.data = item.owner.id if item.owner else 0
+                # Category marked as checked if item has it
+                if hasattr(item, "categories"):
+                    for category in categories:
+                        field_name = f'category_{category.id}'
+                        if category in item.categories:
+                            getattr(self, field_name).data = True
+                        else:
+                            getattr(self, field_name).data = False
+
+            else:
+                for category in categories:
+                    field_name = f'category_{category.id}'
+                    if hasattr(self, field_name):
+                        getattr(self, field_name).data = False
+                self.owner.data = 0
+
+    return _Form()
 
 
 class ItemUpdateForm(FlaskForm):
     """Form for updating an existing item."""
     id = StringField(_l('Item ID'), render_kw={'readonly': True}, validators=[DataRequired()])
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
     images = MultipleFileField('Add Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     storage_location = HiddenField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     owner = SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()])
@@ -81,7 +159,7 @@ class ItemImageUpdateForm(FlaskForm):
 class StorageCreateForm(FlaskForm):
     """Form for creating a new storage location."""
     name = StringField(_l('Storage Name'), validators=[DataRequired(), Length(max=100)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
     images = MultipleFileField('Storage Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     submit = SubmitField(_l('Create Storage'))
 
@@ -89,7 +167,7 @@ class StorageCreateForm(FlaskForm):
 class StorageUpdateForm(FlaskForm):
     """Form for creating a new storage location."""
     name = StringField(_l('Storage Name'), validators=[DataRequired(), Length(max=100)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=500)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
     images = MultipleFileField('Storage Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     storage_location = HiddenField(_l('Parent Storage Location'), validators=[Optional(), Length(max=100)])
     submit = SubmitField(_l('Update Storage'))
@@ -98,21 +176,21 @@ class StorageUpdateForm(FlaskForm):
 class RoleCreateForm(FlaskForm):
     """Form for creating a new role."""
     name = StringField(_l('Role Name'), validators=[DataRequired(), Length(max=50)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Create Role'))
 
 
 class GroupCreateForm(FlaskForm):
     """Form for creating a new group."""
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Create Group'))
 
 
 class GroupUpdateForm(FlaskForm):
     """Form for updating an existing group."""
     name = StringField(_l('Group Name'), validators=[DataRequired(), Length(max=50)])
-    description = StringField(_l('Description'), validators=[Optional(), Length(max=255)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Update Group'))
 
 

@@ -9,7 +9,8 @@ from flask import request, redirect
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from app import db
-from app.forms import ItemCreateForm, ItemUpdateForm
+from app.forms import ItemCreateForm, ItemUpdateForm, build_item_form
+from app.resource.category.model import Category
 from app.resource.item.model import Item, ItemImage
 from app.resource.storage_location.storage import get_storage_hierarchy_ids, get_storage_hierarchy
 from app.user.model import User
@@ -32,16 +33,17 @@ def item_view(item_id):
         Rendered template for the item page.
     """
     item = Item.query.filter_by(id=item_id).first_or_404()
+    users = db.session.query(User).all()
+    categories = db.session.query(Category).all()
     qrcode_url = request.url
 
-    form = ItemUpdateForm(id=item_id,
-                            name=item.name,
-                            description=item.description,
-                            images=item.images,
-                            storage_location=item.storage_location_id,
-                            owner=item.owner_id
-                          )
-    form.owner.choices = [(0, '')] + [(u.id, u.username) for u in User.query.all()]
+    form = build_item_form(
+                        item=item,
+                        users=users,
+                        categories=categories,
+                        submit_text=_('Save Changes')
+                    )
+
     # storage_hierarchy requiered for for the breadcrumbs in the item view
     # storage_hierarchy_ids requiered for the select field in the item update form
     return render_template('site.item.html',
@@ -49,6 +51,8 @@ def item_view(item_id):
                            item=item,
                            qrcode_url=qrcode_url,
                            form=form,
+                           categories=categories,
+                           getattr=getattr,
                            storage_hierarchy=get_storage_hierarchy(item.storage_location_id),
                            storage_hierarchy_ids=get_storage_hierarchy_ids(item.storage_location_id)
                            )
@@ -82,26 +86,49 @@ def delete_item(item_id):
 @login_required
 @check_permissions(['item.update'])
 def update_item_post(item_id):
-    """ 
+    """ Handle the update of an existing item.
+
+    Args:
+        item_id (int): The ID of the item to update.
+
+    Returns:
+        Redirect to the item view page after updating.
     """
     item = db.session.query(Item).filter_by(id=item_id).first_or_404()
-    form = ItemUpdateForm(request.form)
-    form.images.data = request.files.getlist('images')
-    
-    item.name = form.name.data
-    item.description = form.description.data if form.description.data != '' else None
-    item.storage_location_id = form.storage_location.data
-    item.owner_id = form.owner.data if form.owner.data > 0 else None
-    if form.images.data:
-        for image in form.images.data:
-            if image and image.filename:
-                ext = image.filename[image.filename.rfind('.'):]
-                unique_name = f"{uuid4()}{ext}"
-                image.save(os.path.join('img', 'item', unique_name))
-                db.session.add(ItemImage(item_id=item_id, filename=unique_name))
-    db.session.add(item)
-    db.session.commit()
-    # db.session.refresh(item)
+    users = db.session.query(User).all()
+    categories = db.session.query(Category).all()
+
+    form = build_item_form(
+                        item=item,
+                        users=users,
+                        categories=categories,
+                        submit_text=_('Save Changes')
+                    )
+    form.process(request.form)
+
+    if form.validate_on_submit():
+        item.name = form.name.data
+        item.description = form.description.data if form.description.data != '' else None
+        item.storage_location_id = form.storage_location.data
+        item.owner_id = form.owner.data if form.owner.data > 0 else None
+
+        # Update categories
+        item.categories.clear()
+        for category in categories:
+            if f'category_{category.id}' in request.form:
+                item.categories.append(category)
+
+        # Handle image uploads
+        form.images.data = request.files.getlist('images')
+        if form.images.data:
+            for image in form.images.data:
+                if image and image.filename:
+                    ext = image.filename[image.filename.rfind('.'):]
+                    unique_name = f"{uuid4()}{ext}"
+                    image.save(os.path.join('img', 'item', unique_name))
+                    db.session.add(ItemImage(item_id=item_id, filename=unique_name))
+        db.session.add(item)
+        db.session.commit()
     return redirect( url_for('item.item_view', item_id=item_id) )
 
 
@@ -114,19 +141,37 @@ def create_item():
     Returns:
         Redirect to the catalog page after item creation.
     """
-    form = ItemCreateForm(request.form, meta={'csrf': False})
-    form.images.data = request.files.getlist('images')
+    users = db.session.query(User).all()
+    categories = db.session.query(Category).all()
+
+    form = build_item_form(
+        item=None,
+        users=users,
+        categories=categories,
+        submit_text=_('Create Item')
+    )
+
     if form.validate_on_submit():
+        owner_id = request.form.get('owner')
         item = Item(
             name=form.name.data,
-            description=form.description.data,
-            storage_location_id=form.storage_location.data
+            description=form.description.data if form.description.data != '' else None,
+            storage_location_id=form.storage_location.data,
+            owner_id=owner_id if owner_id != '0' else None
         )
+
         db.session.add(item)
         db.session.commit()
-        db.session.flush()
         db.session.refresh(item)
 
+        # add categories
+        for category in categories:
+            if f'category_{category.id}' in request.form:
+                item.categories.append(category)
+        db.session.add(item)
+        db.session.commit()
+
+        form.images.data = request.files.getlist('images')
         if form.images.data:
             for image in form.images.data:
                 if image and image.filename:
@@ -135,4 +180,4 @@ def create_item():
                     image.save(os.path.join('img', 'item', unique_name))
                     db.session.add(ItemImage(item_id=item.id, filename=unique_name))
             db.session.commit()
-    return redirect( url_for('main.catalog') )
+    return redirect(url_for('main.catalog'))
