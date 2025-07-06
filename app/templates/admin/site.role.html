@@ -25,6 +25,7 @@
 <p><strong>{{ _('Description') }}:</strong> {{ role.description if role.description }}</p>
 
 <div>
+    {% include 'admin/role/modal.role.update.html' %}
     {% include 'admin/role/modal.role.add_permission.html' %}
     {% include 'admin/role/modal.role.delete.html' %}
 </div>

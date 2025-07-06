@@ -5,7 +5,8 @@ from flask_babel import gettext as _
 from app import db
 from app.user.model import User
 from app.forms import GroupCreateForm, GroupUpdateForm, GroupMembershipForm, \
-                    GroupAssignRoleForm, build_role_permission_form, RoleCreateForm
+                    GroupAssignRoleForm, build_role_permission_form, RoleCreateForm, \
+                    RoleUpdateForm
 from app.resource.auth.model import Role, Group, Permission
 from app.utils.decorators import check_permissions
 
@@ -105,6 +106,7 @@ def role_view(role_id):
     role = Role.query.get_or_404(role_id)
     permissions = db.session.query(Permission).all()
     form_role_permissions = build_role_permission_form(role, permissions)
+    form_update_role = RoleUpdateForm(obj=role)
 
 
     return render_template('admin/site.role.html',
@@ -112,6 +114,7 @@ def role_view(role_id):
                            role=role,
                            permissions=permissions,
                            form_role_permissions=form_role_permissions,
+                           form_update_role=form_update_role,
                            getattr=getattr
                         )
 
@@ -155,9 +158,25 @@ def add_permission_to_role(role_id: int):
                 'admin.backend.access',
                 'admin.role.update'
             ])
-def update_role_post(role_id):
+def update_role(role_id):
+    """ Update an existing role.
+    
+    Args:
+        role_id (int): The ID of the role to be updated.
+
+    Returns:
+        Redirect to the role view page.
+    """
     role = Role.query.get_or_404(role_id)
-    # Logic to update the role
+    form_update_role = RoleUpdateForm(request.form)
+
+    if form_update_role.validate_on_submit():
+        role.name = form_update_role.name.data
+        role.description = form_update_role.description.data if form_update_role.description.data != '' else None
+
+        db.session.add(role)
+        db.session.commit()
+
     return redirect(url_for('admin.role_view', role_id=role.id))
 
 
