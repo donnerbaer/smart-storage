@@ -4,8 +4,9 @@ from typing import List
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, FileField, MultipleFileField, \
-                    BooleanField, HiddenField, SelectField, RadioField, TextAreaField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
+                    BooleanField, HiddenField, SelectField, RadioField, TextAreaField, \
+                    IntegerField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional, NumberRange
 from flask_babel import lazy_gettext as _l, gettext as _
 from app.user.model import User
 from app.resource.auth.model import Role, Permission
@@ -89,6 +90,7 @@ def build_item_form(
         'images': MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])]),
         'owner': SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()]),
         'storage_location': StringField(_l('Storage Location'), validators=[Optional()]),
+        'quantity': IntegerField(_l('Quantity'), default=1, validators=[Optional(), NumberRange(min=1, message=_l('Quantity must be at least 1'))]),
         'submit': SubmitField(submit_text)
     }
     for category in categories:
@@ -118,6 +120,7 @@ def build_item_form(
                 self.name.data = item.name
                 self.description.data = item.description
                 self.storage_location.data = item.storage_location_id
+                self.quantity.data = item.get_current_stock() if item.get_current_stock() is not None else 1
                 self.owner.data = item.owner.id if item.owner else 0
                 # Category marked as checked if item has it
                 if hasattr(item, "categories"):
@@ -179,6 +182,13 @@ class RoleCreateForm(FlaskForm):
     name = StringField(_l('Role Name'), validators=[DataRequired(), Length(max=50)])
     description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=255)])
     submit = SubmitField(_l('Create Role'))
+
+
+class RoleUpdateForm(FlaskForm):
+    """Form for updating an existing role."""
+    name = StringField(_l('Role Name'), validators=[DataRequired(), Length(max=50)])
+    description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=255)])
+    submit = SubmitField(_l('Update Role'))
 
 
 class GroupCreateForm(FlaskForm):
