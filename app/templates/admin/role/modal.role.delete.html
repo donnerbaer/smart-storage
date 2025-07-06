@@ -1,7 +1,7 @@
 {% if current_user.has_permission('admin.role.delete') %}
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRoleModal">
-    {{ _('Delete Role') }}
+    <i class="bi bi-trash"></i> {{ _('Delete') }}
 </button>
 <!-- Modal -->
 <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
