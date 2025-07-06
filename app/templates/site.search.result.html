@@ -14,24 +14,33 @@
         {{ _('No items found.') }}
     </div>
     {% else %}
-    <div class="row row-cols-5">
+    <div class="row row-cols">
     {% for item in items %}
-        <div class="card mb-3 me-3" style="width: 18rem;">
-            <div class="border-dark-emphasis rounded-4 bg-body-tertiary">
+        <div class="card m-2 col-md-2">
+            <div>
                 <div id="item_{{ item.id }}_Carousel" class="carousel slide">
-                    <div class="carousel-inner mt-2">
-                    {% for image in item.images %}
-                        {% if loop.first %}
+                    <div class="carousel-inner p-2">
+                    {% if item.images|length == 0 %}
                         <div class="carousel-item active">
-                        {% else %}
-                        <div class="carousel-item">
-                        {% endif %}
-                            <img src="{{ url_for('image.serve_item_image', filename=image.filename) }}"
+                            <img src="{{ url_for('image.serve_item_image', filename='default_item_image.png') }}"
                             class="d-block mx-auto my-auto"
-                            alt="Image of {{ item.name }}"
-                            style="max-height:300px; display: block; margin-left: auto; margin-right: auto; object-fit: contain; width: auto; max-width: 100%;">
+                            alt="No image available for {{ item.name }}"
+                            style="height: 200px; display: block; object-fit: contain; width: auto; max-width: 100%;">
                         </div>
-                    {% endfor %}
+                    {% else %}
+                        {% for image in item.images %}
+                            {% if loop.first %}
+                            <div class="carousel-item active">
+                            {% else %}
+                            <div class="carousel-item">
+                            {% endif %}
+                                <img src="{{ url_for('image.serve_item_image', filename=image.filename) }}"
+                                class="d-block mx-auto my-auto"
+                                alt="Image of {{ item.name }}"
+                                style="height: 200px; display: block; object-fit: contain; width: auto; max-width: 100%;">
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#item_{{ item.id }}_Carousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -44,8 +53,8 @@
                 </div>
             </div>
             <div class="card-body">
-                <h3 class="card-title">{{ item.name }}</h3>
-                <div>
+                <h3 class="h5 card-title">{{ item.name }}</h3>
+                <div class="card-subtitle mb-2 text-muted">
                     <span class="badge text-bg-secondary">{{ _('Item') }}</span>
                     {% if item.categories|length > 0 %}
                         {% for category in item.categories %}
@@ -54,9 +63,11 @@
                     {% endif %}
                 </div>
                 <p class="card-text">{{ item.description if item.description else '' }}</p>
-                <a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">{{ _('Show') }}</a>
             </div>
-    </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary w-100">{{ _('Show') }}</a>
+            </div>
+        </div>
     {% endfor %}
     {% endif %}
     </div>
@@ -65,30 +76,40 @@
 
 <!-- Storages -->
 <div class="container">
-    <h2 class="h2">{{ _('Storages') }}</h2>
+<h2 class="h2">{{ _('Storages') }}</h2>
+
     {% if storages|length == 0 %}
     <div class="alert alert-info" role="alert">
-        {{ _('No storages found.') }}
+        {{ _('No items found.') }}
     </div>
     {% else %}
-    <div class="row row-cols-5">
+    <div class="row row-cols">
     {% for storage in storages %}
-        <div class="card mb-3 me-3" style="width: 18rem;">
-            <div class="border-dark-emphasis rounded-4 bg-body-tertiary">
+        <div class="card m-2 col-md-2">
+            <div>
                 <div id="storage_{{ storage.id }}_Carousel" class="carousel slide">
-                    <div class="carousel-inner mt-2">
-                    {% for image in storage.images %}
-                        {% if loop.first %}
+                    <div class="carousel-inner p-2">
+                    {% if storage.images|length == 0 %}
                         <div class="carousel-item active">
-                        {% else %}
-                        <div class="carousel-item">
-                        {% endif %}
-                            <img src="{{ url_for('image.serve_storage_image', filename=image.filename) }}"
+                            <img src="{{ url_for('image.serve_storage_image', filename='default_storage_image.png') }}"
                             class="d-block mx-auto my-auto"
-                            alt="Image of {{ storage.name }}"
-                            style="max-height:300px; display: block; margin-left: auto; margin-right: auto; object-fit: contain; width: auto; max-width: 100%;">
+                            alt="No image available for {{ storage.name }}"
+                            style="height: 200px; display: block; object-fit: contain; width: auto; max-width: 100%;">
                         </div>
-                    {% endfor %}
+                    {% else %}
+                        {% for image in storage.images %}
+                            {% if loop.first %}
+                            <div class="carousel-item active">
+                            {% else %}
+                            <div class="carousel-item">
+                            {% endif %}
+                                <img src="{{ url_for('image.serve_storage_image', filename=image.filename) }}"
+                                class="d-block mx-auto my-auto"
+                                alt="Image of {{ storage.name }}"
+                                style="height: 200px; display: block; object-fit: contain; width: auto; max-width: 100%;">
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#storage_{{ storage.id }}_Carousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -101,8 +122,8 @@
                 </div>
             </div>
             <div class="card-body">
-                <h3 class="card-title">{{ storage.name }}</h3>
-                <div>
+                <h3 class="h5 card-title">{{ storage.name }}</h3>
+                <div class="card-subtitle mb-2 text-muted">
                     <span class="badge text-bg-secondary">{{ _('Storage') }}</span>
                     {% if storage.categories|length > 0 %}
                         {% for category in storage.categories %}
@@ -111,9 +132,11 @@
                     {% endif %}
                 </div>
                 <p class="card-text">{{ storage.description if storage.description else '' }}</p>
-                <a href="{{ url_for('storage.storage_view', storage_id=storage.id) }}" class="btn btn-primary">{{ _('Show') }}</a>
             </div>
-    </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ url_for('storage.storage_view', storage_id=storage.id) }}" class="btn btn-primary w-100">{{ _('Show') }}</a>
+            </div>
+        </div>
     {% endfor %}
     {% endif %}
     </div>
