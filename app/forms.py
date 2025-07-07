@@ -56,7 +56,7 @@ class ItemCreateForm(FlaskForm):
     """Form for creating a new item."""
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
     description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
-    images = MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    images = MultipleFileField(_l('Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     storage_location = StringField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     submit = SubmitField(_l('Create Item'))
 
@@ -87,7 +87,7 @@ def build_item_form(
         'id': HiddenField(_l('Item ID'), validators=[Optional()]),
         'name': StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)]),
         'description': TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)]),
-        'images': MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])]),
+        'images': MultipleFileField(_l('Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])]),
         'owner': SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()]),
         'storage_location': StringField(_l('Storage Location'), validators=[Optional()]),
         'quantity': IntegerField(_l('Quantity'), default=1, validators=[Optional(), NumberRange(min=1, message=_l('Quantity must be at least 1'))]),
@@ -146,7 +146,7 @@ class ItemUpdateForm(FlaskForm):
     id = StringField(_l('Item ID'), render_kw={'readonly': True}, validators=[DataRequired()])
     name = StringField(_l('Item Name'), validators=[DataRequired(), Length(max=100)])
     description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
-    images = MultipleFileField('Add Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    images = MultipleFileField(_l('Add Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     storage_location = HiddenField(_l('Storage Location'), validators=[Optional(), Length(max=100)])
     owner = SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()])
     submit = SubmitField(_l('Save Changes'))
@@ -154,7 +154,7 @@ class ItemUpdateForm(FlaskForm):
 
 class ItemImageUpdateForm(FlaskForm):
     """Form for updating item images."""
-    images = MultipleFileField('Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    images = MultipleFileField(_l('Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     image_descriptions = StringField(_l('Image Descriptions (comma separated)'), validators=[Optional(), Length(max=1000)])
     delete_images = BooleanField(_l('Delete Selected Images'), default=False, validators=[Optional()])
     submit = SubmitField(_l('Update Images'))
@@ -164,7 +164,7 @@ class StorageCreateForm(FlaskForm):
     """Form for creating a new storage location."""
     name = StringField(_l('Storage Name'), validators=[DataRequired(), Length(max=100)])
     description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
-    images = MultipleFileField('Storage Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    images = MultipleFileField(_l('Storage Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     submit = SubmitField(_l('Create Storage'))
 
 
@@ -172,7 +172,7 @@ class StorageUpdateForm(FlaskForm):
     """Form for creating a new storage location."""
     name = StringField(_l('Storage Name'), validators=[DataRequired(), Length(max=100)])
     description = TextAreaField(_l('Description'), validators=[Optional(), Length(max=500)])
-    images = MultipleFileField('Storage Images', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
+    images = MultipleFileField(_l('Storage Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])])
     storage_location = HiddenField(_l('Parent Storage Location'), validators=[Optional(), Length(max=100)])
     submit = SubmitField(_l('Update Storage'))
 
