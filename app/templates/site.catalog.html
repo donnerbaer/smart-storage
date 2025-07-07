@@ -58,6 +58,7 @@
             <th>{{ _('Image') }}</th>
             <th>{{ _("Name") }}</th>
             <th>{{ _('Storage Location') }}</th>
+            <th>{{ _('Quantity') }}</th>
             <th>{{ _('Description') }}</th>
             <th>{{ _('Owner') }}</th>
         </tr>
@@ -77,6 +78,7 @@
                 <a href="{{ url_for('storage.storage_view', storage_id=item.storage_location.id)}}" class="btn btn-primary d-block">{{ item.storage_location.name }}</a>
                 {% endif %}
             </td>
+            <td>{{ item.get_current_stock() }}</td>
             <td>{{ item.description if item.description }}</td>
             <td>
                 {% if item.owner_id %}

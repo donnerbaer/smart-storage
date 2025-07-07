@@ -14,6 +14,11 @@
     </div>
 
     <div class="form-group my-2">
+        <label for="quantity">{{ form.quantity.label }}</label>
+        {{ form.quantity(class="form-control", id="quantity") }}
+    </div>
+
+    <div class="form-group my-2">
         <label>{{ _('Categories') }}</label>
         <div class="form-text">{{ _('Select the categories that apply to this item.') }}</div>
         {% for category in categories %}

@@ -9,9 +9,9 @@ from flask import request, redirect
 from flask_babel import gettext as _
 from flask_login import login_required, current_user
 from app import db
-from app.forms import ItemCreateForm, ItemUpdateForm, build_item_form
+from app.forms import build_item_form
 from app.resource.category.model import Category
-from app.resource.item.model import Item, ItemImage
+from app.resource.item.model import Item, ItemImage, ItemStorageStock
 from app.resource.storage_location.storage import get_storage_hierarchy_ids, get_storage_hierarchy
 from app.user.model import User
 from app.utils.decorators import check_permissions
@@ -37,6 +37,40 @@ def item_view(item_id):
     categories = db.session.query(Category).all()
     qrcode_url = request.url
 
+    """ Prepare data for the dashboard.
+
+        The data is structured as follows:
+        1. The key is the HTML id of the chart.
+        2. The value is a dictionary containing:
+        - 'title': The title of the chart.
+        - 'description': A description of the chart.
+        - 'labels': A list of labels for the chart.
+        - 'data': A list of data points for the chart.
+        - 'name': The name of the chart.
+
+        If required, you can add more charts by following the same structure.
+        The data can be used to render charts using a JavaScript charting library like Chart.js.
+
+        Example:
+            {'overall_sum': {
+                'title': 'Title of the chart',
+                'description': 'Description of the chart',
+                'labels': ['Label1', 'Label2', 'Label3'],
+                'data': [12, 19, 3],
+                'name': 'name of the chart'
+            }
+    """
+
+    data = {
+        "quantity_over_time": {
+            "title": _("Quantity Over Time"),
+            "description": _("This chart shows the quantity of the item over time."),
+            "labels": [ stock.format_timestamp() for stock in item.stocks],
+            "data": [ stock.quantity for stock in item.stocks ],
+            "name": 'quantity_over_time'
+        }
+    }
+
     form = build_item_form(
                         item=item,
                         users=users,
@@ -49,6 +83,7 @@ def item_view(item_id):
     return render_template('site.item.html',
                            current_user=current_user,
                            item=item,
+                           data=data,
                            qrcode_url=qrcode_url,
                            form=form,
                            categories=categories,
@@ -72,6 +107,7 @@ def delete_item(item_id):
     """
     item = db.session.query(Item).filter_by(id=item_id).first_or_404()
     images = db.session.query(ItemImage).filter_by(item_id=item_id).all()
+    db.session.query(ItemStorageStock).filter_by(item_id=item_id).delete()
     for image in images:
         image_path = os.path.join('img', 'item', image.filename)
         if os.path.exists(image_path):
@@ -127,6 +163,16 @@ def update_item_post(item_id):
                     unique_name = f"{uuid4()}{ext}"
                     image.save(os.path.join('img', 'item', unique_name))
                     db.session.add(ItemImage(item_id=item_id, filename=unique_name))
+
+        if item.get_current_stock() != form.quantity.data:
+            # Update stock quantity
+            item.stocks.append(
+                ItemStorageStock(
+                    item_id=item.id,
+                    quantity=form.quantity.data if form.quantity.data else 1
+                )
+            )
+
         db.session.add(item)
         db.session.commit()
     return redirect( url_for('item.item_view', item_id=item_id) )
@@ -159,6 +205,12 @@ def create_item():
             storage_location_id=form.storage_location.data,
             owner_id=owner_id if owner_id != '0' else None
         )
+
+        quantity = ItemStorageStock(
+                item_id=item.id,
+                quantity=form.quantity.data if form.quantity.data else 1
+            )
+        item.stocks.append(quantity)
 
         db.session.add(item)
         db.session.commit()
