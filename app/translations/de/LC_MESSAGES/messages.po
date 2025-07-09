@@ -288,6 +288,7 @@ msgstr "Profil"
 #: templates/admin/site.index.html:24 templates/component/navbar.html:23
 #: templates/site.user.html:12 templates/site.user.update.html:13
 #: templates/site.users.html:12 templates/site.users.html:17 views/main.py:78
+
 msgid "Users"
 msgstr "Benutzer"
 
@@ -575,6 +576,7 @@ msgid "Are you sure you want to delete the group? This action cannot be undone."
 msgstr ""
 "Bist du dir sicher, dass du diese Gruppe löschen möchtest? Diese Aktion "
 "kann nicht rückgängig gemacht werden."
+
 
 #: templates/admin/group/modal.group.remove_role.html:4
 #: templates/admin/group/modal.group.remove_user.html:4
