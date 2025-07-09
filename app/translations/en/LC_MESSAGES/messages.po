@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-07-09 21:27+0200\n"
+"POT-Creation-Date: 2025-07-09 22:57+0200\n"
 "PO-Revision-Date: 2025-07-07 15:51+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -33,6 +33,7 @@ msgstr ""
 #: templates/admin/role/modal.role.create.html:20
 #: templates/admin/role/modal.role.update.html:20
 #: templates/category/modal.category.create.html:20
+#: templates/category/modal.category.delete.html:23
 #: templates/category/modal.category.update.html:20
 #: templates/item/modal.item.update_quantity.html:47
 #: templates/item/modal.update.html:47 templates/site.catalog.html:35
@@ -284,9 +285,9 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: templates/component/navbar.html:23 templates/site.user.html:12
-#: templates/site.user.update.html:13 templates/site.users.html:12
-#: templates/site.users.html:17 views/main.py:78
+#: templates/admin/site.index.html:24 templates/component/navbar.html:23
+#: templates/site.user.html:12 templates/site.user.update.html:13
+#: templates/site.users.html:12 templates/site.users.html:17 views/main.py:78
 msgid "Users"
 msgstr ""
 
@@ -409,7 +410,7 @@ msgstr ""
 
 #: templates/admin/site.group.html:15 templates/admin/site.groups.html:2
 #: templates/admin/site.groups.html:15 templates/admin/site.groups.html:21
-#: templates/component/navbar.html:45
+#: templates/admin/site.index.html:27 templates/component/navbar.html:45
 msgid "Groups"
 msgstr ""
 
@@ -457,34 +458,66 @@ msgstr ""
 msgid "Here is some content for the admin dashboard."
 msgstr ""
 
-#: templates/admin/site.index.html:37
+#: templates/admin/site.index.html:30 templates/admin/site.role.html:15
+#: templates/admin/site.roles.html:2 templates/admin/site.roles.html:15
+#: templates/admin/site.roles.html:20 templates/component/navbar.html:48
+msgid "Roles"
+msgstr ""
+
+#: templates/admin/site.index.html:33
+msgid "Check for Updates"
+msgstr ""
+
+#: templates/admin/site.index.html:40
 msgid "Notes"
 msgstr ""
 
-#: templates/admin/site.index.html:38
+#: templates/admin/site.index.html:41
 msgid "How is the authorization system build?"
 msgstr ""
 
-#: templates/admin/site.index.html:41
+#: templates/admin/site.index.html:44
 msgid "Each user is assigned to at least one group."
 msgstr ""
 
-#: templates/admin/site.index.html:44
+#: templates/admin/site.index.html:47
 msgid "Each group is assigned at least one role."
 msgstr ""
 
-#: templates/admin/site.index.html:47
+#: templates/admin/site.index.html:50
 msgid "Each role has at least one authorization."
+msgstr ""
+
+#: templates/admin/site.index.html:61
+msgid "Version Check"
+msgstr ""
+
+#: templates/admin/site.index.html:63
+msgid "The current version of SmartStorage is:"
+msgstr ""
+
+#: templates/admin/site.index.html:66
+msgid "The latest version available is:"
+msgstr ""
+
+#: templates/admin/site.index.html:69
+msgid "Could not retrieve the latest version information."
+msgstr ""
+
+#: templates/admin/site.index.html:74
+msgid "An update is available!"
+msgstr ""
+
+#: templates/admin/site.index.html:75
+msgid "Get the newest release"
+msgstr ""
+
+#: templates/admin/site.index.html:79
+msgid "You are using the latest version of SmartStorage."
 msgstr ""
 
 #: templates/admin/site.role.html:2 templates/admin/site.role.html:24
 msgid "Role"
-msgstr ""
-
-#: templates/admin/site.role.html:15 templates/admin/site.roles.html:2
-#: templates/admin/site.roles.html:15 templates/admin/site.roles.html:20
-#: templates/component/navbar.html:48
-msgid "Roles"
 msgstr ""
 
 #: templates/admin/role/form.role.add_permission.html:7
