@@ -406,3 +406,34 @@ def remove_user_from_group(group_id: int, user_id: int):
         group.users.remove(user)
         db.session.commit()
     return redirect(url_for('admin.group_view', group_id=group.id))
+
+
+@admin_bp.route('/check_version', methods=['GET'])
+@login_required
+@check_permissions([
+                'admin.backend.access'
+            ])
+def check_version():
+    """Check for updates to the application version.
+
+    Args:
+        None
+
+    Returns:
+        Redirect to the admin view page with a message indicating the version check.
+    """
+    from packaging import version
+    import requests
+    from app.version import get_version
+
+    response = requests.get("https://api.github.com/repos/donnerbaer/smart-storage/releases/latest")
+    current_version = version.parse(get_version())
+    latest_version = version.parse(response.json().get("tag_name"))
+
+    version_info = {
+        'current_version': current_version,
+        'latest_version': latest_version,
+        'update_available': current_version < latest_version
+    }
+
+    return render_template('admin/site.index.html', current_user=current_user, version_info=version_info)
