@@ -25,7 +25,7 @@
 		{% endif %}
 		{% if current_user.has_permission('storages.read') %}
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url_for('storage.storages_view') }}"><i class="bi bi-box"></i> {{ _("Storage Locations") }}</a>
+			<a class="nav-link" href="{{ url_for('storage.storages_view') }}"><i class="bi bi-box"></i> {{ _("Storages") }}</a>
 		</li>
 		{% endif %}
 		{% if current_user.has_permission('categories.read') %}
