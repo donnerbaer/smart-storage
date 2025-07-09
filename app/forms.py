@@ -90,7 +90,7 @@ def build_item_form(
         'images': MultipleFileField(_l('Images'), validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'])]),
         'owner': SelectField(_l('Owner'), choices=[], coerce=int, validators=[Optional()]),
         'storage_location': StringField(_l('Storage Location'), validators=[Optional()]),
-        'quantity': IntegerField(_l('Quantity'), default=1, validators=[Optional(), NumberRange(min=1, message=_l('Quantity must be at least 1'))]),
+        'quantity': IntegerField(_l('Quantity'), default=1, validators=[Optional(), NumberRange(min=0, message=_l('Quantity must be at least 0'))]),
         'submit': SubmitField(submit_text)
     }
     for category in categories:
