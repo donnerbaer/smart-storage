@@ -1,6 +1,12 @@
 # smart-storage
 A website for storing and managing household items
 
+## Supported Languages
+
+The following languages are currently supported.
+
++ de german
++ en english
 
 ## Setup
 
