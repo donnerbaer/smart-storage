@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-07-09 21:27+0200\n"
+"POT-Creation-Date: 2025-07-09 22:57+0200\n"
 "PO-Revision-Date: 2025-07-07 15:51+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -33,6 +33,7 @@ msgstr "Gegenstand erstellen"
 #: templates/admin/role/modal.role.create.html:20
 #: templates/admin/role/modal.role.update.html:20
 #: templates/category/modal.category.create.html:20
+#: templates/category/modal.category.delete.html:23
 #: templates/category/modal.category.update.html:20
 #: templates/item/modal.item.update_quantity.html:47
 #: templates/item/modal.update.html:47 templates/site.catalog.html:35
@@ -284,9 +285,10 @@ msgstr "Kein Lagerot gefunden."
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/component/navbar.html:23 templates/site.user.html:12
-#: templates/site.user.update.html:13 templates/site.users.html:12
-#: templates/site.users.html:17 views/main.py:78
+#: templates/admin/site.index.html:24 templates/component/navbar.html:23
+#: templates/site.user.html:12 templates/site.user.update.html:13
+#: templates/site.users.html:12 templates/site.users.html:17 views/main.py:78
+
 msgid "Users"
 msgstr "Benutzer"
 
@@ -409,7 +411,7 @@ msgstr "Admin"
 
 #: templates/admin/site.group.html:15 templates/admin/site.groups.html:2
 #: templates/admin/site.groups.html:15 templates/admin/site.groups.html:21
-#: templates/component/navbar.html:45
+#: templates/admin/site.index.html:27 templates/component/navbar.html:45
 msgid "Groups"
 msgstr "Gruppen"
 
@@ -457,35 +459,67 @@ msgstr "Adminbereich"
 msgid "Here is some content for the admin dashboard."
 msgstr "Hier ist etwas Inhalt für das Admin Dashboard."
 
-#: templates/admin/site.index.html:37
+#: templates/admin/site.index.html:30 templates/admin/site.role.html:15
+#: templates/admin/site.roles.html:2 templates/admin/site.roles.html:15
+#: templates/admin/site.roles.html:20 templates/component/navbar.html:48
+msgid "Roles"
+msgstr "Rollen"
+
+#: templates/admin/site.index.html:33
+msgid "Check for Updates"
+msgstr "Suche neue Versionen"
+
+#: templates/admin/site.index.html:40
 msgid "Notes"
 msgstr "Anmerkung"
 
-#: templates/admin/site.index.html:38
+#: templates/admin/site.index.html:41
 msgid "How is the authorization system build?"
 msgstr "Wie funktioniert das Berechtigungssystem?"
 
-#: templates/admin/site.index.html:41
+#: templates/admin/site.index.html:44
 msgid "Each user is assigned to at least one group."
 msgstr "Jeder Benutzer ist mindestens einer Gruppe zugeordnet."
 
-#: templates/admin/site.index.html:44
+#: templates/admin/site.index.html:47
 msgid "Each group is assigned at least one role."
 msgstr "Eine Gruppe ist mindestens einer Rolle zugeordnet."
 
-#: templates/admin/site.index.html:47
+#: templates/admin/site.index.html:50
 msgid "Each role has at least one authorization."
 msgstr "Jede Rolle hat mindestens eine Berechtigung."
+
+#: templates/admin/site.index.html:61
+msgid "Version Check"
+msgstr "Version Check"
+
+#: templates/admin/site.index.html:63
+msgid "The current version of SmartStorage is:"
+msgstr "Die aktuelle Version von SmartStorage ist:"
+
+#: templates/admin/site.index.html:66
+msgid "The latest version available is:"
+msgstr "Die neuste verfügbare Version ist:"
+
+#: templates/admin/site.index.html:69
+msgid "Could not retrieve the latest version information."
+msgstr "Die neuste Version konnte nicht abgerufen werden."
+
+#: templates/admin/site.index.html:74
+msgid "An update is available!"
+msgstr "Eine neue Version ist verfügbar!"
+
+#: templates/admin/site.index.html:75
+msgid "Get the newest release"
+msgstr "Neuste Version herunterladen."
+
+#: templates/admin/site.index.html:79
+msgid "You are using the latest version of SmartStorage."
+msgstr "Du nutzt die neuste Version von SmartStorage."
 
 #: templates/admin/site.role.html:2 templates/admin/site.role.html:24
 msgid "Role"
 msgstr "Rolle"
-
-#: templates/admin/site.role.html:15 templates/admin/site.roles.html:2
-#: templates/admin/site.roles.html:15 templates/admin/site.roles.html:20
-#: templates/component/navbar.html:48
-msgid "Roles"
-msgstr "Rollen"
 
 #: templates/admin/role/form.role.add_permission.html:7
 #: templates/admin/site.role.html:37
@@ -539,7 +573,10 @@ msgstr "Warnung!"
 
 #: templates/admin/group/modal.group.delete.html:18
 msgid "Are you sure you want to delete the group? This action cannot be undone."
-msgstr "Bist du dir sicher, dass du diese Gruppe löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden."
+msgstr ""
+"Bist du dir sicher, dass du diese Gruppe löschen möchtest? Diese Aktion "
+"kann nicht rückgängig gemacht werden."
+
 
 #: templates/admin/group/modal.group.remove_role.html:4
 #: templates/admin/group/modal.group.remove_user.html:4
@@ -552,8 +589,12 @@ msgid "Remove role from group"
 msgstr "Entferne Rolle von der Gruppe"
 
 #: templates/admin/group/modal.group.remove_role.html:17
-msgid "Are you sure you want to remove this role from the group? This action cannot be undone."
-msgstr "Bist du dir sicher, dass du die Rolle von der Gruppe entfernen möchtests? Diese Aktion kann nicht rückgängig gemacht werden."
+msgid ""
+"Are you sure you want to remove this role from the group? This action "
+"cannot be undone."
+msgstr ""
+"Bist du dir sicher, dass du die Rolle von der Gruppe entfernen möchtests?"
+" Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: templates/admin/group/modal.group.remove_role.html:22
 msgid "Remove Role"
@@ -564,8 +605,12 @@ msgid "Remove user from group"
 msgstr "Benutzer von der Gruppe entfernen"
 
 #: templates/admin/group/modal.group.remove_user.html:17
-msgid "Are you sure you want to remove this user from the group? This action cannot be undone."
-msgstr "Sind Sie sicher, dass Sie diesen Benutzer aus der Gruppe entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+msgid ""
+"Are you sure you want to remove this user from the group? This action "
+"cannot be undone."
+msgstr ""
+"Sind Sie sicher, dass Sie diesen Benutzer aus der Gruppe entfernen "
+"möchten? Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: templates/admin/group/modal.group.update.html:3
 #: templates/admin/group/modal.group.update.html:9
@@ -608,7 +653,9 @@ msgstr "Rolle löschen"
 
 #: templates/admin/role/modal.role.delete.html:16
 msgid "Are you sure you want to delete the role? This action cannot be undone."
-msgstr "Sind Sie sicher, dass Sie die Rolle löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden."
+msgstr ""
+"Sind Sie sicher, dass Sie die Rolle löschen wollen? Diese Aktion kann "
+"nicht rückgängig gemacht werden."
 
 #: templates/admin/role/modal.role.update.html:11
 msgid "Update role"
@@ -627,8 +674,12 @@ msgid "Delete Category"
 msgstr "Kategorie löschen"
 
 #: templates/category/modal.category.delete.html:18
-msgid "Are you sure you want to delete the category? This action cannot be undone."
-msgstr "Sind Sie sicher, dass Sie die Kategorie löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden."
+msgid ""
+"Are you sure you want to delete the category? This action cannot be "
+"undone."
+msgstr ""
+"Sind Sie sicher, dass Sie die Kategorie löschen wollen? Diese Aktion kann"
+" nicht rückgängig gemacht werden."
 
 #: templates/category/modal.category.update.html:4
 msgid "Update"
@@ -659,8 +710,13 @@ msgid "Error 403: Forbidden"
 msgstr "Fehler 403: Verboten"
 
 #: templates/error/403.html:8
-msgid "You don't have the permission to access the requested resource. It is either read-protected or not readable by the server."
-msgstr "Sie haben nicht die Berechtigung, auf die angeforderte Ressource zuzugreifen. Sie ist entweder schreibgeschützt oder kann vom Server nicht gelesen werden."
+msgid ""
+"You don't have the permission to access the requested resource. It is "
+"either read-protected or not readable by the server."
+msgstr ""
+"Sie haben nicht die Berechtigung, auf die angeforderte Ressource "
+"zuzugreifen. Sie ist entweder schreibgeschützt oder kann vom Server nicht"
+" gelesen werden."
 
 #: templates/error/404.html:2
 msgid "Error 404"
@@ -685,7 +741,9 @@ msgstr "Lösche den Gegenstand jetzt."
 
 #: templates/item/modal.delete.html:14
 msgid "Are you sure you want to delete the item? This action cannot be undone."
-msgstr "Sind Sie sicher, dass Sie den Artikel löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden."
+msgstr ""
+"Sind Sie sicher, dass Sie den Artikel löschen wollen? Diese Aktion kann "
+"nicht rückgängig gemacht werden."
 
 #: templates/item/modal.delete.html:18
 msgid "Delete Item"
@@ -715,7 +773,9 @@ msgstr "Lagerort jetzt löschen"
 
 #: templates/storage/modal.delete.html:14
 msgid "Are you sure you want to delete the Storage? This action cannot be undone."
-msgstr "Sind Sie sicher, dass Sie den Speicher löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden."
+msgstr ""
+"Sind Sie sicher, dass Sie den Speicher löschen wollen? Diese Aktion kann "
+"nicht rückgängig gemacht werden."
 
 #: templates/storage/modal.delete.html:18
 msgid "Delete Storage"
@@ -739,7 +799,9 @@ msgstr "Benutzer löschen"
 
 #: templates/user/modal.delete.html:15
 msgid "Are you sure you want to delete the user? This action cannot be undone."
-msgstr "Sind Sie sicher, dass Sie den Benutzer löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden."
+msgstr ""
+"Sind Sie sicher, dass Sie den Benutzer löschen wollen? Diese Aktion kann "
+"nicht rückgängig gemacht werden."
 
 #: views/admin.py:87
 msgid "Role name already exists."
@@ -751,7 +813,9 @@ msgstr "Gruppenname existiert bereits."
 
 #: views/admin.py:377
 msgid "Please select a user to add to the group."
-msgstr "Bitte wählen Sie einen Benutzer aus, der der Gruppe hinzugefügt werden soll."
+msgstr ""
+"Bitte wählen Sie einen Benutzer aus, der der Gruppe hinzugefügt werden "
+"soll."
 
 #: views/item.py:66
 msgid "Quantity Over Time"
@@ -759,7 +823,9 @@ msgstr "Mengenentwicklung über die Zeit"
 
 #: views/item.py:67
 msgid "This chart shows the quantity of the item over time."
-msgstr "In diesem Diagramm ist die Menge des Gegenstands über die Zeit hinweg dargestellt."
+msgstr ""
+"In diesem Diagramm ist die Menge des Gegenstands über die Zeit hinweg "
+"dargestellt."
 
 #: views/item.py:78 views/item.py:149
 msgid "Save Changes"
