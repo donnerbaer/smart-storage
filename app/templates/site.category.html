@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("Category") }} - {{ category.name }} - {% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{{ url_for('category.categories_view') }}">{{ _('Categories') }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ category.name }}
+        </li>
+    </ol>
+</nav>
+
+<h1>{{ _("Category") }}: {{ category.name }}
+    <span class="badge border border-1 border-dark text-bg-{{ category.color.color }} {% if category.color.color == 'white' %}text-dark{% endif %}">
+        {{ category.color.name }}
+    </span>
+</h1>
+<div class="my-3">
+    {% include 'category/modal.category.update.html' %}
+    {% include 'category/modal.category.delete.html' %}
+</div>
+
+
+
+<section>
+    <h2 class="h4 mt-3">{{ _('Items labeled with') }}</h2>
+    {% if category.items|length == 0%}
+    <div class="alert alert-info" role="alert">
+        {{ _("No items found in this category.") }}
+    </div>
+    {% else %}
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th scope="col">{{ _('ID') }}</th>
+                <th scope="col">{{ _("Name") }}</th>
+                <th scope="col">{{ _('Action') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in category.items %}
+            <tr>
+                <td scope="row">
+                    <span class="fw-bold">{{ item.id }}</span>
+                </td>
+                <td>
+                     {{ item.name }}
+                </td>
+                <td>
+                    <a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</section>
+
+
+
+<section>
+    <h2 class="h4 mt-3">{{ _('Storages labeled with') }}</h2>
+    {% if category.storages|length == 0%}
+    <div class="alert alert-info" role="alert">
+        {{ _("No storages found in this category.") }}
+    </div>
+    {% else %}
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th scope="col">{{ _('ID') }}</th>
+                <th scope="col">{{ _("Name") }}</th>
+                <th scope="col">{{ _('Action') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for storage in category.storages %}
+            <tr>
+                <td scope="row">
+                    <span class="fw-bold">{{ storage.id }}</span>
+                </td>
+                <td>
+                     {{ storage.name }}
+                </td>
+                <td>
+                    <a href="{{ url_for('storage.storage_view', storage_id=storage.id) }}" class="btn btn-primary">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</section>
+
+{% endblock %}

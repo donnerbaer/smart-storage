@@ -1,14 +1,16 @@
 """ This module handles the user views of the application."""
 
 import os
+from uuid import uuid4
 from flask import Blueprint, render_template, url_for
-from flask import redirect, flash
+from flask import redirect, flash, request
 from flask_babel import gettext as _, lazy_gettext
 from flask_login import login_required, current_user
 from app import db
 from app.forms import RegistrationForm, UserUpdateForm
 from app.user.model import User
 from app.utils.image import is_image_name_valid, get_default_user_image
+from app.utils.decorators import check_permissions, check_own_or_has_permissions
 
 
 user_bp = Blueprint('user', __name__)
@@ -29,23 +31,11 @@ def users_view():
                            )
 
 
-@user_bp.route('/users/create', methods=['GET'])
+@user_bp.route('/users', methods=['POST'])
 @login_required
-def create_user_view():
-    """ Render the create user page.
-    
-    Returns:
-        Rendered template for the create user page with a form.
-    """
-    form = RegistrationForm()
-    return render_template('site.user.create.html',
-                           current_user=current_user,
-                           form=form
-                           )
-
-
-@user_bp.route('/users/create', methods=['POST'])
-@login_required
+@check_permissions([
+                'admin.user.create'
+            ])
 def create_user():
     """ Handle the creation of a new user, for already logged-in users.
     This function checks if the passwords match, if the username and email are unique,
@@ -82,6 +72,9 @@ def create_user():
 
 @user_bp.route('/users/<int:user_id>/delete', methods=['GET'])
 @login_required
+@check_own_or_has_permissions([
+                'admin.user.delete'
+            ])
 def delete_user(user_id):
     """ Handle the deletion of a user.
     
@@ -109,6 +102,9 @@ def delete_user(user_id):
 
 @user_bp.route('/users/<int:user_id>', methods=['GET'])
 @login_required
+@check_own_or_has_permissions([
+                'admin.user.read'
+                ])
 def user_view(user_id):
     """ Render the users page
     
@@ -126,6 +122,9 @@ def user_view(user_id):
 
 @user_bp.route('/users/<int:user_id>/update', methods=['GET', 'POST'])
 @login_required
+@check_own_or_has_permissions([
+                'admin.user.update'
+            ])
 def update_user(user_id):
     """ Update user information
 
@@ -138,9 +137,36 @@ def update_user(user_id):
     """
     user = db.session.query(User).filter_by(id=user_id).first_or_404()
     form = UserUpdateForm(obj=user)
-    
+
     if form.validate_on_submit():
+        if not user:
+            flash(_('User not found.'))
+            return redirect(url_for('user.users_view'))
+        if not user.check_password(form.old_password.data):
+            flash(_('Old password is incorrect.'))
+            return render_template('site.user.update.html', current_user=current_user, user=user, form=form)
+
         form.populate_obj(user)
+        # * image handling
+        # remove old image if exists
+        if form.delete_image.data or form.image.data:
+            if user.image_filename and user.image_filename != get_default_user_image():
+                old_image_path = os.path.join('img', 'user', user.image_filename)
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path)
+            user.image_filename = None
+
+        # save new image
+        if form.image.data:
+            image = form.image.data
+            filename = image.filename
+            ext = os.path.splitext(filename)[1]
+            unique_name = f"{uuid4()}{ext}"
+            image_path = os.path.join('img', 'user', unique_name)
+            # Ensure directory exists
+            image.save(image_path)
+            user.image_filename = unique_name
+        db.session.add(user)
         db.session.commit()
         return redirect(f'/users/{user.id}')
 

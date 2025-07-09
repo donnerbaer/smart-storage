@@ -41,15 +41,19 @@ def create_app():
     # ! Blueprints registration
     from app.views.auth import auth_bp
     from app.views.main import main_bp
+    from app.views.category import category_bp
     from app.views.image import image_bp
     from app.views.item import item_bp
     from app.views.user import user_bp
+    from app.views.admin import admin_bp
     from app.views.storage import storage_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(category_bp)
     app.register_blueprint(image_bp)
     app.register_blueprint(item_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(admin_bp)
     app.register_blueprint(storage_bp)
     
     return app

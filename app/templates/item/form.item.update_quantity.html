@@ -1,0 +1,12 @@
+<form action="{{ url_for('item.update_item_quantity', item_id=item.id) }}" method="POST">
+    {{ form_item_quantity.hidden_tag() }}
+
+    <div class="form-group my-2">
+        <label for="quantity">{{ form.quantity.label }}</label>
+        {{ form_item_quantity.quantity(class="form-control", id="quantity") }}
+    </div>
+
+    <div class="form-group my-3"> 
+        {{ form_item_quantity.submit(class="form-control btn btn-success") }}
+    </div>
+</form>

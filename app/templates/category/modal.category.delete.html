@@ -1,0 +1,28 @@
+{% if current_user.has_permission('category.delete') %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
+    <i class="bi bi-trash"></i> {{ _('Delete') }}
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteCategoryModalLabel">{{ _('Delete Category') }}: {{ category.name}} </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ _('Warning!') }}
+                    {{ _('Are you sure you want to delete the category? This action cannot be undone.') }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('category.delete_category', category_id=category.id) }}" class="btn btn-danger">{{ _('Delete') }}</a>
+            <button type="button" class="btn btn-secondary align-start" data-bs-dismiss="modal">{{ _('Close') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

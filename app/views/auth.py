@@ -34,9 +34,10 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             if request.args.get('next'):
-                return redirect(request.args.get('next', '%2F'))
+                return redirect(request.args.get('next', "/"))
         flash(_l('Invalid username or password'))
-    return render_template('site.login.html', nav_login_form=form, next=request.args.get('next', '%2F'))
+        return redirect(url_for('main.dashboard'))
+    return render_template('site.login.html', nav_login_form=form, next=request.args.get('next', "/"))
 
 
 @auth_bp.route('/sign-up', methods=['GET', 'POST'])

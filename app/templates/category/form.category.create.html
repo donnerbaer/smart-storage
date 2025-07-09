@@ -1,0 +1,43 @@
+<form action="{{ url_for('category.create_category') }}" method="POST">
+    {{ form_category_create.hidden_tag() }}
+
+    <div class="mb-3">
+        {{ form_category_create.name.label(class="form-label") }}
+        {{ form_category_create.name(class="form-control", required=True) }}
+        {% if form_category_create.name.errors %}
+            <div class="alert alert-danger mt-2">
+                {% for error in form_category_create.name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        {{ form_category_create.color.label(class="form-label") }}
+        <select name="{{ form_category_create.color.name }}"
+                id="{{ form_category_create.color.id }}"
+                class="form-control selectpicker"
+                data-live-search="true"
+                required>
+            {% for value, label, color in form_category_create.color.choices %}
+            <option value="{{ value }}"
+                class="text-bg-{{ color }}"
+                {% if form_category_create.color.data == value %}selected{% endif %}
+                data-content='<span class="d-block w-100 text-bg-{{ color }} px-2 py-1">{{ label }}</span>'>
+            </option> 
+            {% endfor %}
+        </select>
+
+        {% if form_category_create.color.errors %}
+            <div class="alert alert-danger mt-2">
+                {% for error in form_category_create.color.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form_category_create.submit(class="btn btn-success") }}
+    </div>
+</form>

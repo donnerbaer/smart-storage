@@ -16,7 +16,7 @@
 
 <h1>{{ _("Catalog", context="Highlight") }}</h1>
 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createItemModal">
-    <i class="bi bi-plus-circle"></i> {{ _("Create new item") }}
+    <i class="bi bi-plus-circle"></i> {{ _("Create Item") }}
 </button>
 
 <div class="modal fade" id="createItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createItemModal" aria-hidden="true">
@@ -46,43 +46,49 @@
     <p>{{ _('Number of Items') }}: {{ items|length }}</p>
 {% endif %}
 
-<table class="table table-striped">
+{% if items|length <= 0 %}
+<div class="alert alert-info" role="alert">
+{{ _("No items found.") }}
+</div>
+{% else %}
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>{{ _('ID') }}</th>
             <th>{{ _('Image') }}</th>
             <th>{{ _("Name") }}</th>
             <th>{{ _('Storage Location') }}</th>
+            <th>{{ _('Quantity') }}</th>
             <th>{{ _('Description') }}</th>
-            <th>{{ _('Barcode') }}</th>
             <th>{{ _('Owner') }}</th>
-            
         </tr>
     </thead>
     <tbody>
         {% for item in items %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>
-                    {% if item.images|length > 0: %}
-                    <img src="{{ url_for('image.serve_item_image', filename=item.images[0].filename) }}" alt="{{ item.name }}" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">    
-                    {% endif %} 
-                </td>
-                <td><a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary d-block">{{ item.name }}</a></td>
-                <td>
-                    {% if item.storage_location %}
-                    <a href="{{ url_for('storage.storage_view', storage_id=item.storage_location.id)}}" class="btn btn-primary d-block">{{ item.storage_location.name }}</a>
-                    {% endif %}
-                </td>
-                <td>{{ item.description if item.description }}</td>
-                <td>{{ item.barcode if item.barcode }}</td>
-                <td>
-                    {% if item.owner_id %}
-                    <a href="{{ url_for('user.user_view', user_id=item.owner.id)}}" class="btn btn-primary d-block">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
-                    {% endif %}
-                </td>
-            </tr>
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>
+                {% if item.images|length > 0: %}
+                <img src="{{ url_for('image.serve_item_image', filename=item.images[0].filename) }}" alt="{{ item.name }}" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">    
+                {% endif %} 
+            </td>
+            <td><a href="{{ url_for('item.item_view', item_id=item.id) }}" class="btn btn-primary d-block">{{ item.name }}</a></td>
+            <td>
+                {% if item.storage_location %}
+                <a href="{{ url_for('storage.storage_view', storage_id=item.storage_location.id)}}" class="btn btn-primary d-block">{{ item.storage_location.name }}</a>
+                {% endif %}
+            </td>
+            <td>{{ item.get_current_stock() }}</td>
+            <td>{{ item.description if item.description }}</td>
+            <td>
+                {% if item.owner_id %}
+                <a href="{{ url_for('user.user_view', user_id=item.owner.id)}}" class="btn btn-primary d-block">{{item.owner.first_name}} {{item.owner.last_name}}</a>    
+                {% endif %}
+            </td>
+        </tr>
         {% endfor %}
     </tbody>
 </table>
+{% endif %}
+
 {% endblock %}

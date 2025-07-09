@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} {{ _("Item") }} #{{ item.id }} {{ item.name }}{% endblock %}
-
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 
 {% block main %}
 <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
@@ -22,15 +24,25 @@
 
 
 <h1>#{{ item.id }} {{ item.name }}</h1>
+{% if item.categories|length > 0 %}
+<div class="my-2">
+    {% for category in item.categories %}
+    {% include 'component/badge.category.html' %}
+    {% endfor %}
+</div>
+{% endif %}
+
 
 <div class="container mt-3">
     <div class="row">
-        <div class="col">
+        <div class="col mb-3">
             {% include 'item/carousel.item.html' %}
+            <p>{{ _('Number of images') }}: {{ item.images|length}}</p>
             {% include 'item/modal.update.html' %}
+            {% include 'item/modal.item.update_quantity.html' %}
             {% include 'item/modal.delete.html' %}
         </div>
-        <div class="col-6">
+        <div class="col-lg-6 col-md-12">
             {% include 'component/qrcode.html' %}
 
             <div class="row">
@@ -69,12 +81,12 @@
             </div>
 
             <div class="mt-3">
-                <h3>{{ _("Barcode") }}</h3>
-                {% if item.barcode %}
-                <p>{{ item.barcode }}</p>
+                <h3>{{ _("Quantity") }}</h3>
+                {% if item.stocks|length > 0 %}
+                <p>{{ item.get_current_stock() }}</p>
                 {% else %}
                 <div class="alert alert-info" role="alert">
-                    {{ _("No Barcode found for this item.") }}
+                    {{ _("No quantity information found for this item.") }}
                 </div>
                 {% endif %}
             </div>
@@ -82,6 +94,58 @@
         </div>
     </div>
 </div>
+
+
+<section class="mt-3 col-lg-6 col-md-12">
+    <div class="border border-1 border-dark-emphasis p-3 rounded-4 bg-light">
+        <h2 class="h4">{{ data.quantity_over_time.title}}</h2>
+        <p class="text-muted">{{ data.quantity_over_time.description }}</p>
+        <canvas id="{{ data.quantity_over_time.name }}"></canvas>
+    </div>
+
+    <script>
+        const chartData_{{ data.quantity_over_time.name }} = {
+            labels: {{ data.quantity_over_time.labels|tojson|safe }},
+            datasets: [
+                {
+                    label: 'Dataset',
+                    data: {{ data.quantity_over_time.data|tojson|safe }},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    pointStyle: 'circle',
+                    pointRadius: 10,
+                    pointHoverRadius: 15
+                }
+            ]
+        };
+        const chartConfig_{{ data.quantity_over_time.name }} = {
+            type: 'line',
+            data: chartData_{{ data.quantity_over_time.name }},
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: '{{ data.quantity_over_time.title }}'
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            minRotation: 90,
+                            maxRotation: 90
+                        }
+                    }
+                }
+            }
+        };
+        const ctx_{{ data.quantity_over_time.name }} = document.getElementById('{{ data.quantity_over_time.name }}').getContext('2d');
+        const chartInstance_{{ data.quantity_over_time.name }} = new Chart(ctx_{{ data.quantity_over_time.name }}, chartConfig_{{ data.quantity_over_time.name }});
+    </script>
+</section>
 
 
 

@@ -4,13 +4,26 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from flask_babel import gettext as _
 from app import db
-from app.forms import ItemCreateForm
+from app.forms import ItemCreateForm, SearchForm, build_item_form
+from app.resource.category.model import Category
 from app.resource.item.model import Item
 from app.resource.storage_location.model import StorageLocation
 from app.user.model import User
 
 
+
 main_bp = Blueprint('main', __name__)
+
+
+@main_bp.app_context_processor
+def inject_search_form():
+    """Injects the search form into the template context.
+    
+    This allows the search form to be accessible in all templates rendered within this blueprint.
+    """
+    return {
+        'navbar_search_form': SearchForm()
+    }
 
 
 @main_bp.route('/')
@@ -73,6 +86,43 @@ def dashboard():
                            )
 
 
+@main_bp.route('/search', methods=['GET', 'POST'])
+@login_required
+def search_view():
+    """ Render the search page.
+    
+    Returns:
+        Rendered template for the search page.
+    """
+    form = SearchForm()
+    if form.validate_on_submit():
+        items = Item.query.filter(Item.name.ilike(f"%{form.query.data}%")).all()
+        users = User.query.filter(User.username.ilike(f"%{form.query.data}%")).all()
+        storages = StorageLocation.query.filter(StorageLocation.name.ilike(f"%{form.query.data}%")).all()
+        return render_template('site.search.result.html',
+                               current_user=current_user,
+                               items=items,
+                               users=users,
+                               storages=storages,
+                               form=form
+                               )
+
+    return render_template('site.search.result.html', current_user=current_user)
+
+
+@main_bp.app_errorhandler(403)
+def page_not_found(e):
+    """ Render the 403 error page.
+
+    Args:
+        e: The error that occurred.
+
+    Returns:
+        Rendered template for the 403 error page.
+    """
+    return render_template('error/403.html', current_user=current_user), 403
+
+
 @main_bp.app_errorhandler(404)
 def page_not_found(e):
     """ Render the 404 error page.
@@ -108,9 +158,21 @@ def catalog():
         Rendered template for the catalog page with a list of items.
     """
     items = db.session.query(Item).all()
-    form = ItemCreateForm()
+    users = db.session.query(User).all()
+    categories = db.session.query(Category).all()
+    
+    form = build_item_form(
+                        item=None,
+                        users=users,
+                        categories=categories,
+                        submit_text=_('Create Item')
+                    )
     return render_template('site.catalog.html',
-                           current_user=current_user,
-                           items=items,
-                           form=form
+                            current_user=current_user,
+                            items=items,
+                            form=form,
+                            categories=categories,
+                            getattr=getattr,
+                            storage_hierarchy=None,
+                            storage_hierarchy_ids=None
                            )

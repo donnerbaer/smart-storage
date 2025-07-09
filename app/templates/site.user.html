@@ -67,7 +67,9 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                {% include 'component/link.user.delete.html' %}
+                {% if current_user.has_permission('admin.user.update') or current_user.id == user.id %}
+                <a href="{{ url_for('user.update_user', user_id=user.id) }}" class="btn btn-secondary"><i class="bi bi-pencil-fill"> </i>{{ _("Edit") }}</a>
+                {% endif %}
                 {% include 'user/modal.delete.html' %}
             </div>
         </div>

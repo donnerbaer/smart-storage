@@ -25,6 +25,15 @@
 
 
 <h1>#{{ storage.id }} {{ storage.name }}</h1>
+{% if storage.categories|length > 0 %}
+<div class="my-2">
+    {% for category in storage.categories %}
+    {% include 'component/badge.category.html' %}
+    {% endfor %}
+</div>
+{% endif %}
+
+
 <div class="container mt-3">
     <div class="row">
         <div class="col">
@@ -62,7 +71,6 @@
                 <th scope="col">{{ _('ID') }}</th>
                 <th scope="col">{{ _("Name") }}</th>
                 <th scope="col">{{ _('Description') }}</th>
-                <th scope="col">{{ _('Barcode') }}</th>
                 <th scope="col">{{ _('Owner') }}</th>
             </tr>
         </thead>
@@ -72,7 +80,6 @@
                     <td scope="row">{{ item.id }}</td>
                     <td>{% include 'component/link.item.html' %}</td>
                     <td>{{ item.description if item.description else '' }}</td>
-                    <td>{{ item.barcode if item.barcode else '' }}</td>
                     <td>
                         {% if item.owner_id %}
                             {% include 'component/link.item.owner.html' %}

@@ -1,4 +1,6 @@
 """ This module handles the image routes of the application.
+It provides functionality to serve images for items, current users, and others images.
+It also includes checks to ensure that the current user is logged in before accessing these routes.
 """
 
 import os

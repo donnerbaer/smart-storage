@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %} {{ _("Admin") }}{% endblock %}
+
+
+{% block main %}
+<nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" >
+    <ol class="breadcrumb breadcrumb-chevron pe-3 bg-body-tertiary rounded-3">
+                <li class="breadcrumb-item">
+            <a class="" href="{{ url_for('main.index') }}"><i class="bi bi-house-door-fill"></i></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ _("Admin") }}
+        </li>
+    </ol>
+</nav>
+
+
+<h1>{{ _('Admin Panel') }}</h1>
+<p>{{ _('Here is some content for the admin dashboard.') }}</p>
+
+
+<div>
+    {% if current_user.has_permission('admin.users.read') %}
+        <a href="{{ url_for('user.users_view') }}" class="btn btn-primary">Users</a>	
+    {% endif %}
+    {% if current_user.has_permission('admin.groups.read') %}
+        <a href="{{ url_for('admin.groups_view') }}" class="btn btn-primary">Groups</a>	
+    {% endif %}
+    {% if current_user.has_permission('admin.roles.read') %}
+		<a href="{{ url_for('admin.roles_view') }}" class="btn btn-primary">Roles</a>		
+    {% endif %}
+</div>
+
+
+<div class="mt-4 me-4">
+    <div class="alert alert-warning">
+        <h2 class="h4">{{ _('Notes') }}</h2>
+        <p class="mt-2">{{ _('How is the authorization system build?') }}</p>
+        <ul class="">
+            <li>
+                {{ _("Each user is assigned to at least one group.") }}
+            </li>
+            <li>
+                {{ _("Each group is assigned at least one role.") }}
+            </li>
+            <li>
+                {{ _("Each role has at least one authorization.") }}
+            </li>
+        </ul>
+        
+    </div>
+</div>
+
+
+
+
+{% endblock %}

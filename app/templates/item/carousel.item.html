@@ -1,5 +1,5 @@
 {% if item.images|length>0 %}
-<div class="border border-1 border-dark-emphasis rounded-4 py-5 bg-body-tertiary">
+<div class="border border-1 border-dark-emphasis rounded-4 bg-body-tertiary">
     <div id="mainCarousel" class="carousel slide" style="height:300px;">
         <div class="carousel-inner">
         {% for image in item.images %}
@@ -27,4 +27,3 @@
     {{ _("No images found for this item.") }}
 </div>
 {% endif %}
-<p>{{ _('Number of images') }}: {{ item.images|length}}</p>

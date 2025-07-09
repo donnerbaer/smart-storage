@@ -8,14 +8,41 @@
         <label for="description">{{ form.description.label }}</label>
         {{ form.description(class="form-control", id="description") }}
     </div>
-    <div class="form-group">
-        <label for="barcode">{{ form.barcode.label }}</label>
-        {{ form.barcode(class="form-control", id="barcode") }}
+
+    <div class="form-group my-2">
+        {{ form.quantity.label }}
+        {{ form.quantity(class="form-control", id="quantity") }}
     </div>
-    <div class="form-group">
+
+    <div class="form-group my-2">
+        <label>{{ _('Categories') }}</label>
+        <div class="form-text">{{ _('Select the categories that apply to this item.') }}</div>
+        {% for category in categories %}
+            <!-- Dynamically generated fields for each category -->
+            {% set field = getattr(form, 'category_' ~ category.id) %}
+            <div class="row align-items-center p-2 border-2 border-bottom">
+                    {{ field(class="btn-check", id=field.id) }}
+                    <label
+                        class="btn btn-outline-{{ category.color.color }}"
+                        for="{{ field.id }}"
+                        >
+                        {{ field.label.text }}
+                    </label>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group my-2">
+        {{ form.owner.label }}
+        {{ form.owner(class="form-control", id="owner") }}
+    </div>
+
+    <div class="form-group my-2">
         <label for="storage_location">{{ form.storage_location.label }}</label>
-        {{ form.storage_location(class="form-control", id="storage_location") }}
+        <div id="storage-container"></div>
+        <input type="hidden" name="storage_location" id="storage_location">
     </div>
+
     <div class="form-group">
         <label for="images">{{ form.images.label }} <span class="text-danger">allowed types jpg, png, jpeg, gif</span></label>
         {{ form.images(class="form-control", id="images") }}
@@ -24,3 +51,5 @@
         {{ form.submit(class="form-control btn btn-success") }}
     </div>
 </form>
+
+{% include 'item/script.storage.load.html' %}

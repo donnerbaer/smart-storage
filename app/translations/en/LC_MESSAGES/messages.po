@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-05-09 15:33+0200\n"
-"PO-Revision-Date: 2025-05-09 15:33+0200\n"
+"POT-Creation-Date: 2025-07-09 21:27+0200\n"
+"PO-Revision-Date: 2025-07-07 15:51+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -18,12 +18,135 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: templates/component/navbar.html:15 templates/site.catalog.html:2
-#: templates/site.catalog.html:6
+#: templates/component/navbar.html:18 templates/site.catalog.html:2
+#: templates/site.catalog.html:12 templates/site.catalog.html:17
 msgid "Catalog"
 msgstr ""
 
-#: templates/component/navbar.html:14 templates/site.dashboard.html:2
+#: templates/site.catalog.html:19 templates/site.catalog.html:26
+#: views/item.py:243 views/main.py:168
+msgid "Create Item"
+msgstr ""
+
+#: templates/admin/group/modal.group.create.html:18
+#: templates/admin/group/modal.group.update.html:18
+#: templates/admin/role/modal.role.create.html:20
+#: templates/admin/role/modal.role.update.html:20
+#: templates/category/modal.category.create.html:20
+#: templates/category/modal.category.update.html:20
+#: templates/item/modal.item.update_quantity.html:47
+#: templates/item/modal.update.html:47 templates/site.catalog.html:35
+#: templates/site.users.html:36 templates/storage/modal.storage.create.html:19
+#: templates/storage/modal.update.html:42
+msgid "Close"
+msgstr ""
+
+#: templates/site.catalog.html:44
+msgid "No items found in the catalog."
+msgstr ""
+
+#: templates/site.catalog.html:46
+msgid "Number of Items"
+msgstr ""
+
+#: templates/site.catalog.html:51 templates/site.search.result.html:14
+#: templates/site.search.result.html:83
+msgid "No items found."
+msgstr ""
+
+#: templates/admin/site.group.html:59 templates/admin/site.group.html:105
+#: templates/admin/site.groups.html:35 templates/admin/site.role.html:36
+#: templates/admin/site.roles.html:34 templates/site.catalog.html:57
+#: templates/site.categories.html:29 templates/site.category.html:42
+#: templates/site.category.html:80 templates/site.storage.html:71
+#: templates/site.storages.html:28 templates/site.user.html:86
+#: templates/site.users.html:53
+msgid "ID"
+msgstr ""
+
+#: templates/site.catalog.html:58
+msgid "Image"
+msgstr ""
+
+#: templates/admin/site.group.html:60 templates/admin/site.group.html:106
+#: templates/admin/site.groups.html:36 templates/admin/site.roles.html:35
+#: templates/site.catalog.html:59 templates/site.categories.html:30
+#: templates/site.category.html:43 templates/site.category.html:81
+#: templates/site.storage.html:72 templates/site.storages.html:29
+msgid "Name"
+msgstr ""
+
+#: templates/site.catalog.html:60 templates/site.item.html:50
+msgid "Storage Location"
+msgstr ""
+
+#: templates/item/modal.item.update_quantity.html:4
+#: templates/site.catalog.html:61 templates/site.item.html:84
+msgid "Quantity"
+msgstr ""
+
+#: templates/admin/site.group.html:37 templates/admin/site.group.html:107
+#: templates/admin/site.groups.html:37 templates/admin/site.role.html:25
+#: templates/admin/site.role.html:39 templates/admin/site.roles.html:36
+#: templates/site.catalog.html:62 templates/site.item.html:73
+#: templates/site.storage.html:47 templates/site.storage.html:73
+#: templates/site.storages.html:30 templates/site.user.html:89
+msgid "Description"
+msgstr ""
+
+#: templates/site.catalog.html:63 templates/site.item.html:61
+#: templates/site.storage.html:74
+msgid "Owner"
+msgstr ""
+
+#: templates/site.categories.html:2
+msgid "List of all Categories"
+msgstr ""
+
+#: templates/component/navbar.html:33 templates/item/form.item.create.html:18
+#: templates/item/form.item.update.html:22 templates/site.categories.html:12
+#: templates/site.categories.html:17 templates/site.category.html:12
+msgid "Categories"
+msgstr ""
+
+#: templates/site.categories.html:23
+msgid "Number of Categories"
+msgstr ""
+
+#: templates/site.categories.html:31
+msgid "Color"
+msgstr ""
+
+#: templates/site.categories.html:54
+msgid "No categories found."
+msgstr ""
+
+#: templates/site.category.html:2 templates/site.category.html:20
+msgid "Category"
+msgstr ""
+
+#: templates/site.category.html:33
+msgid "Items labeled with"
+msgstr ""
+
+#: templates/site.category.html:36
+msgid "No items found in this category."
+msgstr ""
+
+#: templates/site.category.html:44 templates/site.category.html:82
+msgid "Action"
+msgstr ""
+
+#: templates/site.category.html:71
+msgid "Storages labeled with"
+msgstr ""
+
+#: templates/site.category.html:74
+msgid "No storages found in this category."
+msgstr ""
+
+#: templates/component/navbar.html:14 templates/component/navbar.html:42
+#: templates/site.dashboard.html:2 templates/site.dashboard.html:16
 msgid "Dashboard"
 msgstr ""
 
@@ -31,38 +154,520 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: templates/site.item.html:2 templates/site.item.html:7
+#: templates/component/navbar.html:10 templates/site.index.html:9
+msgid "Home"
+msgstr ""
+
+#: templates/site.index.html:14
+msgid "Welcome on the site"
+msgstr ""
+
+#: templates/site.index.html:15
+msgid "Here is some content for the index page."
+msgstr ""
+
+#: templates/site.item.html:2 templates/site.search.result.html:58
+#: templates/site.user.html:87
 msgid "Item"
 msgstr ""
 
-#: templates/component/navbar.html:57 templates/component/navbar.html:76
-#: templates/site.login.html:2 templates/site.login.html:5
+#: templates/site.item.html:14 templates/site.search.result.html:127
+#: templates/site.storage.html:2
+msgid "Storage"
+msgstr ""
+
+#: templates/item/modal.item.update_quantity.html:41
+#: templates/item/modal.update.html:41 templates/site.item.html:40
+#: templates/storage/carousel.storage.html:30
+msgid "Number of images"
+msgstr ""
+
+#: templates/site.item.html:55
+msgid "No location assigned to this item."
+msgstr ""
+
+#: templates/site.item.html:66
+msgid "No owner found for this item."
+msgstr ""
+
+#: templates/site.item.html:78
+msgid "No description found for this item."
+msgstr ""
+
+#: templates/site.item.html:89
+msgid "No quantity information found for this item."
+msgstr ""
+
+#: templates/auth/modal.login.html:3 templates/auth/modal.login.html:11
+#: templates/component/navbar.html:86 templates/site.login.html:2
+#: templates/site.login.html:5
 msgid "Sign-in"
 msgstr ""
 
-#: templates/component/navbar.html:60 templates/component/navbar.html:95
+#: templates/site.search.result.html:2
+msgid "Search Result"
+msgstr ""
+
+#: templates/site.search.result.html:5
+msgid "Search Results"
+msgstr ""
+
+#: templates/site.search.result.html:10 templates/site.storage.html:62
+#: views/main.py:78
+msgid "Items"
+msgstr ""
+
+#: templates/item/carousel.item.html:17 templates/site.search.result.html:47
+#: templates/site.search.result.html:116
+#: templates/storage/carousel.storage.html:17
+msgid "Previous"
+msgstr ""
+
+#: templates/item/carousel.item.html:21 templates/site.search.result.html:51
+#: templates/site.search.result.html:120
+#: templates/storage/carousel.storage.html:21
+msgid "Next"
+msgstr ""
+
+#: templates/site.search.result.html:68 templates/site.search.result.html:137
+msgid "Show"
+msgstr ""
+
+#: templates/component/navbar.html:28 templates/site.search.result.html:79
+#: templates/site.storages.html:11
+msgid "Storages"
+msgstr ""
+
+#: templates/auth/modal.registrate.html:3
+#: templates/auth/modal.registrate.html:11 templates/component/navbar.html:91
 #: templates/site.sign-up.html:2 templates/site.sign-up.html:5
 msgid "Sign-up"
 msgstr ""
 
-#: templates/component/navbar.html:16
+#: templates/site.storage.html:52
+msgid "No description found for this storage."
+msgstr ""
+
+#: templates/site.storage.html:65
+msgid "No items found in this storage."
+msgstr ""
+
+#: templates/site.storage.html:96
+msgid "Storages contain in"
+msgstr ""
+
+#: templates/site.storages.html:2
+msgid "List of all Storage Locations"
+msgstr ""
+
+#: templates/site.storages.html:16
+msgid "Storage Locations"
+msgstr ""
+
+#: templates/site.storages.html:22
+msgid "Number of Storages"
+msgstr ""
+
+#: templates/site.storages.html:31
+msgid "Parent"
+msgstr ""
+
+#: templates/site.storages.html:32
+msgid "Root Parent"
+msgstr ""
+
+#: templates/site.storages.html:66
+msgid "No storages found."
+msgstr ""
+
+#: templates/site.user.html:2
+msgid "Profile"
+msgstr ""
+
+#: templates/component/navbar.html:23 templates/site.user.html:12
+#: templates/site.user.update.html:13 templates/site.users.html:12
+#: templates/site.users.html:17 views/main.py:78
 msgid "Users"
 msgstr ""
 
-#: templates/component/navbar.html:17 templates/component/navbar.html:18
+#: templates/admin/site.group.html:61 templates/site.user.html:29
+msgid "Username"
+msgstr ""
+
+#: templates/site.user.html:33
+msgid "First Name"
+msgstr ""
+
+#: templates/site.user.html:37
+msgid "Last Name"
+msgstr ""
+
+#: templates/site.user.html:41
+msgid "Email"
+msgstr ""
+
+#: templates/site.user.html:45
+msgid "Created At"
+msgstr ""
+
+#: templates/site.user.html:49
+msgid "Image Filename"
+msgstr ""
+
+#: templates/site.user.html:51 templates/site.user.html:62
+msgid "No image uploaded"
+msgstr ""
+
+#: templates/site.user.html:55
+msgid "Image URL"
+msgstr ""
+
+#: templates/admin/role/modal.role.update.html:4
+#: templates/item/modal.update.html:4 templates/site.user.html:71
+#: templates/storage/modal.update.html:2
+msgid "Edit"
+msgstr ""
+
+#: templates/site.user.html:81
+msgid "User owned items"
+msgstr ""
+
+#: templates/site.user.html:88
+msgid "Location"
+msgstr ""
+
+#: templates/site.user.html:101
+msgid "No location assigned"
+msgstr ""
+
+#: templates/site.user.html:110
+msgid "No items found for this user."
+msgstr ""
+
+#: templates/site.user.update.html:2
+msgid "Update User"
+msgstr ""
+
+#: templates/site.user.update.html:23 templates/site.user.update.html:102
+#: templates/user/modal.delete.html:20
+msgid "Cancel"
+msgstr ""
+
+#: templates/site.user.update.html:42
+msgid "Errors:"
+msgstr ""
+
+#: templates/site.user.update.html:95
+msgid "Required"
+msgstr ""
+
+#: templates/site.users.html:2
+msgid "List of all users"
+msgstr ""
+
+#: templates/site.users.html:20 templates/site.users.html:27
+msgid "Create User"
+msgstr ""
+
+#: templates/site.users.html:43
+msgid "No users found."
+msgstr ""
+
+#: templates/site.users.html:45 templates/site.users.html:47
+msgid "Number of users"
+msgstr ""
+
+#: templates/site.users.html:54
+msgid "Firstname"
+msgstr ""
+
+#: templates/site.users.html:55
+msgid "Lastname"
+msgstr ""
+
+#: templates/admin/site.group.html:62 templates/admin/site.group.html:108
+#: templates/site.users.html:56
+msgid "Actions"
+msgstr ""
+
+#: templates/site.users.html:66
+msgid "Display"
+msgstr ""
+
+#: templates/admin/site.group.html:2 templates/admin/site.group.html:35
+msgid "Group"
+msgstr ""
+
+#: templates/admin/site.group.html:2 templates/admin/site.group.html:12
+#: templates/admin/site.groups.html:2 templates/admin/site.groups.html:12
+#: templates/admin/site.index.html:2 templates/admin/site.index.html:12
+#: templates/admin/site.role.html:2 templates/admin/site.role.html:12
+#: templates/admin/site.roles.html:2 templates/admin/site.roles.html:12
+#: templates/component/navbar.html:39
 msgid "Admin"
 msgstr ""
 
-#: templates/component/navbar.html:36
+#: templates/admin/site.group.html:15 templates/admin/site.groups.html:2
+#: templates/admin/site.groups.html:15 templates/admin/site.groups.html:21
+#: templates/component/navbar.html:45
+msgid "Groups"
+msgstr ""
+
+#: templates/admin/site.group.html:24
+msgid "There were errors in your form submission:"
+msgstr ""
+
+#: templates/admin/site.group.html:39
+msgid "No description provided for this group."
+msgstr ""
+
+#: templates/admin/site.group.html:50
+msgid "Users assigned to"
+msgstr ""
+
+#: templates/admin/site.group.html:53 templates/admin/site.group.html:99
+msgid "No users assigned to the group."
+msgstr ""
+
+#: templates/admin/site.group.html:78
+msgid "View User"
+msgstr ""
+
+#: templates/admin/site.group.html:96
+msgid "Roles assigned to"
+msgstr ""
+
+#: templates/admin/site.group.html:124
+msgid "View Role"
+msgstr ""
+
+#: templates/admin/site.groups.html:26 templates/admin/site.groups.html:51
+msgid "No groups found."
+msgstr ""
+
+#: templates/admin/site.groups.html:28
+msgid "Number of Groups"
+msgstr ""
+
+#: templates/admin/site.index.html:18
+msgid "Admin Panel"
+msgstr ""
+
+#: templates/admin/site.index.html:19
+msgid "Here is some content for the admin dashboard."
+msgstr ""
+
+#: templates/admin/site.index.html:37
+msgid "Notes"
+msgstr ""
+
+#: templates/admin/site.index.html:38
+msgid "How is the authorization system build?"
+msgstr ""
+
+#: templates/admin/site.index.html:41
+msgid "Each user is assigned to at least one group."
+msgstr ""
+
+#: templates/admin/site.index.html:44
+msgid "Each group is assigned at least one role."
+msgstr ""
+
+#: templates/admin/site.index.html:47
+msgid "Each role has at least one authorization."
+msgstr ""
+
+#: templates/admin/site.role.html:2 templates/admin/site.role.html:24
+msgid "Role"
+msgstr ""
+
+#: templates/admin/site.role.html:15 templates/admin/site.roles.html:2
+#: templates/admin/site.roles.html:15 templates/admin/site.roles.html:20
+#: templates/component/navbar.html:48
+msgid "Roles"
+msgstr ""
+
+#: templates/admin/role/form.role.add_permission.html:7
+#: templates/admin/site.role.html:37
+msgid "Allowed"
+msgstr ""
+
+#: templates/admin/site.role.html:38
+msgid "Permission Name"
+msgstr ""
+
+#: templates/admin/site.roles.html:26 templates/admin/site.roles.html:48
+msgid "No roles found."
+msgstr ""
+
+#: templates/admin/site.roles.html:28
+msgid "Number of roles"
+msgstr ""
+
+#: templates/admin/group/modal.group.add_user.html:4
+msgid "Add User"
+msgstr ""
+
+#: templates/admin/group/modal.group.add_user.html:12
+msgid "Add User to the Group"
+msgstr ""
+
+#: templates/admin/group/modal.group.assign_role.html:4
+msgid "Assign Role"
+msgstr ""
+
+#: templates/admin/group/modal.group.assign_role.html:12
+msgid "Assign Role to"
+msgstr ""
+
+#: templates/admin/group/modal.group.create.html:3
+#: templates/admin/group/modal.group.create.html:9
+msgid "Create Group"
+msgstr ""
+
+#: templates/admin/group/modal.group.delete.html:4
+#: templates/admin/group/modal.group.delete.html:12
+msgid "Delete Group"
+msgstr ""
+
+#: templates/admin/group/modal.group.delete.html:17
+#: templates/category/modal.category.delete.html:17
+#: templates/item/modal.delete.html:13 templates/storage/modal.delete.html:13
+#: templates/user/modal.delete.html:14
+msgid "Warning!"
+msgstr ""
+
+#: templates/admin/group/modal.group.delete.html:18
+msgid "Are you sure you want to delete the group? This action cannot be undone."
+msgstr ""
+
+#: templates/admin/group/modal.group.remove_role.html:4
+#: templates/admin/group/modal.group.remove_user.html:4
+#: templates/admin/group/modal.group.remove_user.html:21
+msgid "Remove"
+msgstr ""
+
+#: templates/admin/group/modal.group.remove_role.html:12
+msgid "Remove role from group"
+msgstr ""
+
+#: templates/admin/group/modal.group.remove_role.html:17
+msgid ""
+"Are you sure you want to remove this role from the group? This action "
+"cannot be undone."
+msgstr ""
+
+#: templates/admin/group/modal.group.remove_role.html:22
+msgid "Remove Role"
+msgstr ""
+
+#: templates/admin/group/modal.group.remove_user.html:12
+msgid "Remove user from group"
+msgstr ""
+
+#: templates/admin/group/modal.group.remove_user.html:17
+msgid ""
+"Are you sure you want to remove this user from the group? This action "
+"cannot be undone."
+msgstr ""
+
+#: templates/admin/group/modal.group.update.html:3
+#: templates/admin/group/modal.group.update.html:9
+msgid "Edit Group"
+msgstr ""
+
+#: templates/admin/role/form.role.add_permission.html:6
+msgid "Permission"
+msgstr ""
+
+#: templates/admin/role/form.role.create.html:5
+msgid "required"
+msgstr ""
+
+#: templates/admin/role/modal.role.add_permission.html:4
+msgid "Update Permissions"
+msgstr ""
+
+#: templates/admin/role/modal.role.add_permission.html:11
+msgid "Update Permissons for"
+msgstr ""
+
+#: templates/admin/role/modal.role.create.html:4
+#: templates/admin/role/modal.role.create.html:11
+msgid "Create role"
+msgstr ""
+
+#: templates/admin/role/modal.role.delete.html:4
+#: templates/category/modal.category.delete.html:4
+#: templates/category/modal.category.delete.html:22
+#: templates/item/modal.delete.html:3 templates/storage/modal.delete.html:3
+#: templates/user/modal.delete.html:3
+msgid "Delete"
+msgstr ""
+
+#: templates/admin/role/modal.role.delete.html:11
+#: templates/admin/role/modal.role.delete.html:21
+msgid "Delete Role"
+msgstr ""
+
+#: templates/admin/role/modal.role.delete.html:16
+msgid "Are you sure you want to delete the role? This action cannot be undone."
+msgstr ""
+
+#: templates/admin/role/modal.role.update.html:11
+msgid "Update role"
+msgstr ""
+
+#: templates/category/modal.category.create.html:4
+msgid "Create"
+msgstr ""
+
+#: templates/category/modal.category.create.html:11
+msgid "Create Category"
+msgstr ""
+
+#: templates/category/modal.category.delete.html:12
+msgid "Delete Category"
+msgstr ""
+
+#: templates/category/modal.category.delete.html:18
+msgid ""
+"Are you sure you want to delete the category? This action cannot be "
+"undone."
+msgstr ""
+
+#: templates/category/modal.category.update.html:4
+msgid "Update"
+msgstr ""
+
+#: templates/category/modal.category.update.html:11
+msgid "Update Category"
+msgstr ""
+
+#: templates/component/navbar.html:64 templates/component/navbar.html:65
 msgid "Search"
 msgstr ""
 
-#: templates/component/navbar.html:47
+#: templates/component/navbar.html:77
 msgid "My Profile"
 msgstr ""
 
-#: templates/component/navbar.html:49
+#: templates/component/navbar.html:79
 msgid "Logout"
+msgstr ""
+
+#: templates/error/403.html:2
+msgid "Error 403"
+msgstr ""
+
+#: templates/error/403.html:7
+msgid "Error 403: Forbidden"
+msgstr ""
+
+#: templates/error/403.html:8
+msgid ""
+"You don't have the permission to access the requested resource. It is "
+"either read-protected or not readable by the server."
 msgstr ""
 
 #: templates/error/404.html:2
@@ -71,5 +676,123 @@ msgstr ""
 
 #: templates/error/500.html:2
 msgid "Error 500"
+msgstr ""
+
+#: templates/item/carousel.item.html:27
+msgid "No images found for this item."
+msgstr ""
+
+#: templates/item/form.item.create.html:19
+#: templates/item/form.item.update.html:23
+msgid "Select the categories that apply to this item."
+msgstr ""
+
+#: templates/item/modal.delete.html:9
+msgid "Delete Item now"
+msgstr ""
+
+#: templates/item/modal.delete.html:14
+msgid "Are you sure you want to delete the item? This action cannot be undone."
+msgstr ""
+
+#: templates/item/modal.delete.html:18
+msgid "Delete Item"
+msgstr ""
+
+#: templates/item/modal.item.update_quantity.html:11
+msgid "Update Item Quantity"
+msgstr ""
+
+#: templates/item/modal.update.html:11
+msgid "Update Item"
+msgstr ""
+
+#: templates/item/script.storage.load.html:31
+#: templates/storage/form.storage.update.html:61
+msgid "Please choose"
+msgstr ""
+
+#: templates/storage/carousel.storage.html:27
+msgid "No images found for this storage."
+msgstr ""
+
+#: templates/storage/modal.delete.html:9
+msgid "Delete Storage now"
+msgstr ""
+
+#: templates/storage/modal.delete.html:14
+msgid "Are you sure you want to delete the Storage? This action cannot be undone."
+msgstr ""
+
+#: templates/storage/modal.delete.html:18
+msgid "Delete Storage"
+msgstr ""
+
+#: templates/storage/modal.storage.create.html:4
+msgid "Create Storage"
+msgstr ""
+
+#: templates/storage/modal.storage.create.html:12
+msgid "Create new Storage"
+msgstr ""
+
+#: templates/storage/modal.update.html:8
+msgid "Update Storage"
+msgstr ""
+
+#: templates/user/modal.delete.html:9 templates/user/modal.delete.html:19
+msgid "Delete User"
+msgstr ""
+
+#: templates/user/modal.delete.html:15
+msgid "Are you sure you want to delete the user? This action cannot be undone."
+msgstr ""
+
+#: views/admin.py:87
+msgid "Role name already exists."
+msgstr ""
+
+#: views/admin.py:279
+msgid "Group name already exists."
+msgstr ""
+
+#: views/admin.py:377
+msgid "Please select a user to add to the group."
+msgstr ""
+
+#: views/item.py:66
+msgid "Quantity Over Time"
+msgstr ""
+
+#: views/item.py:67
+msgid "This chart shows the quantity of the item over time."
+msgstr ""
+
+#: views/item.py:78 views/item.py:149
+msgid "Save Changes"
+msgstr ""
+
+#: views/item.py:85 views/item.py:206
+msgid "Update Quantity"
+msgstr ""
+
+#: views/main.py:76
+msgid "Overall Summary"
+msgstr ""
+
+#: views/main.py:77
+msgid "This is the overall summary of your storage system."
+msgstr ""
+
+#: views/main.py:78
+msgid "Locations"
+msgstr ""
+
+#: views/user.py:143
+msgid "User not found."
+msgstr ""
+
+#: views/user.py:146
+msgid "Old password is incorrect."
 msgstr ""
 
