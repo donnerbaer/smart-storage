@@ -77,6 +77,13 @@ def item_view(item_id):
                         categories=categories,
                         submit_text=_('Save Changes')
                     )
+    
+    form_item_quantity = build_item_form(
+        categories=[],
+        users=[],
+        item=item,
+        submit_text=_('Update Quantity')
+    )
 
     # storage_hierarchy requiered for for the breadcrumbs in the item view
     # storage_hierarchy_ids requiered for the select field in the item update form
@@ -86,6 +93,7 @@ def item_view(item_id):
                            data=data,
                            qrcode_url=qrcode_url,
                            form=form,
+                           form_item_quantity=form_item_quantity,
                            categories=categories,
                            getattr=getattr,
                            storage_hierarchy=get_storage_hierarchy(item.storage_location_id),
@@ -175,6 +183,44 @@ def update_item_post(item_id):
 
         db.session.add(item)
         db.session.commit()
+    return redirect( url_for('item.item_view', item_id=item_id) )
+
+
+@item_bp.route('/items/<int:item_id>/update_quantity', methods=['POST'])
+@login_required
+@check_permissions(['item.update'])
+def update_item_quantity(item_id):
+    """ Handle the update of an item's quantity.
+
+    Args:
+        item_id (int): The ID of the item to update.
+
+    Returns:
+        Redirect to the item view page after updating.
+    """
+    item = db.session.query(Item).filter_by(id=item_id).first_or_404()
+    form = build_item_form(
+        categories=[],
+        users=[],
+        item=item,
+        submit_text=_('Update Quantity')
+    )
+    form.process(request.form)
+    # in forms.py the item.name is required, so we need to set it here
+    # otherwise the form will not validate
+    form.name.data = item.name
+
+    if form.validate_on_submit():
+        # Update stock quantity
+        if item.get_current_stock() != form.quantity.data:
+            item.stocks.append(
+                ItemStorageStock(
+                    item_id=item.id,
+                    quantity=form.quantity.data if form.quantity.data else 1
+                )
+            )
+            db.session.add(item)
+            db.session.commit()
     return redirect( url_for('item.item_view', item_id=item_id) )
 
 
